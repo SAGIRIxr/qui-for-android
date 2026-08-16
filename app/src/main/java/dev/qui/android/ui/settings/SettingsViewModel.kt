@@ -39,8 +39,9 @@ class SettingsViewModel @Inject constructor(
             repository.currentUser().onSuccess { user ->
                 _account.update { it.copy(username = user.username) }
             }
-            repository.latestVersion().onSuccess { latest ->
-                _account.update { it.copy(version = latest.tagName) }
+            // The server's own version, not the newest release on GitHub.
+            repository.serverVersion().onSuccess { info ->
+                _account.update { it.copy(version = info.version) }
             }
         }
     }

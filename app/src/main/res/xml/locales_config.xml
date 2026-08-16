@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The languages qui itself ships. Android matches the device locale against this
+  list on first launch, so a French phone opens the app in French with no setup;
+  it also populates the per-app language picker in system settings on Android 13+.
+-->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en" />
+    <locale android:name="cs" />
+    <locale android:name="de" />
+    <locale android:name="fr" />
+    <locale android:name="it" />
+    <locale android:name="ko" />
+    <locale android:name="pt-BR" />
+    <locale android:name="uk" />
+    <locale android:name="zh-CN" />
+</locale-config>

@@ -54,10 +54,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.qui.android.R
 import dev.qui.android.ui.addintent.AddIntent
 import dev.qui.android.ui.addintent.TorrentPayload
 import dev.qui.android.ui.theme.QuiTheme
@@ -106,13 +108,16 @@ fun AddTorrentSheet(
                 .padding(bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text("Add torrent", style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = stringResource(R.string.add_title),
+                style = MaterialTheme.typography.titleMedium,
+            )
 
             OutlinedTextField(
                 value = state.urls,
                 onValueChange = viewModel::setUrls,
-                label = { Text("Magnet or URL") },
-                placeholder = { Text("magnet:?xt=urn:btih:… (one per line)") },
+                label = { Text(stringResource(R.string.add_magnet_or_url)) },
+                placeholder = { Text(stringResource(R.string.add_magnet_placeholder)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 2,
                 maxLines = 5,
@@ -124,7 +129,7 @@ fun AddTorrentSheet(
             ) {
                 Icon(Icons.Default.AttachFile, contentDescription = null, Modifier.size(18.dp))
                 Spacer(Modifier.width(8.dp))
-                Text("Choose .torrent files")
+                Text(stringResource(R.string.add_choose_files))
             }
 
             state.files.forEach { file ->
@@ -141,7 +146,7 @@ fun AddTorrentSheet(
                     )
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = "Remove",
+                        contentDescription = stringResource(R.string.common_remove),
                         modifier = Modifier
                             .size(16.dp)
                             .clickable { viewModel.removeFile(file) },
@@ -150,7 +155,10 @@ fun AddTorrentSheet(
             }
 
             if (categories.isNotEmpty()) {
-                Text("Category", style = MaterialTheme.typography.labelMedium)
+                Text(
+                    text = stringResource(R.string.add_category),
+                    style = MaterialTheme.typography.labelMedium,
+                )
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     categories.forEach { category ->
                         FilterChip(
@@ -165,7 +173,10 @@ fun AddTorrentSheet(
             }
 
             if (knownTags.isNotEmpty()) {
-                Text("Tags", style = MaterialTheme.typography.labelMedium)
+                Text(
+                    text = stringResource(R.string.add_tags),
+                    style = MaterialTheme.typography.labelMedium,
+                )
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     knownTags.forEach { tag ->
                         FilterChip(
@@ -180,15 +191,31 @@ fun AddTorrentSheet(
             OutlinedTextField(
                 value = state.savePath,
                 onValueChange = viewModel::setSavePath,
-                label = { Text("Save path (optional)") },
+                label = { Text(stringResource(R.string.add_save_path)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            ToggleRow("Start paused", state.startPaused, viewModel::setStartPaused)
-            ToggleRow("Skip hash check", state.skipHashCheck, viewModel::setSkipHashCheck)
-            ToggleRow("Sequential download", state.sequential, viewModel::setSequential)
-            ToggleRow("First and last piece first", state.firstLastPiece, viewModel::setFirstLastPiece)
+            ToggleRow(
+                label = stringResource(R.string.add_start_paused),
+                checked = state.startPaused,
+                onChange = viewModel::setStartPaused,
+            )
+            ToggleRow(
+                label = stringResource(R.string.add_skip_hash_check),
+                checked = state.skipHashCheck,
+                onChange = viewModel::setSkipHashCheck,
+            )
+            ToggleRow(
+                label = stringResource(R.string.add_sequential),
+                checked = state.sequential,
+                onChange = viewModel::setSequential,
+            )
+            ToggleRow(
+                label = stringResource(R.string.add_first_last_piece),
+                checked = state.firstLastPiece,
+                onChange = viewModel::setFirstLastPiece,
+            )
 
             state.error?.let {
                 Text(it, style = MaterialTheme.typography.bodySmall, color = palette.destructive)
@@ -206,7 +233,7 @@ fun AddTorrentSheet(
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
                 } else {
-                    Text("Add")
+                    Text(stringResource(R.string.add_submit))
                 }
             }
         }

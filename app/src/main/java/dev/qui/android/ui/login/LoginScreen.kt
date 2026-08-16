@@ -46,6 +46,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -54,6 +55,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.qui.android.R
 import dev.qui.android.ui.components.QuiLogo
 import dev.qui.android.ui.theme.QuiTheme
 
@@ -87,7 +89,7 @@ fun LoginScreen(
                 fontWeight = FontWeight.Bold,
             )
             Text(
-                text = "Connect to your qui server",
+                text = stringResource(R.string.login_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = palette.mutedForeground,
             )
@@ -108,8 +110,10 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = state.serverUrl,
                         onValueChange = viewModel::setServerUrl,
-                        label = { Text("Server address") },
-                        placeholder = { Text("http://192.168.1.10:7476") },
+                        label = { Text(stringResource(R.string.login_server_address)) },
+                        placeholder = {
+                            Text(stringResource(R.string.login_server_placeholder))
+                        },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions = KeyboardOptions(
@@ -123,12 +127,12 @@ fun LoginScreen(
                         enabled = !state.isBusy && state.serverUrl.isNotBlank(),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Text("Test connection")
+                        Text(stringResource(R.string.login_test_connection))
                     }
 
-                    state.probeMessage?.let {
+                    state.probeRes?.let {
                         Text(
-                            text = it,
+                            text = stringResource(it),
                             style = MaterialTheme.typography.bodySmall,
                             color = palette.chart3,
                         )
@@ -138,12 +142,12 @@ fun LoginScreen(
                         Tab(
                             selected = state.mode == AuthMode.Password,
                             onClick = { viewModel.setMode(AuthMode.Password) },
-                            text = { Text("Password") },
+                            text = { Text(stringResource(R.string.login_password)) },
                         )
                         Tab(
                             selected = state.mode == AuthMode.ApiKey,
                             onClick = { viewModel.setMode(AuthMode.ApiKey) },
-                            text = { Text("API key") },
+                            text = { Text(stringResource(R.string.login_api_key)) },
                         )
                     }
 
@@ -151,7 +155,7 @@ fun LoginScreen(
                         OutlinedTextField(
                             value = state.username,
                             onValueChange = viewModel::setUsername,
-                            label = { Text("Username") },
+                            label = { Text(stringResource(R.string.login_username)) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -159,7 +163,7 @@ fun LoginScreen(
                         OutlinedTextField(
                             value = state.password,
                             onValueChange = viewModel::setPassword,
-                            label = { Text("Password") },
+                            label = { Text(stringResource(R.string.login_password)) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             visualTransformation = if (passwordVisible) {
@@ -179,11 +183,13 @@ fun LoginScreen(
                                         } else {
                                             Icons.Default.Visibility
                                         },
-                                        contentDescription = if (passwordVisible) {
-                                            "Hide password"
-                                        } else {
-                                            "Show password"
-                                        },
+                                        contentDescription = stringResource(
+                                            if (passwordVisible) {
+                                                R.string.login_hide_password
+                                            } else {
+                                                R.string.login_show_password
+                                            }
+                                        ),
                                     )
                                 }
                             },
@@ -192,7 +198,7 @@ fun LoginScreen(
                         OutlinedTextField(
                             value = state.apiKey,
                             onValueChange = viewModel::setApiKey,
-                            label = { Text("API key") },
+                            label = { Text(stringResource(R.string.login_api_key)) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             visualTransformation = if (passwordVisible) {
@@ -209,14 +215,15 @@ fun LoginScreen(
                                         } else {
                                             Icons.Default.Visibility
                                         },
-                                        contentDescription = "Toggle key visibility",
+                                        contentDescription = stringResource(
+                                            R.string.login_toggle_key_visibility
+                                        ),
                                     )
                                 }
                             },
                         )
                         Text(
-                            text = "Create a key in qui under Settings → API keys. " +
-                                "Keys do not expire, so the app stays signed in.",
+                            text = stringResource(R.string.login_api_key_hint),
                             style = MaterialTheme.typography.bodySmall,
                             color = palette.mutedForeground,
                         )
@@ -228,11 +235,11 @@ fun LoginScreen(
                     ) {
                         Column(Modifier.weight(1f)) {
                             Text(
-                                "Trust self-signed certificates",
+                                stringResource(R.string.login_trust_certs),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                             Text(
-                                "Only enable this for a server you control.",
+                                stringResource(R.string.login_trust_certs_hint),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = palette.mutedForeground,
                             )
@@ -243,7 +250,7 @@ fun LoginScreen(
                         )
                     }
 
-                    state.error?.let {
+                    (state.errorRes?.let { stringResource(it) } ?: state.errorRaw)?.let {
                         Text(
                             text = it,
                             style = MaterialTheme.typography.bodySmall,
@@ -264,11 +271,15 @@ fun LoginScreen(
                             )
                         } else {
                             Text(
-                                when {
-                                    state.mode == AuthMode.ApiKey -> "Connect"
-                                    state.setupRequired -> "Create account"
-                                    else -> "Sign in"
-                                }
+                                stringResource(
+                                    when {
+                                        state.mode == AuthMode.ApiKey ->
+                                            R.string.login_connect
+                                        state.setupRequired ->
+                                            R.string.login_create_account
+                                        else -> R.string.login_sign_in
+                                    }
+                                )
                             )
                         }
                     }

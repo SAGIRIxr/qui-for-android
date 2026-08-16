@@ -5,12 +5,14 @@
 
 package dev.qui.android.ui
 
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.qui.android.data.AppPreferencesStore
 import dev.qui.android.data.QuiRepository
 import dev.qui.android.data.SpeedUnit
+import dev.qui.android.data.TrackerIconStore
 import dev.qui.android.data.ThemeMode
 import dev.qui.android.data.ViewMode
 import dev.qui.android.data.remote.SessionStore
@@ -25,10 +27,19 @@ class RootViewModel @Inject constructor(
     private val prefsStore: AppPreferencesStore,
     private val session: SessionStore,
     private val repository: QuiRepository,
+    private val trackerIconStore: TrackerIconStore,
 ) : ViewModel() {
 
     val preferences: StateFlow<AppPreferencesStore.Snapshot> = prefsStore.snapshot
         .stateIn(viewModelScope, SharingStarted.Eagerly, AppPreferencesStore.Snapshot())
+
+    /**
+     * Provided once for the whole tree so the list, the detail screen and anything else
+     * showing a tracker share one decoded cache.
+     */
+    val trackerIcons: StateFlow<Map<String, ImageBitmap>> = trackerIconStore.icons
+
+    fun loadTrackerIcons() = viewModelScope.launch { trackerIconStore.refresh() }
 
     val isConfigured: StateFlow<Boolean?> = session.isConfigured
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)

@@ -5,6 +5,7 @@
 
 package dev.qui.android
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -15,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import dev.qui.android.ui.AppLocale
 import dev.qui.android.ui.QuiApp
 import dev.qui.android.ui.RootViewModel
 import dev.qui.android.ui.addintent.AddIntent
@@ -31,6 +33,11 @@ class MainActivity : ComponentActivity() {
      * through onNewIntent because the activity is singleTask.
      */
     private val pendingAdd = MutableStateFlow<AddIntent?>(null)
+
+    /** Applies a language chosen in Settings on Android 12 and below. */
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(AppLocale.wrap(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

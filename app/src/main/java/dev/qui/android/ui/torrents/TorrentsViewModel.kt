@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.qui.android.data.AppPreferencesStore
 import dev.qui.android.data.QuiRepository
+import dev.qui.android.data.SpeedUnit
 import dev.qui.android.data.model.ActionTarget
 import dev.qui.android.data.model.BulkActionRequest
 import dev.qui.android.data.model.Category
@@ -58,7 +59,6 @@ data class TorrentsUiState(
     val streamConnected: Boolean = false,
     val selection: Set<String> = emptySet(),
     val selectionMode: Boolean = false,
-    val trackerIcons: Map<String, String> = emptyMap(),
 ) {
     val selectedInstance: Instance?
         get() = instances.firstOrNull { it.id == selectedInstanceId }
@@ -93,11 +93,6 @@ class TorrentsViewModel @Inject constructor(
                 )
             }
             loadInstances()
-        }
-        viewModelScope.launch {
-            repository.trackerIcons().onSuccess { icons ->
-                _state.update { it.copy(trackerIcons = icons) }
-            }
         }
     }
 
@@ -333,6 +328,16 @@ class TorrentsViewModel @Inject constructor(
         viewModelScope.launch { prefsStore.setSort(field, order) }
         loadedPages = 1
         restart()
+    }
+
+    /** qui's mobile header lets you flip the unit inline, without opening settings. */
+    fun toggleSpeedUnit() {
+        val next = if (preferences.value.speedUnit == SpeedUnit.Bytes) {
+            SpeedUnit.Bits
+        } else {
+            SpeedUnit.Bytes
+        }
+        viewModelScope.launch { prefsStore.setSpeedUnit(next) }
     }
 
     fun setFilters(filters: TorrentFilters) {

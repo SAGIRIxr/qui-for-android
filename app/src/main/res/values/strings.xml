@@ -1,5 +1,343 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2026 qui-android contributors
+  SPDX-License-Identifier: GPL-2.0-or-later
+
+  English is the source language. The other locales are produced by
+  tools/generate_translations.py, which reuses autobrr/qui's own locale files
+  wherever the same English string appears there, so the wording matches the web
+  UI. Do not hand-edit values-*/strings.xml.
+-->
 <resources>
-    <string name="app_name">qui</string>
+
+    <string name="app_name" translatable="false">qui</string>
     <string name="add_to_qui">Add to qui</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_clients">Clients</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_no_active_clients">No clients</string>
+    <string name="nav_loading">Loading…</string>
+
+    <!-- Login / setup -->
+    <string name="login_subtitle">Connect to your qui server</string>
+    <string name="login_server_address">Server address</string>
+    <string name="login_server_placeholder" translatable="false">http://192.168.1.10:7476</string>
+    <string name="login_test_connection">Test connection</string>
+    <string name="login_password">Password</string>
+    <string name="login_api_key">API key</string>
+    <string name="login_username">Username</string>
+    <string name="login_api_key_hint">Create a key in qui under Settings → API keys. Keys do not expire, so the app stays signed in.</string>
+    <string name="login_show_password">Show password</string>
+    <string name="login_hide_password">Hide password</string>
+    <string name="login_toggle_key_visibility">Toggle key visibility</string>
+    <string name="login_trust_certs">Trust self-signed certificates</string>
+    <string name="login_trust_certs_hint">Only enable this for a server you control.</string>
+    <string name="login_connect">Connect</string>
+    <string name="login_create_account">Create account</string>
+    <string name="login_sign_in">Sign in</string>
+    <string name="login_error_no_address">Enter the address of your qui server</string>
+    <string name="login_probe_setup_required">This qui server has no account yet — create one below.</string>
+    <string name="login_probe_ok">Connected. Sign in below.</string>
+    <string name="login_error_generic">Something went wrong</string>
+    <string name="login_error_credentials">Wrong credentials</string>
+    <string name="login_error_forbidden">Access denied by the server</string>
+    <string name="login_error_not_qui">That address does not look like a qui server</string>
+    <string name="login_error_host">Cannot reach that host</string>
+    <string name="login_error_tls">TLS certificate was rejected — turn on \"Trust self-signed certificates\" if this is your own server</string>
+    <string name="login_error_unreachable">Cannot reach the server — check the address and that it is running</string>
+
+    <!-- Torrent list -->
+    <string name="torrents_select_client">Select client</string>
+    <string name="torrents_search">Search</string>
+    <string name="torrents_search_placeholder">Search torrents</string>
+    <string name="torrents_sort">Sort</string>
+    <string name="torrents_filters">Filters</string>
+    <string name="torrents_add">Add torrent</string>
+    <string name="torrents_polling">Polling</string>
+    <string name="torrents_live">Live</string>
+    <string name="torrents_no_clients_title">No active clients</string>
+    <string name="torrents_no_clients_message">Add a qBittorrent instance in qui, then pull to refresh.</string>
+    <string name="torrents_empty_title">No torrents</string>
+    <string name="torrents_empty_filtered">Nothing matches the current search and filters.</string>
+    <string name="torrents_empty_message">This client has no torrents yet.</string>
+    <string name="torrents_clear_search">Clear search</string>
+    <string name="torrents_ratio">Ratio</string>
+    <plurals name="torrents_count">
+        <item quantity="one">%1$d torrent</item>
+        <item quantity="other">%1$d torrents</item>
+    </plurals>
+    <string name="torrents_loaded_of">%1$d of %2$d</string>
+
+    <!-- Selection bar -->
+    <string name="selection_clear">Clear selection</string>
+    <string name="selection_select_all">Select all</string>
+    <plurals name="selection_count">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+
+    <!-- Torrent actions -->
+    <string name="action_resume">Resume</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_recheck">Force recheck</string>
+    <string name="action_reannounce">Reannounce</string>
+    <string name="action_top_of_queue">Top of queue</string>
+    <string name="action_bottom_of_queue">Bottom of queue</string>
+    <string name="action_set_category">Set category</string>
+    <string name="action_set_tags">Set tags</string>
+    <string name="action_speed_limits">Speed limits</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_more">More actions</string>
+
+    <!-- Filter sheet -->
+    <string name="filters_title">Filters</string>
+    <string name="filters_clear_all">Clear all</string>
+    <string name="filters_status">Status</string>
+    <string name="filters_categories">Categories</string>
+    <string name="filters_tags">Tags</string>
+    <string name="filters_trackers">Trackers</string>
+    <string name="filters_uncategorized">Uncategorized</string>
+    <string name="filters_untagged">Untagged</string>
+    <string name="filters_unknown">Unknown</string>
+    <string name="filters_hint">Tap a row to include it, tap the minus to exclude it.</string>
+    <string name="filters_exclude">Exclude</string>
+
+    <!-- Sort sheet -->
+    <string name="sort_title">Sort by</string>
+    <string name="sort_ascending">Ascending</string>
+    <string name="sort_descending">Descending</string>
+
+    <!-- Instance sheet -->
+    <string name="instances_title">qBittorrent clients</string>
+    <string name="instances_selected">Selected</string>
+    <string name="instances_disabled">Disabled</string>
+    <string name="instances_not_reachable">Not reachable</string>
+
+    <!-- Delete dialog -->
+    <string name="delete_title_one">Delete torrent?</string>
+    <string name="delete_title_many">Delete %1$d torrents?</string>
+    <string name="delete_body_keep_files">The torrents will be removed from qBittorrent. Downloaded files stay on disk.</string>
+    <string name="delete_body_with_files">The downloaded files will be permanently deleted from disk. This cannot be undone.</string>
+    <string name="delete_also_files">Also delete files from disk</string>
+
+    <!-- Generic dialog buttons -->
+    <string name="common_cancel">Cancel</string>
+    <string name="common_apply">Apply</string>
+    <string name="common_save">Save</string>
+    <string name="common_close">Close</string>
+    <string name="common_remove">Remove</string>
+    <string name="common_back">Back</string>
+    <string name="common_none">(none)</string>
+    <string name="common_yes">Yes</string>
+    <string name="common_no">No</string>
+    <string name="common_or_type_new">Or type a new one</string>
+    <string name="common_retry">Retry</string>
+
+    <!-- Speed limit dialog -->
+    <string name="speed_limits_hint">Values are in KiB/s. Leave a field empty to leave that limit unchanged; use 0 for unlimited.</string>
+    <string name="speed_limit_download">Download limit</string>
+    <string name="speed_limit_upload">Upload limit</string>
+
+    <!-- Add torrent -->
+    <string name="add_title">Add torrent</string>
+    <string name="add_magnet_or_url">Magnet or URL</string>
+    <string name="add_magnet_placeholder" translatable="false">magnet:?xt=urn:btih:… </string>
+    <string name="add_choose_files">Choose .torrent files</string>
+    <string name="add_category">Category</string>
+    <string name="add_tags">Tags</string>
+    <string name="add_save_path">Save path (optional)</string>
+    <string name="add_start_paused">Start paused</string>
+    <string name="add_skip_hash_check">Skip hash check</string>
+    <string name="add_sequential">Sequential download</string>
+    <string name="add_first_last_piece">First and last piece first</string>
+    <string name="add_submit">Add</string>
+
+    <!-- Torrent details -->
+    <string name="detail_fallback_title">Torrent</string>
+    <string name="detail_tab_general">General</string>
+    <string name="detail_tab_trackers">Trackers</string>
+    <string name="detail_tab_peers">Peers</string>
+    <string name="detail_tab_content">Content</string>
+    <string name="detail_tab_web_seeds">HTTP Sources</string>
+    <string name="detail_rename_title">Rename torrent</string>
+    <string name="detail_size">Size</string>
+    <string name="detail_downloaded">Downloaded</string>
+    <string name="detail_uploaded">Uploaded</string>
+    <string name="detail_wasted">Wasted</string>
+    <string name="detail_ratio">Ratio</string>
+    <string name="detail_seeds">Seeds</string>
+    <string name="detail_peers">Peers</string>
+    <string name="detail_connections">Connections</string>
+    <string name="detail_time_active">Time active</string>
+    <string name="detail_seeding_time">Seeding time</string>
+    <string name="detail_added">Added</string>
+    <string name="detail_completed">Completed</string>
+    <string name="detail_last_seen">Last seen</string>
+    <string name="detail_reannounce_in">Reannounce in</string>
+    <string name="detail_pieces">Pieces</string>
+    <string name="detail_private">Private</string>
+    <string name="detail_save_path">Save path</string>
+    <string name="detail_download_path">Download path</string>
+    <string name="detail_category">Category</string>
+    <string name="detail_tags">Tags</string>
+    <string name="detail_hash_v1">Hash v1</string>
+    <string name="detail_hash_v2">Hash v2</string>
+    <string name="detail_created_by">Created by</string>
+    <string name="detail_comment">Comment</string>
+    <string name="detail_x_of_y">%1$d of %2$d</string>
+    <string name="detail_no_trackers">No trackers</string>
+    <string name="detail_no_peers">No connected peers</string>
+    <string name="detail_no_files">No files found</string>
+    <string name="detail_no_web_seeds">No HTTP sources</string>
+
+    <!-- Tracker status (qBittorrent enum) -->
+    <string name="tracker_status_disabled">Disabled</string>
+    <string name="tracker_status_not_contacted">Not contacted</string>
+    <string name="tracker_status_working">Working</string>
+    <string name="tracker_status_updating">Updating</string>
+    <string name="tracker_status_not_working">Not working</string>
+    <string name="tracker_status_unknown">Unknown</string>
+
+    <!-- File priority -->
+    <string name="file_priority_skip">Skip</string>
+    <string name="file_priority_normal">Normal</string>
+    <string name="file_priority_high">High</string>
+    <string name="file_priority_maximum">Maximum</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_all_clients">All clients</string>
+    <string name="dashboard_download">Download</string>
+    <string name="dashboard_upload">Upload</string>
+    <string name="dashboard_torrents">Torrents</string>
+    <string name="dashboard_downloading">Downloading</string>
+    <string name="dashboard_seeding">Seeding</string>
+    <string name="dashboard_active">Active</string>
+    <string name="dashboard_total">Total</string>
+    <string name="dashboard_errors">Errors</string>
+    <string name="dashboard_session">Session</string>
+    <string name="dashboard_all_time">All time</string>
+    <string name="dashboard_total_size">Total size</string>
+    <string name="dashboard_free_space">Free space</string>
+    <string name="dashboard_uptime">Uptime</string>
+    <string name="dashboard_peer_connections">Peer connections</string>
+    <string name="dashboard_alt_speed_limits">Alternative speed limits</string>
+    <string name="dashboard_show_more">Show more</string>
+    <string name="dashboard_show_less">Show less</string>
+    <string name="dashboard_no_instances_title">No clients yet</string>
+    <string name="dashboard_no_instances_message">Add a qBittorrent instance in qui and it will show up here.</string>
+
+    <!-- Settings -->
+    <string name="settings_account">Account</string>
+    <string name="settings_signed_in">Signed in</string>
+    <string name="settings_sign_out">Sign out</string>
+    <string name="settings_sign_out_title">Sign out?</string>
+    <string name="settings_sign_out_body">The stored credentials for this server will be removed.</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_mode">Mode</string>
+    <string name="settings_mode_light">Light</string>
+    <string name="settings_mode_dark">Dark</string>
+    <string name="settings_mode_system">System</string>
+    <string name="settings_view_mode">View mode</string>
+    <string name="settings_view_mode_normal">Normal</string>
+    <string name="settings_view_mode_compact">Compact</string>
+    <string name="settings_view_mode_ultra">Ultra</string>
+    <string name="settings_speed_units">Speed units</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_behaviour">Behaviour</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_system">System default</string>
+    <string name="settings_incognito">Incognito mode</string>
+    <string name="settings_incognito_hint">Replace names, categories and trackers with Linux ISOs.</string>
+    <string name="settings_confirm_delete">Confirm before deleting</string>
+    <string name="settings_confirm_delete_hint">Ask before removing torrents.</string>
+    <string name="settings_dynamic_color">Use system colours</string>
+    <string name="settings_dynamic_color_hint">Follow the Android wallpaper palette instead of a qui theme.</string>
+    <string name="settings_selected">Selected</string>
+    <string name="settings_about">About</string>
+    <string name="settings_source_code">Source code</string>
+
+    <!-- Torrent state labels (qui TORRENT_STATE_LABELS) -->
+    <string name="state_downloading">Downloading</string>
+    <string name="state_metaDL">Fetching Metadata</string>
+    <string name="state_allocating">Allocating</string>
+    <string name="state_stalledDL">Stalled</string>
+    <string name="state_queuedDL">Queued</string>
+    <string name="state_checkingDL">Checking</string>
+    <string name="state_forcedDL">(F) Downloading</string>
+    <string name="state_uploading">Seeding</string>
+    <string name="state_stalledUP">Seeding</string>
+    <string name="state_queuedUP">Queued</string>
+    <string name="state_checkingUP">Checking</string>
+    <string name="state_forcedUP">(F) Seeding</string>
+    <string name="state_pausedDL">Paused</string>
+    <string name="state_pausedUP">Completed</string>
+    <string name="state_stoppedDL">Stopped</string>
+    <string name="state_stoppedUP">Completed</string>
+    <string name="state_error">Error</string>
+    <string name="state_missingFiles">Missing Files</string>
+    <string name="state_checkingResumeData">Checking Resume Data</string>
+    <string name="state_moving">Moving</string>
+
+    <!-- Tracker health badges -->
+    <string name="tracker_health_down">Tracker Down</string>
+    <string name="tracker_health_error">Tracker Error</string>
+    <string name="tracker_health_unregistered">Unregistered</string>
+
+    <!-- Status filter options (qui FilterSidebar) -->
+    <string name="status_downloading">Downloading</string>
+    <string name="status_uploading">Seeding</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_stopped">Stopped</string>
+    <string name="status_active">Active</string>
+    <string name="status_inactive">Inactive</string>
+    <string name="status_running">Running</string>
+    <string name="status_stalled">Stalled</string>
+    <string name="status_stalled_uploading">Stalled Up</string>
+    <string name="status_stalled_downloading">Stalled Down</string>
+    <string name="status_errored">Error</string>
+    <string name="status_checking">Checking</string>
+    <string name="status_moving">Moving</string>
+    <string name="status_unregistered">Unregistered</string>
+    <string name="status_tracker_down">Tracker Down</string>
+    <string name="status_tracker_error">Tracker Error</string>
+
+    <!-- Sort fields (qui TORRENT_SORT_OPTIONS) -->
+    <string name="sort_added_on">Recently Added</string>
+    <string name="sort_name">Name</string>
+    <string name="sort_size">Size</string>
+    <string name="sort_progress">Progress</string>
+    <string name="sort_state">Status</string>
+    <string name="sort_priority">Priority</string>
+    <string name="sort_num_seeds">Seeds</string>
+    <string name="sort_num_leechs">Leechers</string>
+    <string name="sort_dlspeed">Download Speed</string>
+    <string name="sort_upspeed">Upload Speed</string>
+    <string name="sort_eta">ETA</string>
+    <string name="sort_ratio">Ratio</string>
+    <string name="sort_popularity">Popularity</string>
+    <string name="sort_category">Category</string>
+    <string name="sort_tags">Tags</string>
+    <string name="sort_completion_on">Completed On</string>
+    <string name="sort_tracker">Tracker</string>
+    <string name="sort_dl_limit">Download Limit</string>
+    <string name="sort_up_limit">Upload Limit</string>
+    <string name="sort_downloaded">Downloaded</string>
+    <string name="sort_uploaded">Uploaded</string>
+    <string name="sort_downloaded_session">Session Downloaded</string>
+    <string name="sort_uploaded_session">Session Uploaded</string>
+    <string name="sort_amount_left">Remaining</string>
+    <string name="sort_time_active">Time Active</string>
+    <string name="sort_seeding_time">Seeding Time</string>
+    <string name="sort_save_path">Save Path</string>
+    <string name="sort_completed">Completed</string>
+    <string name="sort_ratio_limit">Ratio Limit</string>
+    <string name="sort_seen_complete">Last Seen Complete</string>
+    <string name="sort_last_activity">Last Activity</string>
+    <string name="sort_availability">Availability</string>
+    <string name="sort_reannounce">Reannounce In</string>
+    <string name="sort_private">Private</string>
+
 </resources>

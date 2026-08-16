@@ -4,11 +4,13 @@
  *
  * Port of the appearance dialog and preference rows from qui's MobileFooterNav and
  * Settings page: theme + variation, light/dark mode, list density, speed units,
- * incognito mode, and the signed-in account.
+ * language, incognito mode, and the signed-in account.
  */
 
 package dev.qui.android.ui.settings
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,16 +27,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.SettingsBrightness
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -49,17 +53,27 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.qui.android.BuildConfig
+import dev.qui.android.R
 import dev.qui.android.data.SpeedUnit
 import dev.qui.android.data.ThemeMode
 import dev.qui.android.data.ViewMode
+import dev.qui.android.ui.AppLocale
+import dev.qui.android.ui.LANGUAGE_NAMES
 import dev.qui.android.ui.RootViewModel
+import dev.qui.android.ui.SUPPORTED_LANGUAGES
+import dev.qui.android.ui.components.QuiCard
 import dev.qui.android.ui.theme.QuiTheme
 import dev.qui.android.ui.theme.QuiThemes
+
+private const val SOURCE_URL = "https://github.com/SAGIRIxr/qui-for-android"
 
 @Composable
 fun SettingsScreen(
@@ -69,19 +83,22 @@ fun SettingsScreen(
     val prefs by root.preferences.collectAsStateWithLifecycle()
     val account by viewModel.account.collectAsStateWithLifecycle()
     val palette = QuiTheme.palette
+    val context = LocalContext.current
     var showLogout by remember { mutableStateOf(false) }
+    var showLanguages by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(12.dp),
+        contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         item {
-            SectionCard("Account") {
+            SectionCard(stringResource(R.string.settings_account)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
                         Text(
-                            text = account.username ?: "Signed in",
+                            text = account.username
+                                ?: stringResource(R.string.settings_signed_in),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                         )
@@ -100,7 +117,7 @@ fun SettingsScreen(
                             modifier = Modifier.size(16.dp),
                         )
                         Spacer(Modifier.width(6.dp))
-                        Text("Sign out")
+                        Text(stringResource(R.string.settings_sign_out))
                     }
                 }
                 account.version?.let {
@@ -115,20 +132,47 @@ fun SettingsScreen(
         }
 
         item {
-            SectionCard("Mode") {
+            SectionCard(stringResource(R.string.settings_language)) {
+                val active = AppLocale.current(context)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showLanguages = true }
+                        .padding(vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        Icons.Default.Language,
+                        contentDescription = null,
+                        tint = palette.mutedForeground,
+                        modifier = Modifier.size(18.dp),
+                    )
+                    Spacer(Modifier.width(12.dp))
+                    Text(
+                        text = active?.let { LANGUAGE_NAMES[it] ?: it }
+                            ?: stringResource(R.string.settings_language_system),
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+        }
+
+        item {
+            SectionCard(stringResource(R.string.settings_mode)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     ModeChip(
-                        label = "Light",
+                        label = stringResource(R.string.settings_mode_light),
                         icon = Icons.Default.LightMode,
                         selected = prefs.themeMode == ThemeMode.Light,
                     ) { root.setThemeMode(ThemeMode.Light) }
                     ModeChip(
-                        label = "Dark",
+                        label = stringResource(R.string.settings_mode_dark),
                         icon = Icons.Default.DarkMode,
                         selected = prefs.themeMode == ThemeMode.Dark,
                     ) { root.setThemeMode(ThemeMode.Dark) }
                     ModeChip(
-                        label = "System",
+                        label = stringResource(R.string.settings_mode_system),
                         icon = Icons.Default.SettingsBrightness,
                         selected = prefs.themeMode == ThemeMode.Auto,
                     ) { root.setThemeMode(ThemeMode.Auto) }
@@ -137,17 +181,17 @@ fun SettingsScreen(
         }
 
         item {
-            SectionCard("Torrent list density") {
+            SectionCard(stringResource(R.string.settings_view_mode)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf(
-                        ViewMode.Normal to "Normal",
-                        ViewMode.Compact to "Compact",
-                        ViewMode.UltraCompact to "Ultra",
+                        ViewMode.Normal to R.string.settings_view_mode_normal,
+                        ViewMode.Compact to R.string.settings_view_mode_compact,
+                        ViewMode.UltraCompact to R.string.settings_view_mode_ultra,
                     ).forEach { (mode, label) ->
                         FilterChip(
                             selected = prefs.viewMode == mode,
                             onClick = { root.setViewMode(mode) },
-                            label = { Text(label) },
+                            label = { Text(stringResource(label)) },
                         )
                     }
                 }
@@ -155,39 +199,39 @@ fun SettingsScreen(
         }
 
         item {
-            SectionCard("Speed units") {
+            SectionCard(stringResource(R.string.settings_speed_units)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilterChip(
                         selected = prefs.speedUnit == SpeedUnit.Bytes,
                         onClick = { root.setSpeedUnit(SpeedUnit.Bytes) },
-                        label = { Text("B/s") },
+                        label = { Text("MiB/s") },
                     )
                     FilterChip(
                         selected = prefs.speedUnit == SpeedUnit.Bits,
                         onClick = { root.setSpeedUnit(SpeedUnit.Bits) },
-                        label = { Text("bps") },
+                        label = { Text("Mbps") },
                     )
                 }
             }
         }
 
         item {
-            SectionCard("Behaviour") {
+            SectionCard(stringResource(R.string.settings_behaviour)) {
                 ToggleRow(
-                    title = "Incognito mode",
-                    subtitle = "Replace names, categories and trackers with Linux ISOs.",
+                    title = stringResource(R.string.settings_incognito),
+                    subtitle = stringResource(R.string.settings_incognito_hint),
                     checked = prefs.incognito,
                     onChange = root::setIncognito,
                 )
                 ToggleRow(
-                    title = "Confirm before deleting",
-                    subtitle = "Ask before removing torrents.",
+                    title = stringResource(R.string.settings_confirm_delete),
+                    subtitle = stringResource(R.string.settings_confirm_delete_hint),
                     checked = prefs.confirmDelete,
                     onChange = root::setConfirmDelete,
                 )
                 ToggleRow(
-                    title = "Use system colours",
-                    subtitle = "Follow the Android wallpaper palette instead of a qui theme.",
+                    title = stringResource(R.string.settings_dynamic_color),
+                    subtitle = stringResource(R.string.settings_dynamic_color_hint),
                     checked = prefs.dynamicColor,
                     onChange = root::setDynamicColor,
                 )
@@ -195,7 +239,7 @@ fun SettingsScreen(
         }
 
         item {
-            SectionCard("Theme") {
+            SectionCard(stringResource(R.string.settings_theme)) {
                 QuiThemes.forEach { theme ->
                     ThemeRow(
                         name = theme.name,
@@ -235,48 +279,164 @@ fun SettingsScreen(
                 }
             }
         }
+
+        item {
+            SectionCard(stringResource(R.string.settings_about)) {
+                Text(
+                    text = "qui for Android ${BuildConfig.VERSION_NAME}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = palette.mutedForeground,
+                )
+                Spacer(Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            context.startActivity(
+                                Intent(Intent.ACTION_VIEW, Uri.parse(SOURCE_URL))
+                            )
+                        }
+                        .padding(vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        Icons.Default.Code,
+                        contentDescription = null,
+                        tint = palette.mutedForeground,
+                        modifier = Modifier.size(16.dp),
+                    )
+                    Spacer(Modifier.width(10.dp))
+                    Text(
+                        text = stringResource(R.string.settings_source_code),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = palette.primary,
+                    )
+                }
+            }
+        }
+    }
+
+    if (showLanguages) {
+        LanguageDialog(
+            current = AppLocale.current(context),
+            onDismiss = { showLanguages = false },
+            onSelect = { tag ->
+                showLanguages = false
+                AppLocale.apply(context, tag)
+                // Resources are resolved at activity creation, so the whole tree has to
+                // be rebuilt for the new language to take effect.
+                (context as? android.app.Activity)?.recreate()
+            },
+        )
     }
 
     if (showLogout) {
         AlertDialog(
             onDismissRequest = { showLogout = false },
-            title = { Text("Sign out?") },
-            text = { Text("The stored credentials for this server will be removed.") },
+            title = { Text(stringResource(R.string.settings_sign_out_title)) },
+            text = { Text(stringResource(R.string.settings_sign_out_body)) },
             confirmButton = {
                 TextButton(
                     onClick = {
                         showLogout = false
                         root.logout()
                     },
-                ) { Text("Sign out", color = palette.destructive) }
+                ) {
+                    Text(
+                        text = stringResource(R.string.settings_sign_out),
+                        color = palette.destructive,
+                    )
+                }
             },
             dismissButton = {
-                TextButton(onClick = { showLogout = false }) { Text("Cancel") }
+                TextButton(onClick = { showLogout = false }) {
+                    Text(stringResource(R.string.common_cancel))
+                }
             },
         )
+    }
+}
+
+/**
+ * The same list qui's footer nav offers, plus a "system default" row that hands
+ * language selection back to Android's own matching.
+ */
+@Composable
+private fun LanguageDialog(
+    current: String?,
+    onDismiss: () -> Unit,
+    onSelect: (String?) -> Unit,
+) {
+    val palette = QuiTheme.palette
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.settings_language)) },
+        text = {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                LanguageRow(
+                    label = stringResource(R.string.settings_language_system),
+                    selected = current == null,
+                    onClick = { onSelect(null) },
+                )
+                SUPPORTED_LANGUAGES.forEach { tag ->
+                    LanguageRow(
+                        label = LANGUAGE_NAMES[tag] ?: tag,
+                        selected = current == tag,
+                        onClick = { onSelect(tag) },
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_close)) }
+        },
+    )
+}
+
+@Composable
+private fun LanguageRow(label: String, selected: Boolean, onClick: () -> Unit) {
+    val palette = QuiTheme.palette
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = if (selected) palette.primary else palette.foreground,
+            modifier = Modifier.weight(1f),
+        )
+        if (selected) {
+            Icon(
+                Icons.Default.Check,
+                contentDescription = stringResource(R.string.settings_selected),
+                tint = palette.primary,
+                modifier = Modifier.size(18.dp),
+            )
+        }
     }
 }
 
 @Composable
 private fun SectionCard(title: String, content: @Composable () -> Unit) {
     val palette = QuiTheme.palette
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = palette.card,
-            contentColor = palette.cardForeground,
-        ),
-    ) {
-        Column(Modifier.padding(16.dp)) {
-            Text(
-                text = title.uppercase(),
-                style = MaterialTheme.typography.labelSmall,
-                color = palette.mutedForeground,
-                fontWeight = FontWeight.SemiBold,
-            )
-            Spacer(Modifier.height(10.dp))
-            content()
-        }
+    QuiCard {
+        Text(
+            text = title.uppercase(),
+            style = MaterialTheme.typography.labelSmall,
+            color = palette.mutedForeground,
+            fontWeight = FontWeight.SemiBold,
+        )
+        Spacer(Modifier.height(10.dp))
+        content()
     }
 }
 
@@ -363,7 +523,7 @@ private fun ThemeRow(
         if (selected) {
             Icon(
                 Icons.Default.Check,
-                contentDescription = "Selected",
+                contentDescription = stringResource(R.string.settings_selected),
                 tint = palette.primary,
                 modifier = Modifier.size(18.dp),
             )

@@ -43,24 +43,31 @@ import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.qui.android.R
 import dev.qui.android.data.model.TorrentFile
 import dev.qui.android.data.model.TorrentPeer
 import dev.qui.android.data.model.TorrentTracker
+import dev.qui.android.ui.components.BadgeVariant
 import dev.qui.android.ui.components.QuiBadge
+import dev.qui.android.ui.components.QuiCard
+import dev.qui.android.ui.components.TrackerIcon
 import dev.qui.android.ui.components.QuiProgress
 import dev.qui.android.ui.format.formatBytes
 import dev.qui.android.ui.format.formatDuration
@@ -72,6 +79,7 @@ import dev.qui.android.ui.format.formatUnixTime
 import dev.qui.android.ui.theme.QuiTheme
 import dev.qui.android.ui.torrents.TextInputDialog
 import dev.qui.android.ui.torrents.statusBadgeFor
+import dev.qui.android.ui.torrents.trackerHost
 
 @Composable
 fun TorrentDetailScreen(
@@ -83,11 +91,18 @@ fun TorrentDetailScreen(
     val palette = QuiTheme.palette
     var showRename by remember { mutableStateOf(false) }
 
-    val title = state.torrent?.name ?: state.properties?.name ?: "Torrent"
+    val title = state.torrent?.name
+        ?: state.properties?.name
+        ?: stringResource(R.string.detail_fallback_title)
 
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = palette.background,
+                    titleContentColor = palette.foreground,
+                    navigationIconContentColor = palette.foreground,
+                ),
                 title = {
                     Text(
                         text = title,
@@ -98,7 +113,10 @@ fun TorrentDetailScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.common_back),
+                        )
                     }
                 },
             )
@@ -128,19 +146,34 @@ fun TorrentDetailScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 IconButton(onClick = { viewModel.action("resume") }) {
-                    Icon(Icons.Default.PlayArrow, contentDescription = "Resume")
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = stringResource(R.string.action_resume),
+                    )
                 }
                 IconButton(onClick = { viewModel.action("pause") }) {
-                    Icon(Icons.Default.Pause, contentDescription = "Pause")
+                    Icon(
+                        imageVector = Icons.Default.Pause,
+                        contentDescription = stringResource(R.string.action_pause),
+                    )
                 }
                 IconButton(onClick = { viewModel.action("recheck") }) {
-                    Icon(Icons.Default.Refresh, contentDescription = "Recheck")
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = stringResource(R.string.action_recheck),
+                    )
                 }
                 IconButton(onClick = { viewModel.action("reannounce") }) {
-                    Icon(Icons.Default.Campaign, contentDescription = "Reannounce")
+                    Icon(
+                        imageVector = Icons.Default.Campaign,
+                        contentDescription = stringResource(R.string.action_reannounce),
+                    )
                 }
                 IconButton(onClick = { showRename = true }) {
-                    Icon(Icons.Default.DriveFileRenameOutline, contentDescription = "Rename")
+                    Icon(
+                        imageVector = Icons.Default.DriveFileRenameOutline,
+                        contentDescription = stringResource(R.string.action_rename),
+                    )
                 }
             }
 
@@ -156,11 +189,16 @@ fun TorrentDetailScreen(
                         text = {
                             Text(
                                 text = when (tab) {
-                                    DetailTab.General -> "General"
-                                    DetailTab.Trackers -> "Trackers"
-                                    DetailTab.Peers -> "Peers"
-                                    DetailTab.Content -> "Content"
-                                    DetailTab.WebSeeds -> "HTTP Sources"
+                                    DetailTab.General ->
+                                        stringResource(R.string.detail_tab_general)
+                                    DetailTab.Trackers ->
+                                        stringResource(R.string.detail_tab_trackers)
+                                    DetailTab.Peers ->
+                                        stringResource(R.string.detail_tab_peers)
+                                    DetailTab.Content ->
+                                        stringResource(R.string.detail_tab_content)
+                                    DetailTab.WebSeeds ->
+                                        stringResource(R.string.detail_tab_web_seeds)
                                 },
                                 style = MaterialTheme.typography.labelMedium,
                             )
@@ -181,7 +219,7 @@ fun TorrentDetailScreen(
 
     if (showRename) {
         TextInputDialog(
-            title = "Rename torrent",
+            title = stringResource(R.string.detail_rename_title),
             initial = title,
             onDismiss = { showRename = false },
             onConfirm = {
@@ -239,7 +277,7 @@ private fun DetailHeader(state: DetailUiState, speedUnit: dev.qui.android.data.S
             )
             val ratio = props?.shareRatio ?: torrent?.ratio ?: 0.0
             Text(
-                text = "Ratio ${formatRatio(ratio)}",
+                text = stringResource(R.string.detail_ratio) + " " + formatRatio(ratio),
                 style = MaterialTheme.typography.bodySmall,
                 color = QuiTheme.ratioColor(ratio),
             )
@@ -252,38 +290,95 @@ private fun GeneralTab(state: DetailUiState) {
     val props = state.properties ?: return
     val torrent = state.torrent
 
-    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+    LazyColumn(
+        contentPadding = PaddingValues(12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
         item {
-            StatRow("Size", formatBytes(props.totalSize))
-            StatRow("Downloaded", formatBytes(props.totalDownloaded))
-            StatRow("Uploaded", formatBytes(props.totalUploaded))
-            StatRow("Wasted", formatBytes(props.totalWasted))
-            StatRow("Ratio", formatRatio(props.shareRatio))
-            StatRow("Seeds", "${props.seeds} of ${props.seedsTotal}")
-            StatRow("Peers", "${props.peers} of ${props.peersTotal}")
-            StatRow("Connections", "${props.nbConnections} of ${props.nbConnectionsLimit}")
-            StatRow("Time active", formatDuration(props.timeElapsed))
-            StatRow("Seeding time", formatDuration(props.seedingTime))
-            StatRow("Added", formatUnixTime(props.additionDate))
-            StatRow("Completed", formatUnixTime(props.completionDate))
-            StatRow("Last seen", formatUnixTime(props.lastSeen))
-            StatRow("Reannounce in", formatDuration(props.reannounce))
-            StatRow("Pieces", "${props.piecesHave} / ${props.piecesNum} (${formatBytes(props.pieceSize)})")
-            StatRow("Private", if (props.isPrivate) "Yes" else "No")
-            StatRow("Save path", props.savePath, mono = true)
+          QuiCard {
+            StatRow(stringResource(R.string.detail_size), formatBytes(props.totalSize))
+            StatRow(stringResource(R.string.detail_downloaded), formatBytes(props.totalDownloaded))
+            StatRow(stringResource(R.string.detail_uploaded), formatBytes(props.totalUploaded))
+            StatRow(stringResource(R.string.detail_wasted), formatBytes(props.totalWasted))
+            StatRow(stringResource(R.string.detail_ratio), formatRatio(props.shareRatio))
+            StatRow(
+                label = stringResource(R.string.detail_seeds),
+                value = stringResource(R.string.detail_x_of_y, props.seeds, props.seedsTotal),
+            )
+            StatRow(
+                label = stringResource(R.string.detail_peers),
+                value = stringResource(R.string.detail_x_of_y, props.peers, props.peersTotal),
+            )
+            StatRow(
+                label = stringResource(R.string.detail_connections),
+                value = stringResource(
+                    R.string.detail_x_of_y,
+                    props.nbConnections,
+                    props.nbConnectionsLimit,
+                ),
+            )
+          }
+        }
+
+        item {
+          QuiCard {
+            StatRow(stringResource(R.string.detail_time_active), formatDuration(props.timeElapsed))
+            StatRow(stringResource(R.string.detail_seeding_time), formatDuration(props.seedingTime))
+            StatRow(stringResource(R.string.detail_added), formatUnixTime(props.additionDate))
+            StatRow(stringResource(R.string.detail_completed), formatUnixTime(props.completionDate))
+            StatRow(stringResource(R.string.detail_last_seen), formatUnixTime(props.lastSeen))
+            StatRow(stringResource(R.string.detail_reannounce_in), formatDuration(props.reannounce))
+          }
+        }
+
+        item {
+          QuiCard {
+            StatRow(
+                label = stringResource(R.string.detail_pieces),
+                value = "${props.piecesHave} / ${props.piecesNum} " +
+                    "(${formatBytes(props.pieceSize)})",
+            )
+            StatRow(
+                label = stringResource(R.string.detail_private),
+                value = stringResource(
+                    if (props.isPrivate) R.string.common_yes else R.string.common_no
+                ),
+            )
+            StatRow(stringResource(R.string.detail_save_path), props.savePath, mono = true)
             if (props.downloadPath.isNotBlank()) {
-                StatRow("Download path", props.downloadPath, mono = true)
+                StatRow(
+                    label = stringResource(R.string.detail_download_path),
+                    value = props.downloadPath,
+                    mono = true,
+                )
             }
             torrent?.let {
-                StatRow("Category", it.category.ifBlank { "—" })
-                StatRow("Tags", it.tagList.joinToString(", ").ifBlank { "—" })
+                StatRow(stringResource(R.string.detail_category), it.category.ifBlank { "—" })
+                StatRow(
+                    label = stringResource(R.string.detail_tags),
+                    value = it.tagList.joinToString(", ").ifBlank { "—" },
+                )
             }
-            StatRow("Hash v1", props.infohashV1.ifBlank { props.hash }, mono = true)
+          }
+        }
+
+        item {
+          QuiCard {
+            StatRow(
+                label = stringResource(R.string.detail_hash_v1),
+                value = props.infohashV1.ifBlank { props.hash },
+                mono = true,
+            )
             if (props.infohashV2.isNotBlank()) {
-                StatRow("Hash v2", props.infohashV2, mono = true)
+                StatRow(stringResource(R.string.detail_hash_v2), props.infohashV2, mono = true)
             }
-            if (props.createdBy.isNotBlank()) StatRow("Created by", props.createdBy)
-            if (props.comment.isNotBlank()) StatRow("Comment", props.comment)
+            if (props.createdBy.isNotBlank()) {
+                StatRow(stringResource(R.string.detail_created_by), props.createdBy)
+            }
+            if (props.comment.isNotBlank()) {
+                StatRow(stringResource(R.string.detail_comment), props.comment)
+            }
+          }
         }
     }
 }
@@ -317,25 +412,43 @@ private fun TrackersTab(trackers: List<TorrentTracker>) {
     val palette = QuiTheme.palette
 
     if (trackers.isEmpty()) {
-        EmptyTab("No trackers")
+        EmptyTab(stringResource(R.string.detail_no_trackers))
         return
     }
 
-    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+    LazyColumn(
+        contentPadding = PaddingValues(12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         items(trackers) { tracker ->
-            Column(Modifier.padding(vertical = 6.dp)) {
-                Text(
-                    text = tracker.url,
-                    style = MaterialTheme.typography.bodySmall,
-                    fontFamily = FontFamily.Monospace,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Spacer(Modifier.height(2.dp))
+            QuiCard {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    TrackerIcon(host = trackerHost(tracker.url), size = 16.dp)
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = tracker.url,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontFamily = FontFamily.Monospace,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f),
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    QuiBadge(
+                        text = trackerStatusLabel(tracker.status),
+                        // Only status 2 means the tracker actually answered.
+                        variant = when (tracker.status) {
+                            2 -> BadgeVariant.Secondary
+                            4 -> BadgeVariant.Destructive
+                            else -> BadgeVariant.Outline
+                        },
+                        compact = true,
+                    )
+                }
+                Spacer(Modifier.height(6.dp))
                 Text(
                     text = buildString {
-                        append(trackerStatusLabel(tracker.status))
-                        append(" · S ${tracker.numSeeds}")
+                        append("S ${tracker.numSeeds}")
                         append(" · L ${tracker.numLeeches}")
                         append(" · P ${tracker.numPeers}")
                         if (tracker.msg.isNotBlank()) append(" · ${tracker.msg}")
@@ -349,21 +462,25 @@ private fun TrackersTab(trackers: List<TorrentTracker>) {
 }
 
 /** qBittorrent's tracker status enum. */
-private fun trackerStatusLabel(status: Int): String = when (status) {
-    0 -> "Disabled"
-    1 -> "Not contacted"
-    2 -> "Working"
-    3 -> "Updating"
-    4 -> "Not working"
-    else -> "Unknown"
-}
+@Composable
+@ReadOnlyComposable
+private fun trackerStatusLabel(status: Int): String = stringResource(
+    when (status) {
+        0 -> R.string.tracker_status_disabled
+        1 -> R.string.tracker_status_not_contacted
+        2 -> R.string.tracker_status_working
+        3 -> R.string.tracker_status_updating
+        4 -> R.string.tracker_status_not_working
+        else -> R.string.tracker_status_unknown
+    }
+)
 
 @Composable
 private fun PeersTab(peers: List<TorrentPeer>, speedUnit: dev.qui.android.data.SpeedUnit) {
     val palette = QuiTheme.palette
 
     if (peers.isEmpty()) {
-        EmptyTab("No connected peers")
+        EmptyTab(stringResource(R.string.detail_no_peers))
         return
     }
 
@@ -426,7 +543,7 @@ private fun ContentTab(
     val palette = QuiTheme.palette
 
     if (files.isEmpty()) {
-        EmptyTab("No file list available")
+        EmptyTab(stringResource(R.string.detail_no_files))
         return
     }
 
@@ -485,18 +602,21 @@ private fun ContentTab(
     }
 }
 
-private fun filePriorityLabel(priority: Int): String = when (priority) {
-    0 -> "Skip"
-    1 -> "Normal"
-    6 -> "High"
-    7 -> "Maximum"
-    else -> "Normal"
-}
+@Composable
+@ReadOnlyComposable
+private fun filePriorityLabel(priority: Int): String = stringResource(
+    when (priority) {
+        0 -> R.string.file_priority_skip
+        6 -> R.string.file_priority_high
+        7 -> R.string.file_priority_maximum
+        else -> R.string.file_priority_normal
+    }
+)
 
 @Composable
 private fun WebSeedsTab(urls: List<String>) {
     if (urls.isEmpty()) {
-        EmptyTab("No HTTP sources")
+        EmptyTab(stringResource(R.string.detail_no_web_seeds))
         return
     }
 

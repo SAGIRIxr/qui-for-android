@@ -8,27 +8,43 @@
 
 package dev.qui.android.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.Image
+import androidx.compose.ui.unit.sp
 import dev.qui.android.R
+import dev.qui.android.data.iconFor
 import dev.qui.android.ui.theme.QuiTheme
 
 /**
@@ -150,7 +166,7 @@ fun QuiProgress(
 fun QuiLogo(modifier: Modifier = Modifier, tint: Color? = null) {
     Image(
         painter = painterResource(R.drawable.ic_qui_logo),
-        contentDescription = "qui",
+        contentDescription = stringResource(R.string.app_name),
         modifier = modifier.size(24.dp),
         colorFilter = ColorFilter.tint(tint ?: QuiTheme.palette.primary),
     )
@@ -165,5 +181,149 @@ fun StatusDot(connected: Boolean, modifier: Modifier = Modifier) {
             .size(8.dp)
             .clip(RoundedCornerShape(percent = 50))
             .background(if (connected) palette.chart3 else palette.destructive),
+    )
+}
+
+/**
+ * Favicons fetched from qui's tracker-icon cache, keyed by host. Empty until the
+ * first fetch lands, which is why TrackerIcon always has a letter fallback.
+ */
+val LocalTrackerIcons = staticCompositionLocalOf<Map<String, ImageBitmap>> { emptyMap() }
+
+/**
+ * qui's TrackerIcon: the cached favicon when there is one, otherwise the host's
+ * first letter in a muted square, so the row keeps its alignment either way.
+ */
+@Composable
+fun TrackerIcon(
+    host: String,
+    modifier: Modifier = Modifier,
+    size: Dp = 14.dp,
+) {
+    if (host.isEmpty()) return
+    val palette = QuiTheme.palette
+    val icon = LocalTrackerIcons.current.iconFor(host)
+    val shape = RoundedCornerShape(3.dp)
+
+    if (icon != null) {
+        Image(
+            bitmap = icon,
+            contentDescription = null,
+            modifier = modifier
+                .size(size)
+                .clip(shape),
+            contentScale = ContentScale.Fit,
+        )
+    } else {
+        Box(
+            modifier = modifier
+                .size(size)
+                .clip(shape)
+                .background(palette.muted),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = host.first().uppercase(),
+                color = palette.mutedForeground,
+                fontSize = (size.value * 0.62f).sp,
+                lineHeight = (size.value * 0.62f).sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+    }
+}
+
+/**
+ * A labelled figure, used across the dashboard cards and the list header. Matches the
+ * "big number over a muted caption" blocks in qui's InstanceCard.
+ */
+@Composable
+fun Metric(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+    color: Color? = null,
+) {
+    val palette = QuiTheme.palette
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = value,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = color ?: palette.foreground,
+            maxLines = 1,
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = palette.mutedForeground,
+            maxLines = 1,
+        )
+    }
+}
+
+/** A label/value line, the layout qui uses for the smaller stats under the counts. */
+@Composable
+fun StatLine(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    valueColor: Color? = null,
+) {
+    val palette = QuiTheme.palette
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = valueColor ?: palette.mutedForeground,
+                modifier = Modifier.size(13.dp),
+            )
+            Spacer(Modifier.width(6.dp))
+        }
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodySmall,
+            color = palette.mutedForeground,
+            modifier = Modifier.weight(1f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Medium,
+            color = valueColor ?: palette.foreground,
+            maxLines = 1,
+        )
+    }
+}
+
+/**
+ * The card surface qui uses everywhere: `bg-card` with a hairline border and a
+ * generous radius. Material's own Card draws a tonal elevation that fights the
+ * ported palette, so this keeps the two UIs looking the same.
+ */
+@Composable
+fun QuiCard(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    val palette = QuiTheme.palette
+    val shape = RoundedCornerShape(12.dp)
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .background(palette.card)
+            .border(1.dp, palette.border, shape)
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+            .padding(16.dp),
+        content = content,
     )
 }

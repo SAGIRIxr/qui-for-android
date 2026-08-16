@@ -38,14 +38,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import dev.qui.android.R
 import dev.qui.android.data.SpeedUnit
 import dev.qui.android.data.ViewMode
 import dev.qui.android.data.model.Torrent
 import dev.qui.android.ui.components.QuiBadge
 import dev.qui.android.ui.components.QuiProgress
+import dev.qui.android.ui.components.TrackerIcon
 import dev.qui.android.ui.format.ETA_INFINITE
 import dev.qui.android.ui.format.formatBytes
 import dev.qui.android.ui.format.formatEta
@@ -77,6 +80,8 @@ fun TorrentCard(
     val displayTags = if (incognito) incognitoTags(torrent.hash) else torrent.tagList
     val displayRatio = if (incognito) incognitoRatio(torrent.hash) else torrent.ratio
     val trackerName = if (incognito) "tracker.example" else trackerShortName(torrent.tracker)
+    // Incognito must not leak the real tracker, and an empty host suppresses the icon.
+    val trackerIconHost = if (incognito) "" else trackerHost(torrent.tracker)
 
     Box(
         modifier = modifier
@@ -114,6 +119,7 @@ fun TorrentCard(
                     ViewMode.UltraCompact -> UltraCompactBody(
                         torrent = torrent,
                         displayName = displayName,
+                        trackerIconHost = trackerIconHost,
                         badge = badge,
                         speedUnit = speedUnit,
                     )
@@ -125,6 +131,7 @@ fun TorrentCard(
                         displayTags = displayTags,
                         displayRatio = displayRatio,
                         trackerName = trackerName,
+                        trackerIconHost = trackerIconHost,
                         badge = badge,
                         speedUnit = speedUnit,
                     )
@@ -136,6 +143,7 @@ fun TorrentCard(
                         displayTags = displayTags,
                         displayRatio = displayRatio,
                         trackerName = trackerName,
+                        trackerIconHost = trackerIconHost,
                         badge = badge,
                         speedUnit = speedUnit,
                     )
@@ -157,6 +165,7 @@ fun TorrentCard(
 private fun UltraCompactBody(
     torrent: Torrent,
     displayName: String,
+    trackerIconHost: String,
     badge: StatusBadge,
     speedUnit: SpeedUnit,
 ) {
@@ -166,6 +175,8 @@ private fun UltraCompactBody(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
+        // qui's ultra-compact row leads with the tracker favicon before the name.
+        TrackerIcon(host = trackerIconHost, size = 12.dp)
         Text(
             text = displayName,
             style = MaterialTheme.typography.bodySmall,
@@ -217,6 +228,7 @@ private fun CompactBody(
     displayTags: List<String>,
     displayRatio: Double,
     trackerName: String,
+    trackerIconHost: String,
     badge: StatusBadge,
     speedUnit: SpeedUnit,
 ) {
@@ -249,7 +261,7 @@ private fun CompactBody(
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "Ratio ",
+                text = stringResource(R.string.torrents_ratio) + " ",
                 style = MaterialTheme.typography.bodySmall,
                 color = palette.mutedForeground,
             )
@@ -277,7 +289,7 @@ private fun CompactBody(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (trackerName.isNotEmpty()) {
-                MetaChip(text = trackerName)
+                MetaChip(text = trackerName, trackerHost = trackerIconHost)
             }
             if (displayCategory.isNotEmpty()) {
                 MetaChip(icon = Icons.Default.Folder, text = displayCategory)
@@ -326,6 +338,7 @@ private fun NormalBody(
     displayTags: List<String>,
     displayRatio: Double,
     trackerName: String,
+    trackerIconHost: String,
     badge: StatusBadge,
     speedUnit: SpeedUnit,
 ) {
@@ -435,7 +448,9 @@ private fun NormalBody(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (trackerName.isNotEmpty()) MetaChip(text = trackerName)
+            if (trackerName.isNotEmpty()) {
+                MetaChip(text = trackerName, trackerHost = trackerIconHost)
+            }
             if (displayCategory.isNotEmpty()) {
                 MetaChip(icon = Icons.Default.Folder, text = displayCategory)
             }
@@ -466,12 +481,16 @@ private fun SpeedLabel(
 private fun MetaChip(
     text: String,
     icon: androidx.compose.ui.graphics.vector.ImageVector? = null,
+    trackerHost: String? = null,
 ) {
     val palette = QuiTheme.palette
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(3.dp),
     ) {
+        if (trackerHost != null) {
+            TrackerIcon(host = trackerHost, size = 13.dp)
+        }
         if (icon != null) {
             Icon(
                 imageVector = icon,

@@ -1,0 +1,853 @@
+{
+  "_comment": [
+    "Strings that have no counterpart in autobrr/qui's own locale files, so they",
+    "are translated here instead. Everything else is pulled from qui at build time",
+    "by generate_translations.py so the wording matches the web UI.",
+    "Languages: cs, de, fr, it, ko, pt-BR, uk, zh-CN (the set qui supports)."
+  ],
+
+  "add_to_qui": {
+    "cs": "Přidat do qui",
+    "de": "Zu qui hinzufügen",
+    "fr": "Ajouter à qui",
+    "it": "Aggiungi a qui",
+    "ko": "qui에 추가",
+    "pt-BR": "Adicionar ao qui",
+    "uk": "Додати до qui",
+    "zh-CN": "添加到 qui"
+  },
+
+  "action_top_of_queue": {
+    "cs": "Na začátek fronty",
+    "de": "An den Anfang der Warteschlange",
+    "fr": "En haut de la file",
+    "it": "In cima alla coda",
+    "ko": "대기열 맨 위로",
+    "pt-BR": "Início da fila",
+    "uk": "На початок черги",
+    "zh-CN": "移到队列首位"
+  },
+  "action_bottom_of_queue": {
+    "cs": "Na konec fronty",
+    "de": "Ans Ende der Warteschlange",
+    "fr": "En bas de la file",
+    "it": "In fondo alla coda",
+    "ko": "대기열 맨 아래로",
+    "pt-BR": "Fim da fila",
+    "uk": "У кінець черги",
+    "zh-CN": "移到队列末尾"
+  },
+  "action_more": {
+    "cs": "Další akce",
+    "de": "Weitere Aktionen",
+    "fr": "Plus d'actions",
+    "it": "Altre azioni",
+    "ko": "추가 작업",
+    "pt-BR": "Mais ações",
+    "uk": "Інші дії",
+    "zh-CN": "更多操作"
+  },
+
+  "add_magnet_or_url": {
+    "cs": "Magnet nebo URL",
+    "de": "Magnet oder URL",
+    "fr": "Magnet ou URL",
+    "it": "Magnet o URL",
+    "ko": "Magnet 또는 URL",
+    "pt-BR": "Magnet ou URL",
+    "uk": "Magnet або URL",
+    "zh-CN": "Magnet 链接或 URL"
+  },
+  "add_choose_files": {
+    "cs": "Vybrat soubory .torrent",
+    "de": ".torrent-Dateien auswählen",
+    "fr": "Choisir des fichiers .torrent",
+    "it": "Scegli file .torrent",
+    "ko": ".torrent 파일 선택",
+    "pt-BR": "Escolher arquivos .torrent",
+    "uk": "Вибрати файли .torrent",
+    "zh-CN": "选择 .torrent 文件"
+  },
+  "add_first_last_piece": {
+    "cs": "Nejprve první a poslední část",
+    "de": "Erstes und letztes Teil zuerst",
+    "fr": "Premier et dernier fragment en priorité",
+    "it": "Prima il primo e l'ultimo pezzo",
+    "ko": "첫 조각과 마지막 조각 우선",
+    "pt-BR": "Primeiro e último pedaço primeiro",
+    "uk": "Спочатку перша й остання частини",
+    "zh-CN": "优先下载首尾块"
+  },
+
+  "common_none": {
+    "cs": "(žádná)",
+    "de": "(keine)",
+    "fr": "(aucune)",
+    "it": "(nessuna)",
+    "ko": "(없음)",
+    "pt-BR": "(nenhuma)",
+    "uk": "(немає)",
+    "zh-CN": "（无）"
+  },
+  "common_or_type_new": {
+    "cs": "Nebo zadejte novou",
+    "de": "Oder eine neue eingeben",
+    "fr": "Ou saisissez-en une nouvelle",
+    "it": "Oppure scrivine una nuova",
+    "ko": "또는 새로 입력",
+    "pt-BR": "Ou digite uma nova",
+    "uk": "Або введіть нову",
+    "zh-CN": "或输入新的"
+  },
+
+  "dashboard_all_clients": {
+    "cs": "Všichni klienti",
+    "de": "Alle Clients",
+    "fr": "Tous les clients",
+    "it": "Tutti i client",
+    "ko": "모든 클라이언트",
+    "pt-BR": "Todos os clientes",
+    "uk": "Усі клієнти",
+    "zh-CN": "全部客户端"
+  },
+  "dashboard_session": {
+    "cs": "Relace",
+    "de": "Sitzung",
+    "fr": "Session",
+    "it": "Sessione",
+    "ko": "세션",
+    "pt-BR": "Sessão",
+    "uk": "Сеанс",
+    "zh-CN": "本次会话"
+  },
+  "dashboard_all_time": {
+    "cs": "Celkem",
+    "de": "Insgesamt",
+    "fr": "Depuis toujours",
+    "it": "Da sempre",
+    "ko": "전체 기간",
+    "pt-BR": "Desde sempre",
+    "uk": "За весь час",
+    "zh-CN": "累计"
+  },
+  "dashboard_alt_speed_limits": {
+    "cs": "Alternativní rychlostní limity",
+    "de": "Alternative Geschwindigkeitsbegrenzungen",
+    "fr": "Limites de vitesse alternatives",
+    "it": "Limiti di velocità alternativi",
+    "ko": "대체 속도 제한",
+    "pt-BR": "Limites de velocidade alternativos",
+    "uk": "Альтернативні обмеження швидкості",
+    "zh-CN": "备用速度限制"
+  },
+  "dashboard_no_instances_title": {
+    "cs": "Zatím žádní klienti",
+    "de": "Noch keine Clients",
+    "fr": "Aucun client",
+    "it": "Nessun client",
+    "ko": "클라이언트 없음",
+    "pt-BR": "Nenhum cliente ainda",
+    "uk": "Клієнтів ще немає",
+    "zh-CN": "暂无客户端"
+  },
+  "dashboard_no_instances_message": {
+    "cs": "Přidejte instanci qBittorrentu v qui a objeví se zde.",
+    "de": "Füge in qui eine qBittorrent-Instanz hinzu, dann erscheint sie hier.",
+    "fr": "Ajoutez une instance qBittorrent dans qui et elle apparaîtra ici.",
+    "it": "Aggiungi un'istanza qBittorrent in qui e comparirà qui.",
+    "ko": "qui에서 qBittorrent 인스턴스를 추가하면 여기에 표시됩니다.",
+    "pt-BR": "Adicione uma instância do qBittorrent no qui e ela aparecerá aqui.",
+    "uk": "Додайте екземпляр qBittorrent у qui — і він з'явиться тут.",
+    "zh-CN": "在 qui 中添加 qBittorrent 实例后会显示在这里。"
+  },
+
+  "delete_title_one": {
+    "cs": "Smazat torrent?",
+    "de": "Torrent löschen?",
+    "fr": "Supprimer le torrent ?",
+    "it": "Eliminare il torrent?",
+    "ko": "토렌트를 삭제할까요?",
+    "pt-BR": "Excluir torrent?",
+    "uk": "Видалити торент?",
+    "zh-CN": "删除该种子？"
+  },
+  "delete_title_many": {
+    "cs": "Smazat %1$d torrentů?",
+    "de": "%1$d Torrents löschen?",
+    "fr": "Supprimer %1$d torrents ?",
+    "it": "Eliminare %1$d torrent?",
+    "ko": "토렌트 %1$d개를 삭제할까요?",
+    "pt-BR": "Excluir %1$d torrents?",
+    "uk": "Видалити %1$d торентів?",
+    "zh-CN": "删除 %1$d 个种子？"
+  },
+  "delete_body_keep_files": {
+    "cs": "Torrenty budou odebrány z qBittorrentu. Stažené soubory zůstanou na disku.",
+    "de": "Die Torrents werden aus qBittorrent entfernt. Heruntergeladene Dateien bleiben auf der Festplatte.",
+    "fr": "Les torrents seront retirés de qBittorrent. Les fichiers téléchargés restent sur le disque.",
+    "it": "I torrent verranno rimossi da qBittorrent. I file scaricati restano sul disco.",
+    "ko": "토렌트가 qBittorrent에서 제거됩니다. 내려받은 파일은 디스크에 남습니다.",
+    "pt-BR": "Os torrents serão removidos do qBittorrent. Os arquivos baixados permanecem no disco.",
+    "uk": "Торенти буде вилучено з qBittorrent. Завантажені файли залишаться на диску.",
+    "zh-CN": "种子将从 qBittorrent 中移除，已下载的文件仍保留在磁盘上。"
+  },
+  "delete_body_with_files": {
+    "cs": "Stažené soubory budou trvale smazány z disku. Tuto akci nelze vrátit zpět.",
+    "de": "Die heruntergeladenen Dateien werden dauerhaft von der Festplatte gelöscht. Das lässt sich nicht rückgängig machen.",
+    "fr": "Les fichiers téléchargés seront définitivement supprimés du disque. Cette action est irréversible.",
+    "it": "I file scaricati verranno eliminati definitivamente dal disco. L'operazione non può essere annullata.",
+    "ko": "내려받은 파일이 디스크에서 영구히 삭제됩니다. 되돌릴 수 없습니다.",
+    "pt-BR": "Os arquivos baixados serão excluídos permanentemente do disco. Isso não pode ser desfeito.",
+    "uk": "Завантажені файли буде остаточно видалено з диска. Цю дію не можна скасувати.",
+    "zh-CN": "已下载的文件将从磁盘上永久删除，此操作无法撤销。"
+  },
+
+  "detail_no_trackers": {
+    "cs": "Žádné trackery",
+    "de": "Keine Tracker",
+    "fr": "Aucun tracker",
+    "it": "Nessun tracker",
+    "ko": "트래커 없음",
+    "pt-BR": "Nenhum tracker",
+    "uk": "Немає трекерів",
+    "zh-CN": "没有 Tracker"
+  },
+  "detail_no_peers": {
+    "cs": "Žádní připojení peeři",
+    "de": "Keine verbundenen Peers",
+    "fr": "Aucun pair connecté",
+    "it": "Nessun peer connesso",
+    "ko": "연결된 피어 없음",
+    "pt-BR": "Nenhum peer conectado",
+    "uk": "Немає підключених пірів",
+    "zh-CN": "没有已连接的用户"
+  },
+  "detail_reannounce_in": {
+    "cs": "Znovu ohlásit za",
+    "de": "Erneute Ankündigung in",
+    "fr": "Réannonce dans",
+    "it": "Riannuncio tra",
+    "ko": "재알림까지",
+    "pt-BR": "Reanunciar em",
+    "uk": "Повторне оголошення через",
+    "zh-CN": "距下次汇报"
+  },
+  "detail_x_of_y": {
+    "cs": "%1$d z %2$d",
+    "de": "%1$d von %2$d",
+    "fr": "%1$d sur %2$d",
+    "it": "%1$d di %2$d",
+    "ko": "%2$d개 중 %1$d개",
+    "pt-BR": "%1$d de %2$d",
+    "uk": "%1$d з %2$d",
+    "zh-CN": "%1$d / %2$d"
+  },
+
+  "filters_hint": {
+    "cs": "Klepnutím na řádek jej zahrnete, klepnutím na minus jej vyloučíte.",
+    "de": "Auf eine Zeile tippen, um sie einzuschließen; auf das Minus tippen, um sie auszuschließen.",
+    "fr": "Touchez une ligne pour l'inclure, touchez le moins pour l'exclure.",
+    "it": "Tocca una riga per includerla, tocca il meno per escluderla.",
+    "ko": "행을 탭하면 포함, 빼기를 탭하면 제외됩니다.",
+    "pt-BR": "Toque em uma linha para incluí-la; toque no menos para excluí-la.",
+    "uk": "Торкніться рядка, щоб увімкнути його, або мінуса, щоб виключити.",
+    "zh-CN": "点按条目为包含，点按减号为排除。"
+  },
+
+  "instances_selected": {
+    "cs": "Vybráno",
+    "de": "Ausgewählt",
+    "fr": "Sélectionné",
+    "it": "Selezionato",
+    "ko": "선택됨",
+    "pt-BR": "Selecionado",
+    "uk": "Вибрано",
+    "zh-CN": "已选择"
+  },
+  "instances_not_reachable": {
+    "cs": "Nedostupné",
+    "de": "Nicht erreichbar",
+    "fr": "Injoignable",
+    "it": "Non raggiungibile",
+    "ko": "연결할 수 없음",
+    "pt-BR": "Inacessível",
+    "uk": "Недоступний",
+    "zh-CN": "无法连接"
+  },
+
+  "login_subtitle": {
+    "cs": "Připojte se ke svému serveru qui",
+    "de": "Mit deinem qui-Server verbinden",
+    "fr": "Connectez-vous à votre serveur qui",
+    "it": "Connettiti al tuo server qui",
+    "ko": "qui 서버에 연결",
+    "pt-BR": "Conecte-se ao seu servidor qui",
+    "uk": "Під'єднайтеся до свого сервера qui",
+    "zh-CN": "连接到你的 qui 服务器"
+  },
+  "login_server_address": {
+    "cs": "Adresa serveru",
+    "de": "Serveradresse",
+    "fr": "Adresse du serveur",
+    "it": "Indirizzo del server",
+    "ko": "서버 주소",
+    "pt-BR": "Endereço do servidor",
+    "uk": "Адреса сервера",
+    "zh-CN": "服务器地址"
+  },
+  "login_api_key_hint": {
+    "cs": "Vytvořte klíč v qui v Nastavení → API klíče. Klíče nevyprší, takže aplikace zůstane přihlášená.",
+    "de": "Erstelle in qui unter Einstellungen → API-Schlüssel einen Schlüssel. Schlüssel laufen nicht ab, die App bleibt also angemeldet.",
+    "fr": "Créez une clé dans qui sous Paramètres → Clés API. Les clés n'expirent pas, l'application reste donc connectée.",
+    "it": "Crea una chiave in qui da Impostazioni → Chiavi API. Le chiavi non scadono, quindi l'app resta connessa.",
+    "ko": "qui의 설정 → API 키에서 키를 만드세요. 키는 만료되지 않으므로 앱이 로그인 상태를 유지합니다.",
+    "pt-BR": "Crie uma chave no qui em Configurações → Chaves de API. As chaves não expiram, então o app continua conectado.",
+    "uk": "Створіть ключ у qui в розділі Налаштування → Ключі API. Ключі не мають терміну дії, тож застосунок залишатиметься в системі.",
+    "zh-CN": "在 qui 的「设置 → API 密钥」中创建密钥。密钥不会过期，应用会保持登录状态。"
+  },
+  "login_show_password": {
+    "cs": "Zobrazit heslo",
+    "de": "Passwort anzeigen",
+    "fr": "Afficher le mot de passe",
+    "it": "Mostra password",
+    "ko": "비밀번호 표시",
+    "pt-BR": "Mostrar senha",
+    "uk": "Показати пароль",
+    "zh-CN": "显示密码"
+  },
+  "login_hide_password": {
+    "cs": "Skrýt heslo",
+    "de": "Passwort verbergen",
+    "fr": "Masquer le mot de passe",
+    "it": "Nascondi password",
+    "ko": "비밀번호 숨기기",
+    "pt-BR": "Ocultar senha",
+    "uk": "Приховати пароль",
+    "zh-CN": "隐藏密码"
+  },
+  "login_toggle_key_visibility": {
+    "cs": "Přepnout viditelnost klíče",
+    "de": "Schlüsselanzeige umschalten",
+    "fr": "Afficher ou masquer la clé",
+    "it": "Mostra o nascondi la chiave",
+    "ko": "키 표시 전환",
+    "pt-BR": "Alternar visibilidade da chave",
+    "uk": "Показати або приховати ключ",
+    "zh-CN": "切换密钥显示"
+  },
+  "login_trust_certs": {
+    "cs": "Důvěřovat certifikátům podepsaným sebou samým",
+    "de": "Selbstsignierten Zertifikaten vertrauen",
+    "fr": "Faire confiance aux certificats auto-signés",
+    "it": "Considera attendibili i certificati autofirmati",
+    "ko": "자체 서명 인증서 신뢰",
+    "pt-BR": "Confiar em certificados autoassinados",
+    "uk": "Довіряти самопідписаним сертифікатам",
+    "zh-CN": "信任自签名证书"
+  },
+  "login_trust_certs_hint": {
+    "cs": "Zapínejte pouze u serveru, který spravujete.",
+    "de": "Aktiviere das nur für einen Server, den du selbst betreibst.",
+    "fr": "N'activez cette option que pour un serveur que vous contrôlez.",
+    "it": "Attivalo solo per un server che gestisci tu.",
+    "ko": "본인이 관리하는 서버에서만 켜세요.",
+    "pt-BR": "Ative apenas para um servidor que você controla.",
+    "uk": "Вмикайте лише для сервера, яким ви керуєте.",
+    "zh-CN": "仅在你自己掌控的服务器上启用。"
+  },
+  "login_error_no_address": {
+    "cs": "Zadejte adresu svého serveru qui",
+    "de": "Gib die Adresse deines qui-Servers ein",
+    "fr": "Saisissez l'adresse de votre serveur qui",
+    "it": "Inserisci l'indirizzo del tuo server qui",
+    "ko": "qui 서버 주소를 입력하세요",
+    "pt-BR": "Informe o endereço do seu servidor qui",
+    "uk": "Введіть адресу свого сервера qui",
+    "zh-CN": "请输入 qui 服务器地址"
+  },
+  "login_probe_setup_required": {
+    "cs": "Tento server qui zatím nemá účet – vytvořte jej níže.",
+    "de": "Dieser qui-Server hat noch kein Konto – lege unten eins an.",
+    "fr": "Ce serveur qui n'a pas encore de compte – créez-en un ci-dessous.",
+    "it": "Questo server qui non ha ancora un account: creane uno qui sotto.",
+    "ko": "이 qui 서버에는 아직 계정이 없습니다 — 아래에서 만드세요.",
+    "pt-BR": "Este servidor qui ainda não tem conta – crie uma abaixo.",
+    "uk": "На цьому сервері qui ще немає облікового запису — створіть його нижче.",
+    "zh-CN": "该 qui 服务器还没有账户——请在下方创建。"
+  },
+  "login_probe_ok": {
+    "cs": "Připojeno. Přihlaste se níže.",
+    "de": "Verbunden. Melde dich unten an.",
+    "fr": "Connecté. Identifiez-vous ci-dessous.",
+    "it": "Connesso. Accedi qui sotto.",
+    "ko": "연결되었습니다. 아래에서 로그인하세요.",
+    "pt-BR": "Conectado. Entre abaixo.",
+    "uk": "З'єднано. Увійдіть нижче.",
+    "zh-CN": "已连接，请在下方登录。"
+  },
+  "login_error_generic": {
+    "cs": "Něco se pokazilo",
+    "de": "Etwas ist schiefgelaufen",
+    "fr": "Une erreur s'est produite",
+    "it": "Qualcosa è andato storto",
+    "ko": "문제가 발생했습니다",
+    "pt-BR": "Algo deu errado",
+    "uk": "Щось пішло не так",
+    "zh-CN": "出错了"
+  },
+  "login_error_credentials": {
+    "cs": "Nesprávné přihlašovací údaje",
+    "de": "Falsche Zugangsdaten",
+    "fr": "Identifiants incorrects",
+    "it": "Credenziali errate",
+    "ko": "잘못된 자격 증명",
+    "pt-BR": "Credenciais incorretas",
+    "uk": "Неправильні облікові дані",
+    "zh-CN": "凭据不正确"
+  },
+  "login_error_forbidden": {
+    "cs": "Server přístup odmítl",
+    "de": "Zugriff vom Server verweigert",
+    "fr": "Accès refusé par le serveur",
+    "it": "Accesso negato dal server",
+    "ko": "서버가 접근을 거부했습니다",
+    "pt-BR": "Acesso negado pelo servidor",
+    "uk": "Сервер відмовив у доступі",
+    "zh-CN": "服务器拒绝访问"
+  },
+  "login_error_not_qui": {
+    "cs": "Tato adresa nevypadá jako server qui",
+    "de": "Diese Adresse sieht nicht nach einem qui-Server aus",
+    "fr": "Cette adresse ne ressemble pas à un serveur qui",
+    "it": "Questo indirizzo non sembra un server qui",
+    "ko": "이 주소는 qui 서버가 아닌 것 같습니다",
+    "pt-BR": "Esse endereço não parece ser um servidor qui",
+    "uk": "Ця адреса не схожа на сервер qui",
+    "zh-CN": "该地址似乎不是 qui 服务器"
+  },
+  "login_error_host": {
+    "cs": "Tento hostitel není dostupný",
+    "de": "Dieser Host ist nicht erreichbar",
+    "fr": "Impossible de joindre cet hôte",
+    "it": "Impossibile raggiungere questo host",
+    "ko": "해당 호스트에 연결할 수 없습니다",
+    "pt-BR": "Não foi possível acessar esse host",
+    "uk": "Не вдається зв'язатися з цим хостом",
+    "zh-CN": "无法连接到该主机"
+  },
+  "login_error_tls": {
+    "cs": "Certifikát TLS byl odmítnut – pokud jde o váš vlastní server, zapněte „Důvěřovat certifikátům podepsaným sebou samým“",
+    "de": "TLS-Zertifikat wurde abgelehnt – aktiviere „Selbstsignierten Zertifikaten vertrauen“, wenn das dein eigener Server ist",
+    "fr": "Le certificat TLS a été rejeté – activez « Faire confiance aux certificats auto-signés » s'il s'agit de votre propre serveur",
+    "it": "Certificato TLS rifiutato – attiva «Considera attendibili i certificati autofirmati» se è un tuo server",
+    "ko": "TLS 인증서가 거부되었습니다 — 본인 서버라면 '자체 서명 인증서 신뢰'를 켜세요",
+    "pt-BR": "O certificado TLS foi rejeitado – ative “Confiar em certificados autoassinados” se este for seu próprio servidor",
+    "uk": "Сертифікат TLS відхилено — увімкніть «Довіряти самопідписаним сертифікатам», якщо це ваш власний сервер",
+    "zh-CN": "TLS 证书被拒绝——如果这是你自己的服务器，请打开「信任自签名证书」"
+  },
+  "login_error_unreachable": {
+    "cs": "Server není dostupný – zkontrolujte adresu a to, zda běží",
+    "de": "Server nicht erreichbar – prüfe die Adresse und ob er läuft",
+    "fr": "Serveur injoignable – vérifiez l'adresse et qu'il est bien démarré",
+    "it": "Server irraggiungibile – controlla l'indirizzo e che sia in esecuzione",
+    "ko": "서버에 연결할 수 없습니다 — 주소와 실행 여부를 확인하세요",
+    "pt-BR": "Não foi possível acessar o servidor – verifique o endereço e se ele está em execução",
+    "uk": "Не вдається зв'язатися із сервером — перевірте адресу та чи він запущений",
+    "zh-CN": "无法连接服务器——请检查地址以及服务是否正在运行"
+  },
+
+  "settings_account": {
+    "cs": "Účet",
+    "de": "Konto",
+    "fr": "Compte",
+    "it": "Account",
+    "ko": "계정",
+    "pt-BR": "Conta",
+    "uk": "Обліковий запис",
+    "zh-CN": "账户"
+  },
+  "settings_signed_in": {
+    "cs": "Přihlášeno",
+    "de": "Angemeldet",
+    "fr": "Connecté",
+    "it": "Connesso",
+    "ko": "로그인됨",
+    "pt-BR": "Conectado",
+    "uk": "Ви увійшли",
+    "zh-CN": "已登录"
+  },
+  "settings_sign_out_title": {
+    "cs": "Odhlásit se?",
+    "de": "Abmelden?",
+    "fr": "Se déconnecter ?",
+    "it": "Uscire?",
+    "ko": "로그아웃할까요?",
+    "pt-BR": "Sair?",
+    "uk": "Вийти?",
+    "zh-CN": "退出登录？"
+  },
+  "settings_sign_out_body": {
+    "cs": "Uložené přihlašovací údaje pro tento server budou odstraněny.",
+    "de": "Die gespeicherten Zugangsdaten für diesen Server werden entfernt.",
+    "fr": "Les identifiants enregistrés pour ce serveur seront supprimés.",
+    "it": "Le credenziali salvate per questo server verranno rimosse.",
+    "ko": "이 서버에 저장된 자격 증명이 삭제됩니다.",
+    "pt-BR": "As credenciais salvas para este servidor serão removidas.",
+    "uk": "Збережені облікові дані для цього сервера буде вилучено.",
+    "zh-CN": "将删除此服务器已保存的凭据。"
+  },
+  "settings_speed_units": {
+    "cs": "Jednotky rychlosti",
+    "de": "Geschwindigkeitseinheiten",
+    "fr": "Unités de vitesse",
+    "it": "Unità di velocità",
+    "ko": "속도 단위",
+    "pt-BR": "Unidades de velocidade",
+    "uk": "Одиниці швидкості",
+    "zh-CN": "速度单位"
+  },
+  "settings_behaviour": {
+    "cs": "Chování",
+    "de": "Verhalten",
+    "fr": "Comportement",
+    "it": "Comportamento",
+    "ko": "동작",
+    "pt-BR": "Comportamento",
+    "uk": "Поведінка",
+    "zh-CN": "行为"
+  },
+  "settings_language_system": {
+    "cs": "Výchozí jazyk systému",
+    "de": "Systemstandard",
+    "fr": "Langue du système",
+    "it": "Predefinita di sistema",
+    "ko": "시스템 기본값",
+    "pt-BR": "Padrão do sistema",
+    "uk": "За налаштуванням системи",
+    "zh-CN": "跟随系统"
+  },
+  "settings_incognito": {
+    "cs": "Anonymní režim",
+    "de": "Inkognito-Modus",
+    "fr": "Mode incognito",
+    "it": "Modalità in incognito",
+    "ko": "시크릿 모드",
+    "pt-BR": "Modo anônimo",
+    "uk": "Режим анонімності",
+    "zh-CN": "隐身模式"
+  },
+  "settings_incognito_hint": {
+    "cs": "Nahradit názvy, kategorie a trackery linuxovými ISO.",
+    "de": "Namen, Kategorien und Tracker durch Linux-ISOs ersetzen.",
+    "fr": "Remplacer les noms, catégories et trackers par des ISO Linux.",
+    "it": "Sostituisci nomi, categorie e tracker con ISO Linux.",
+    "ko": "이름, 분류, 트래커를 리눅스 ISO로 바꿉니다.",
+    "pt-BR": "Substituir nomes, categorias e trackers por ISOs de Linux.",
+    "uk": "Замінювати назви, категорії та трекери на ISO-образи Linux.",
+    "zh-CN": "将名称、分类和 Tracker 替换为 Linux ISO。"
+  },
+  "settings_confirm_delete": {
+    "cs": "Potvrdit před smazáním",
+    "de": "Vor dem Löschen bestätigen",
+    "fr": "Confirmer avant de supprimer",
+    "it": "Conferma prima di eliminare",
+    "ko": "삭제 전 확인",
+    "pt-BR": "Confirmar antes de excluir",
+    "uk": "Підтверджувати перед видаленням",
+    "zh-CN": "删除前确认"
+  },
+  "settings_confirm_delete_hint": {
+    "cs": "Zeptat se před odebráním torrentů.",
+    "de": "Vor dem Entfernen von Torrents nachfragen.",
+    "fr": "Demander avant de retirer des torrents.",
+    "it": "Chiedi conferma prima di rimuovere i torrent.",
+    "ko": "토렌트를 제거하기 전에 묻습니다.",
+    "pt-BR": "Perguntar antes de remover torrents.",
+    "uk": "Запитувати перед вилученням торентів.",
+    "zh-CN": "移除种子前先询问。"
+  },
+  "settings_dynamic_color": {
+    "cs": "Použít systémové barvy",
+    "de": "Systemfarben verwenden",
+    "fr": "Utiliser les couleurs du système",
+    "it": "Usa i colori di sistema",
+    "ko": "시스템 색상 사용",
+    "pt-BR": "Usar cores do sistema",
+    "uk": "Використовувати системні кольори",
+    "zh-CN": "使用系统配色"
+  },
+  "settings_dynamic_color_hint": {
+    "cs": "Řídit se paletou tapety Androidu místo motivu qui.",
+    "de": "Der Android-Hintergrundpalette folgen statt einem qui-Theme.",
+    "fr": "Suivre la palette du fond d'écran Android au lieu d'un thème qui.",
+    "it": "Segui la palette dello sfondo Android invece di un tema qui.",
+    "ko": "qui 테마 대신 Android 배경화면 색상을 따릅니다.",
+    "pt-BR": "Seguir a paleta do papel de parede do Android em vez de um tema do qui.",
+    "uk": "Використовувати палітру шпалер Android замість теми qui.",
+    "zh-CN": "跟随 Android 壁纸取色，而不使用 qui 主题。"
+  },
+  "settings_selected": {
+    "cs": "Vybráno",
+    "de": "Ausgewählt",
+    "fr": "Sélectionné",
+    "it": "Selezionato",
+    "ko": "선택됨",
+    "pt-BR": "Selecionado",
+    "uk": "Вибрано",
+    "zh-CN": "已选择"
+  },
+  "settings_about": {
+    "cs": "O aplikaci",
+    "de": "Über",
+    "fr": "À propos",
+    "it": "Informazioni",
+    "ko": "정보",
+    "pt-BR": "Sobre",
+    "uk": "Про застосунок",
+    "zh-CN": "关于"
+  },
+  "settings_source_code": {
+    "cs": "Zdrojový kód",
+    "de": "Quellcode",
+    "fr": "Code source",
+    "it": "Codice sorgente",
+    "ko": "소스 코드",
+    "pt-BR": "Código-fonte",
+    "uk": "Вихідний код",
+    "zh-CN": "源代码"
+  },
+
+  "sort_added_on": {
+    "cs": "Nedávno přidané",
+    "de": "Zuletzt hinzugefügt",
+    "fr": "Ajoutés récemment",
+    "it": "Aggiunti di recente",
+    "ko": "최근 추가순",
+    "pt-BR": "Adicionados recentemente",
+    "uk": "Нещодавно додані",
+    "zh-CN": "最近添加"
+  },
+  "sort_downloaded_session": {
+    "cs": "Staženo v relaci",
+    "de": "Sitzung heruntergeladen",
+    "fr": "Téléchargé (session)",
+    "it": "Scaricato (sessione)",
+    "ko": "세션 다운로드량",
+    "pt-BR": "Baixado na sessão",
+    "uk": "Завантажено за сеанс",
+    "zh-CN": "本次会话下载量"
+  },
+  "sort_uploaded_session": {
+    "cs": "Nahráno v relaci",
+    "de": "Sitzung hochgeladen",
+    "fr": "Envoyé (session)",
+    "it": "Caricato (sessione)",
+    "ko": "세션 업로드량",
+    "pt-BR": "Enviado na sessão",
+    "uk": "Вивантажено за сеанс",
+    "zh-CN": "本次会话上传量"
+  },
+  "sort_seen_complete": {
+    "cs": "Naposledy viděno kompletní",
+    "de": "Zuletzt vollständig gesehen",
+    "fr": "Dernière fois complet",
+    "it": "Ultima volta completo",
+    "ko": "마지막 완전 확인",
+    "pt-BR": "Visto completo pela última vez",
+    "uk": "Востаннє бачено повним",
+    "zh-CN": "上次完整可见"
+  },
+  "sort_reannounce": {
+    "cs": "Znovu ohlásit za",
+    "de": "Erneute Ankündigung in",
+    "fr": "Réannonce dans",
+    "it": "Riannuncio tra",
+    "ko": "재알림까지",
+    "pt-BR": "Reanunciar em",
+    "uk": "Повторне оголошення через",
+    "zh-CN": "距下次汇报"
+  },
+
+  "speed_limits_hint": {
+    "cs": "Hodnoty jsou v KiB/s. Prázdné pole ponechá limit beze změny; 0 znamená bez omezení.",
+    "de": "Werte in KiB/s. Ein leeres Feld lässt das Limit unverändert; 0 bedeutet unbegrenzt.",
+    "fr": "Valeurs en Kio/s. Laissez un champ vide pour ne pas modifier la limite ; 0 signifie illimité.",
+    "it": "Valori in KiB/s. Lascia vuoto un campo per non modificare quel limite; 0 significa illimitato.",
+    "ko": "단위는 KiB/s입니다. 비워 두면 해당 제한을 그대로 두고, 0은 무제한입니다.",
+    "pt-BR": "Valores em KiB/s. Deixe um campo vazio para manter o limite; use 0 para ilimitado.",
+    "uk": "Значення в KiB/s. Порожнє поле залишає обмеження без змін; 0 — без обмежень.",
+    "zh-CN": "单位为 KiB/s。留空表示不改动该项限制，填 0 表示不限速。"
+  },
+
+  "torrents_select_client": {
+    "cs": "Vybrat klienta",
+    "de": "Client auswählen",
+    "fr": "Choisir un client",
+    "it": "Seleziona client",
+    "ko": "클라이언트 선택",
+    "pt-BR": "Selecionar cliente",
+    "uk": "Вибрати клієнта",
+    "zh-CN": "选择客户端"
+  },
+  "torrents_polling": {
+    "cs": "Dotazování",
+    "de": "Abfrage",
+    "fr": "Interrogation",
+    "it": "Polling",
+    "ko": "폴링 중",
+    "pt-BR": "Consultando",
+    "uk": "Опитування",
+    "zh-CN": "轮询中"
+  },
+  "torrents_live": {
+    "cs": "Živě",
+    "de": "Live",
+    "fr": "En direct",
+    "it": "In diretta",
+    "ko": "실시간",
+    "pt-BR": "Ao vivo",
+    "uk": "У реальному часі",
+    "zh-CN": "实时"
+  },
+  "torrents_empty_title": {
+    "cs": "Žádné torrenty",
+    "de": "Keine Torrents",
+    "fr": "Aucun torrent",
+    "it": "Nessun torrent",
+    "ko": "토렌트 없음",
+    "pt-BR": "Nenhum torrent",
+    "uk": "Немає торентів",
+    "zh-CN": "没有种子"
+  },
+  "torrents_empty_filtered": {
+    "cs": "Aktuálnímu hledání a filtrům nic neodpovídá.",
+    "de": "Nichts passt zur aktuellen Suche und den Filtern.",
+    "fr": "Rien ne correspond à la recherche et aux filtres actuels.",
+    "it": "Nessun risultato per la ricerca e i filtri attuali.",
+    "ko": "현재 검색어와 필터에 맞는 항목이 없습니다.",
+    "pt-BR": "Nada corresponde à busca e aos filtros atuais.",
+    "uk": "Нічого не відповідає поточному пошуку та фільтрам.",
+    "zh-CN": "没有符合当前搜索和筛选条件的内容。"
+  },
+  "torrents_empty_message": {
+    "cs": "Tento klient zatím nemá žádné torrenty.",
+    "de": "Dieser Client hat noch keine Torrents.",
+    "fr": "Ce client n'a encore aucun torrent.",
+    "it": "Questo client non ha ancora torrent.",
+    "ko": "이 클라이언트에는 아직 토렌트가 없습니다.",
+    "pt-BR": "Este cliente ainda não tem torrents.",
+    "uk": "У цього клієнта ще немає торентів.",
+    "zh-CN": "该客户端还没有种子。"
+  },
+  "torrents_no_clients_message": {
+    "cs": "Přidejte instanci qBittorrentu v qui a poté potáhněte pro obnovení.",
+    "de": "Füge in qui eine qBittorrent-Instanz hinzu und ziehe dann zum Aktualisieren.",
+    "fr": "Ajoutez une instance qBittorrent dans qui, puis tirez pour actualiser.",
+    "it": "Aggiungi un'istanza qBittorrent in qui, poi trascina per aggiornare.",
+    "ko": "qui에서 qBittorrent 인스턴스를 추가한 뒤 당겨서 새로고침하세요.",
+    "pt-BR": "Adicione uma instância do qBittorrent no qui e puxe para atualizar.",
+    "uk": "Додайте екземпляр qBittorrent у qui, потім потягніть, щоб оновити.",
+    "zh-CN": "请先在 qui 中添加 qBittorrent 实例，然后下拉刷新。"
+  },
+  "torrents_loaded_of": {
+    "cs": "%1$d z %2$d",
+    "de": "%1$d von %2$d",
+    "fr": "%1$d sur %2$d",
+    "it": "%1$d di %2$d",
+    "ko": "%2$d개 중 %1$d개",
+    "pt-BR": "%1$d de %2$d",
+    "uk": "%1$d з %2$d",
+    "zh-CN": "%1$d / %2$d"
+  },
+
+  "tracker_status_not_working": {
+    "cs": "Nefunguje",
+    "de": "Funktioniert nicht",
+    "fr": "Ne fonctionne pas",
+    "it": "Non funzionante",
+    "ko": "작동하지 않음",
+    "pt-BR": "Não funciona",
+    "uk": "Не працює",
+    "zh-CN": "无法工作"
+  },
+
+  "torrents_count": {
+    "cs": {
+      "one": "%1$d torrent",
+      "few": "%1$d torrenty",
+      "many": "%1$d torrentu",
+      "other": "%1$d torrentů"
+    },
+    "de": {
+      "one": "%1$d Torrent",
+      "other": "%1$d Torrents"
+    },
+    "fr": {
+      "one": "%1$d torrent",
+      "many": "%1$d torrents",
+      "other": "%1$d torrents"
+    },
+    "it": {
+      "one": "%1$d torrent",
+      "many": "%1$d torrent",
+      "other": "%1$d torrent"
+    },
+    "ko": {
+      "other": "토렌트 %1$d개"
+    },
+    "pt-BR": {
+      "one": "%1$d torrent",
+      "many": "%1$d torrents",
+      "other": "%1$d torrents"
+    },
+    "uk": {
+      "one": "%1$d торент",
+      "few": "%1$d торенти",
+      "many": "%1$d торентів",
+      "other": "%1$d торента"
+    },
+    "zh-CN": {
+      "other": "%1$d 个种子"
+    }
+  },
+
+  "selection_count": {
+    "cs": {
+      "one": "Vybrán %1$d",
+      "few": "Vybrány %1$d",
+      "many": "Vybráno %1$d",
+      "other": "Vybráno %1$d"
+    },
+    "de": {
+      "one": "%1$d ausgewählt",
+      "other": "%1$d ausgewählt"
+    },
+    "fr": {
+      "one": "%1$d sélectionné",
+      "many": "%1$d sélectionnés",
+      "other": "%1$d sélectionnés"
+    },
+    "it": {
+      "one": "%1$d selezionato",
+      "many": "%1$d selezionati",
+      "other": "%1$d selezionati"
+    },
+    "ko": {
+      "other": "%1$d개 선택됨"
+    },
+    "pt-BR": {
+      "one": "%1$d selecionado",
+      "many": "%1$d selecionados",
+      "other": "%1$d selecionados"
+    },
+    "uk": {
+      "one": "Вибрано %1$d",
+      "few": "Вибрано %1$d",
+      "many": "Вибрано %1$d",
+      "other": "Вибрано %1$d"
+    },
+    "zh-CN": {
+      "other": "已选择 %1$d 项"
+    }
+  }
+}

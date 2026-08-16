@@ -66,6 +66,8 @@ android {
 
     buildFeatures {
         compose = true
+        // Settings shows the app's own version next to the qui server's.
+        buildConfig = true
     }
 
     packaging {

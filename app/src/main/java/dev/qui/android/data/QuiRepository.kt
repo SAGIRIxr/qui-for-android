@@ -368,6 +368,8 @@ class QuiRepository @Inject constructor(
 
     suspend fun trackerIcons(): Result<Map<String, String>> = io { api -> api.trackerIcons() }
 
+    suspend fun serverVersion() = io { api -> api.version() }
+
     suspend fun latestVersion() = io { api -> api.latestVersion() }
 
     private suspend inline fun <T> io(

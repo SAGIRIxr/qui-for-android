@@ -60,9 +60,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import dev.qui.android.R
 import dev.qui.android.data.model.BulkActionRequest
 import dev.qui.android.data.model.FilterState
 import dev.qui.android.data.model.Instance
@@ -80,6 +83,11 @@ fun FilterSheet(
     val palette = QuiTheme.palette
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    // qBittorrent reports the catch-all buckets as empty strings; qui labels them.
+    val uncategorized = stringResource(R.string.filters_uncategorized)
+    val untagged = stringResource(R.string.filters_untagged)
+    val unknownTracker = stringResource(R.string.filters_unknown)
+
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
         Column(
             modifier = Modifier
@@ -91,18 +99,18 @@ fun FilterSheet(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    "Filters",
+                    stringResource(R.string.filters_title),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.weight(1f),
                 )
                 if (!state.filters.isEmpty) {
-                    TextButton(onClick = onClear) { Text("Clear all") }
+                    TextButton(onClick = onClear) { Text(stringResource(R.string.filters_clear_all)) }
                 }
             }
 
             FilterGroup(
-                title = "Status",
-                options = STATUS_FILTER_OPTIONS.map { it.value to it.label },
+                title = stringResource(R.string.filters_status),
+                options = STATUS_FILTER_OPTIONS.map { it.value to stringResource(it.label) },
                 counts = state.counts?.status.orEmpty(),
                 included = state.filters.status,
                 excluded = state.filters.excludeStatus,
@@ -112,10 +120,10 @@ fun FilterSheet(
             val categoryOptions = (state.categories.keys + state.counts?.categories?.keys.orEmpty())
                 .distinct()
                 .sorted()
-                .map { it to it.ifEmpty { "Uncategorized" } }
+                .map { it to it.ifEmpty { uncategorized } }
             if (categoryOptions.isNotEmpty()) {
                 FilterGroup(
-                    title = "Categories",
+                    title = stringResource(R.string.filters_categories),
                     options = categoryOptions,
                     counts = state.counts?.categories.orEmpty(),
                     included = state.filters.categories,
@@ -127,10 +135,10 @@ fun FilterSheet(
             val tagOptions = (state.tags + state.counts?.tags?.keys.orEmpty())
                 .distinct()
                 .sorted()
-                .map { it to it.ifEmpty { "Untagged" } }
+                .map { it to it.ifEmpty { untagged } }
             if (tagOptions.isNotEmpty()) {
                 FilterGroup(
-                    title = "Tags",
+                    title = stringResource(R.string.filters_tags),
                     options = tagOptions,
                     counts = state.counts?.tags.orEmpty(),
                     included = state.filters.tags,
@@ -141,10 +149,10 @@ fun FilterSheet(
 
             val trackerOptions = state.counts?.trackers?.keys.orEmpty()
                 .sorted()
-                .map { it to it.ifEmpty { "Unknown" } }
+                .map { it to it.ifEmpty { unknownTracker } }
             if (trackerOptions.isNotEmpty()) {
                 FilterGroup(
-                    title = "Trackers",
+                    title = stringResource(R.string.filters_trackers),
                     options = trackerOptions,
                     counts = state.counts?.trackers.orEmpty(),
                     included = state.filters.trackers,
@@ -155,7 +163,7 @@ fun FilterSheet(
 
             Spacer(Modifier.height(8.dp))
             Text(
-                "Tap a row to include it, tap the minus to exclude it.",
+                stringResource(R.string.filters_hint),
                 style = MaterialTheme.typography.bodySmall,
                 color = palette.mutedForeground,
             )
@@ -253,7 +261,7 @@ fun SortSheet(
                 .heightIn(max = 620.dp),
         ) {
             Text(
-                "Sort by",
+                stringResource(R.string.sort_title),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
@@ -278,7 +286,7 @@ fun SortSheet(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = option.label,
+                            text = stringResource(option.label),
                             style = MaterialTheme.typography.bodyMedium,
                             color = if (selected) palette.primary else palette.foreground,
                             modifier = Modifier.weight(1f),
@@ -290,7 +298,13 @@ fun SortSheet(
                                 } else {
                                     Icons.Default.ArrowDownward
                                 },
-                                contentDescription = currentOrder,
+                                contentDescription = stringResource(
+                                    if (currentOrder == "asc") {
+                                        R.string.sort_ascending
+                                    } else {
+                                        R.string.sort_descending
+                                    }
+                                ),
                                 tint = palette.primary,
                                 modifier = Modifier.size(18.dp),
                             )
@@ -316,7 +330,7 @@ fun InstanceSheet(
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
         Column(Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
             Text(
-                "qBittorrent clients",
+                stringResource(R.string.instances_title),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
@@ -359,7 +373,7 @@ fun InstanceSheet(
                     if (instance.id == selectedId) {
                         Icon(
                             Icons.Default.Check,
-                            contentDescription = "Selected",
+                            contentDescription = stringResource(R.string.instances_selected),
                             tint = palette.primary,
                             modifier = Modifier.size(18.dp),
                         )
@@ -402,25 +416,34 @@ fun TorrentActionsSheet(
                 .padding(bottom = 24.dp),
         ) {
             Text(
-                text = singleTorrent?.name ?: "$targetCount selected",
+                text = singleTorrent?.name
+                    ?: pluralStringResource(
+                        R.plurals.selection_count,
+                        targetCount,
+                        targetCount,
+                    ),
                 style = MaterialTheme.typography.titleSmall,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
 
-            ActionRow(Icons.Default.PlayArrow, "Resume") { onAction("resume") { this } }
-            ActionRow(Icons.Default.Pause, "Pause") { onAction("pause") { this } }
-            ActionRow(Icons.Default.Refresh, "Force recheck") { onAction("recheck") { this } }
-            ActionRow(Icons.Default.Campaign, "Reannounce") { onAction("reannounce") { this } }
-            ActionRow(Icons.Default.PriorityHigh, "Top of queue") { onAction("topPriority") { this } }
-            ActionRow(Icons.Default.LowPriority, "Bottom of queue") {
+            ActionRow(Icons.Default.PlayArrow, stringResource(R.string.action_resume)) { onAction("resume") { this } }
+            ActionRow(Icons.Default.Pause, stringResource(R.string.action_pause)) { onAction("pause") { this } }
+            ActionRow(Icons.Default.Refresh, stringResource(R.string.action_recheck)) { onAction("recheck") { this } }
+            ActionRow(Icons.Default.Campaign, stringResource(R.string.action_reannounce)) { onAction("reannounce") { this } }
+            ActionRow(Icons.Default.PriorityHigh, stringResource(R.string.action_top_of_queue)) { onAction("topPriority") { this } }
+            ActionRow(Icons.Default.LowPriority, stringResource(R.string.action_bottom_of_queue)) {
                 onAction("bottomPriority") { this }
             }
-            ActionRow(Icons.Default.Folder, "Set category") { showCategory = true }
-            ActionRow(Icons.Default.Sell, "Set tags") { showTags = true }
-            ActionRow(Icons.Default.Speed, "Speed limits") { showSpeed = true }
-            ActionRow(Icons.Default.Delete, "Delete", destructive = true) {
+            ActionRow(Icons.Default.Folder, stringResource(R.string.action_set_category)) { showCategory = true }
+            ActionRow(Icons.Default.Sell, stringResource(R.string.action_set_tags)) { showTags = true }
+            ActionRow(Icons.Default.Speed, stringResource(R.string.action_speed_limits)) { showSpeed = true }
+            ActionRow(
+                icon = Icons.Default.Delete,
+                label = stringResource(R.string.action_delete),
+                destructive = true,
+            ) {
                 if (confirmDelete) showDelete = true else onAction("delete") { this }
             }
         }
@@ -439,8 +462,9 @@ fun TorrentActionsSheet(
 
     if (showCategory) {
         PickerDialog(
-            title = "Set category",
-            options = listOf("" to "(none)") + categories.map { it to it },
+            title = stringResource(R.string.action_set_category),
+            options = listOf("" to stringResource(R.string.common_none)) +
+                categories.map { it to it },
             allowFreeText = true,
             onDismiss = { showCategory = false },
             onConfirm = { value ->
@@ -452,7 +476,7 @@ fun TorrentActionsSheet(
 
     if (showTags) {
         PickerDialog(
-            title = "Set tags",
+            title = stringResource(R.string.action_set_tags),
             options = tags.map { it to it },
             allowFreeText = true,
             multiSelect = true,
@@ -509,29 +533,42 @@ private fun DeleteDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (count == 1) "Delete torrent?" else "Delete $count torrents?") },
+        title = {
+            Text(
+                if (count == 1) {
+                    stringResource(R.string.delete_title_one)
+                } else {
+                    stringResource(R.string.delete_title_many, count)
+                }
+            )
+        },
         text = {
             Column {
                 Text(
                     if (deleteFiles) {
-                        "The downloaded files will be permanently deleted from disk. This cannot be undone."
+                        stringResource(R.string.delete_body_with_files)
                     } else {
-                        "The torrents will be removed from qBittorrent. Downloaded files stay on disk."
+                        stringResource(R.string.delete_body_keep_files)
                     }
                 )
                 Spacer(Modifier.height(12.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(checked = deleteFiles, onCheckedChange = { deleteFiles = it })
-                    Text("Also delete files from disk")
+                    Text(stringResource(R.string.delete_also_files))
                 }
             }
         },
         confirmButton = {
             TextButton(onClick = { onConfirm(deleteFiles) }) {
-                Text("Delete", color = QuiTheme.palette.destructive)
+                Text(
+                    text = stringResource(R.string.action_delete),
+                    color = QuiTheme.palette.destructive,
+                )
             }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
+        },
     )
 }
 
@@ -585,7 +622,7 @@ private fun PickerDialog(
                     OutlinedTextField(
                         value = freeText,
                         onValueChange = { freeText = it },
-                        label = { Text("Or type a new one") },
+                        label = { Text(stringResource(R.string.common_or_type_new)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                     )
@@ -603,9 +640,11 @@ private fun PickerDialog(
                     }
                     onConfirm(value)
                 },
-            ) { Text("Apply") }
+            ) { Text(stringResource(R.string.common_apply)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
+        },
     )
 }
 
@@ -633,9 +672,11 @@ fun TextInputDialog(
             TextButton(
                 onClick = { onConfirm(value.trim()) },
                 enabled = value.isNotBlank(),
-            ) { Text("Save") }
+            ) { Text(stringResource(R.string.common_save)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
+        },
     )
 }
 
@@ -649,12 +690,11 @@ private fun SpeedLimitDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Speed limits") },
+        title = { Text(stringResource(R.string.action_speed_limits)) },
         text = {
             Column {
                 Text(
-                    "Values are in KiB/s. Leave a field empty to leave that limit unchanged; " +
-                        "use 0 for unlimited.",
+                    stringResource(R.string.speed_limits_hint),
                     style = MaterialTheme.typography.bodySmall,
                     color = QuiTheme.palette.mutedForeground,
                 )
@@ -662,7 +702,7 @@ private fun SpeedLimitDialog(
                 OutlinedTextField(
                     value = download,
                     onValueChange = { download = it.filter(Char::isDigit) },
-                    label = { Text("Download limit") },
+                    label = { Text(stringResource(R.string.speed_limit_download)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -670,7 +710,7 @@ private fun SpeedLimitDialog(
                 OutlinedTextField(
                     value = upload,
                     onValueChange = { upload = it.filter(Char::isDigit) },
-                    label = { Text("Upload limit") },
+                    label = { Text(stringResource(R.string.speed_limit_upload)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -679,8 +719,10 @@ private fun SpeedLimitDialog(
         confirmButton = {
             TextButton(
                 onClick = { onConfirm(download.toLongOrNull(), upload.toLongOrNull()) },
-            ) { Text("Apply") }
+            ) { Text(stringResource(R.string.common_apply)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
+        },
     )
 }

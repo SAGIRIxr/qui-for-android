@@ -5,9 +5,11 @@
 
 package dev.qui.android.ui.login
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.qui.android.R
 import dev.qui.android.data.QuiRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,9 +30,15 @@ data class LoginUiState(
     val trustAllCerts: Boolean = false,
     val setupRequired: Boolean = false,
     val isBusy: Boolean = false,
-    val error: String? = null,
-    val probeMessage: String? = null,
+    // Errors are resource ids so they follow the app language; `errorRaw` carries the
+    // server's own wording for failures we have no phrasing of our own for.
+    @StringRes val errorRes: Int? = null,
+    val errorRaw: String? = null,
+    @StringRes val probeRes: Int? = null,
 )
+
+/** Either a translated failure or the raw text the server gave us. */
+internal data class LoginError(@StringRes val res: Int?, val raw: String?)
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -40,14 +48,16 @@ class LoginViewModel @Inject constructor(
     private val _state = MutableStateFlow(LoginUiState())
     val state: StateFlow<LoginUiState> = _state.asStateFlow()
 
+    private fun LoginUiState.cleared() = copy(errorRes = null, errorRaw = null)
+
     fun setServerUrl(value: String) = _state.update {
-        it.copy(serverUrl = value, error = null, probeMessage = null, setupRequired = false)
+        it.cleared().copy(serverUrl = value, probeRes = null, setupRequired = false)
     }
 
-    fun setUsername(value: String) = _state.update { it.copy(username = value, error = null) }
-    fun setPassword(value: String) = _state.update { it.copy(password = value, error = null) }
-    fun setApiKey(value: String) = _state.update { it.copy(apiKey = value, error = null) }
-    fun setMode(mode: AuthMode) = _state.update { it.copy(mode = mode, error = null) }
+    fun setUsername(value: String) = _state.update { it.cleared().copy(username = value) }
+    fun setPassword(value: String) = _state.update { it.cleared().copy(password = value) }
+    fun setApiKey(value: String) = _state.update { it.cleared().copy(apiKey = value) }
+    fun setMode(mode: AuthMode) = _state.update { it.cleared().copy(mode = mode) }
     fun setTrustAllCerts(value: Boolean) = _state.update { it.copy(trustAllCerts = value) }
 
     /**
@@ -57,11 +67,11 @@ class LoginViewModel @Inject constructor(
     fun probeServer() {
         val url = _state.value.serverUrl.trim()
         if (url.isBlank()) {
-            _state.update { it.copy(error = "Enter the address of your qui server") }
+            _state.update { it.copy(errorRes = R.string.login_error_no_address, errorRaw = null) }
             return
         }
 
-        _state.update { it.copy(isBusy = true, error = null, probeMessage = null) }
+        _state.update { it.cleared().copy(isBusy = true, probeRes = null) }
         viewModelScope.launch {
             repository.isSetupRequired(url)
                 .onSuccess { required ->
@@ -69,17 +79,18 @@ class LoginViewModel @Inject constructor(
                         it.copy(
                             isBusy = false,
                             setupRequired = required,
-                            probeMessage = if (required) {
-                                "This qui server has no account yet — create one below."
+                            probeRes = if (required) {
+                                R.string.login_probe_setup_required
                             } else {
-                                "Connected. Sign in below."
+                                R.string.login_probe_ok
                             },
                         )
                     }
                 }
                 .onFailure { error ->
+                    val failure = error.friendlyMessage()
                     _state.update {
-                        it.copy(isBusy = false, error = error.friendlyMessage())
+                        it.copy(isBusy = false, errorRes = failure.res, errorRaw = failure.raw)
                     }
                 }
         }
@@ -88,11 +99,11 @@ class LoginViewModel @Inject constructor(
     fun submit(onAuthenticated: () -> Unit) {
         val current = _state.value
         if (current.serverUrl.isBlank()) {
-            _state.update { it.copy(error = "Enter the address of your qui server") }
+            _state.update { it.copy(errorRes = R.string.login_error_no_address, errorRaw = null) }
             return
         }
 
-        _state.update { it.copy(isBusy = true, error = null) }
+        _state.update { it.cleared().copy(isBusy = true) }
         viewModelScope.launch {
             val result = when {
                 current.mode == AuthMode.ApiKey -> repository.loginWithApiKey(
@@ -122,24 +133,28 @@ class LoginViewModel @Inject constructor(
                     onAuthenticated()
                 }
                 .onFailure { error ->
-                    _state.update { it.copy(isBusy = false, error = error.friendlyMessage()) }
+                    val failure = error.friendlyMessage()
+                    _state.update {
+                        it.copy(isBusy = false, errorRes = failure.res, errorRaw = failure.raw)
+                    }
                 }
         }
     }
 }
 
 /** Raw exception text is unhelpful on a login form; translate the common failures. */
-internal fun Throwable.friendlyMessage(): String {
-    val raw = message ?: return "Something went wrong"
-    return when {
-        raw.contains("401") -> "Wrong credentials"
-        raw.contains("403") -> "Access denied by the server"
-        raw.contains("404") -> "That address does not look like a qui server"
-        raw.contains("Unable to resolve host", true) -> "Cannot reach that host"
+internal fun Throwable.friendlyMessage(): LoginError {
+    val raw = message ?: return LoginError(R.string.login_error_generic, null)
+    val res = when {
+        raw.contains("401") -> R.string.login_error_credentials
+        raw.contains("403") -> R.string.login_error_forbidden
+        raw.contains("404") -> R.string.login_error_not_qui
+        raw.contains("Unable to resolve host", true) -> R.string.login_error_host
         raw.contains("CertPathValidator", true) || raw.contains("SSLHandshake", true) ->
-            "TLS certificate was rejected — enable \"Trust self-signed certificates\" if this is your own server"
+            R.string.login_error_tls
         raw.contains("Failed to connect", true) || raw.contains("timeout", true) ->
-            "Cannot reach the server — check the address and that it is running"
-        else -> raw
+            R.string.login_error_unreachable
+        else -> null
     }
+    return LoginError(res, if (res == null) raw else null)
 }

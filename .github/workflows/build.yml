@@ -21,6 +21,9 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v6
 
+      - name: Check translations
+        run: python tools/check_translations.py
+
       - name: Unit tests
         run: ./gradlew testDebugUnitTest --stacktrace
 

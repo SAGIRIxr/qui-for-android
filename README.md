@@ -25,8 +25,12 @@ rebuild of that mobile experience for Android.
   per-file priority.
 - **Add torrents** — magnet links, URLs and `.torrent` files, including magnet links and
   files shared from other apps.
+- **Nine languages** — the same set qui ships (English, Українська, 简体中文, Français,
+  Deutsch, Čeština, Italiano, 한국어, Português Brasileiro). Android picks the closest
+  match to the device's language on first launch; Settings has a manual override.
 - **All nine qui themes** with their colour variations, light/dark/system mode, and
   optional Material You dynamic colour.
+- **Tracker favicons** from qui's own icon cache, next to the tracker name on each card.
 - **Incognito mode** — swaps names, categories, tags and trackers for a deterministic
   Linux-distro vocabulary, using the same hash arithmetic as qui, so a given torrent
   shows the same alias in both clients.
@@ -115,13 +119,38 @@ The app is a client for qui's API, not a reimplementation of qui:
 | `GET /api/stream` (SSE) | `QuiStreamClient` — init/update/delta/heartbeat frames |
 | `GET /api/instances/{id}/torrents` | `QuiRepository.torrents` |
 | `POST /api/instances/{id}/torrents/bulk-action` | `QuiRepository.bulkAction` |
+| `GET /api/tracker-icons` | `TrackerIconStore` — data URIs decoded once, shared by every card |
 | `web/src/themes/*.css` | `QuiThemes.kt`, generated with OKLCH → sRGB conversion |
+| `web/src/i18n/locales/*` | `res/values-*/strings.xml`, generated (see Translations) |
 | `web/src/lib/utils.ts`, `speedUnits.ts` | `ui/format/Format.kt` |
 | `web/src/lib/incognito.ts` | `ui/torrents/Incognito.kt` |
 | `TorrentCardsMobile.tsx` | `ui/torrents/TorrentCard.kt` |
 
 Theme colours are not eyeballed: qui's CSS custom properties are parsed and the OKLCH
 values converted to sRGB, so the palettes are numerically identical to the web UI.
+
+## Translations
+
+English lives in `app/src/main/res/values/strings.xml` and is the only file to edit by
+hand. The other eight locales are generated:
+
+```bash
+python tools/generate_translations.py ../qui-upstream
+```
+
+For every English string the generator looks for the same sentence in qui's own locale
+files and reuses that translation, so torrent states, filters and actions read exactly
+as they do in the web UI (about three quarters of the catalogue). The rest come from
+`tools/translations_overrides.json`, which is hand-written and covers the strings that
+only exist in this app — the login form, the dashboard cards, and the Android-specific
+settings.
+
+`tools/check_translations.py` runs in CI and fails if a locale is missing a key or if a
+translation's `%1$s` placeholders do not match the English source. It needs no qui
+checkout.
+
+Adding a language means adding it to `LANGUAGES` in the generator, `SUPPORTED_LANGUAGES`
+and `LANGUAGE_NAMES` in `ui/AppLocale.kt`, and `res/xml/locales_config.xml`.
 
 ## Not implemented
 

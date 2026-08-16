@@ -1,13 +1,20 @@
 /*
  * Copyright (c) 2026 qui-android contributors
  * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * Backs the per-instance cards. qui's InstanceCard shows counts, transfer totals, disk
+ * figures and the alternative-speed switch, and every one of those numbers already
+ * rides along on the torrent listing's stats/serverState, so one request per instance
+ * fills the whole card.
  */
 
 package dev.qui.android.ui.dashboard
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.qui.android.R
 import dev.qui.android.data.AppPreferencesStore
 import dev.qui.android.data.QuiRepository
 import dev.qui.android.data.model.Instance
@@ -29,9 +36,20 @@ data class InstanceCard(
     val uploadSpeed: Long = 0,
     val sessionDownloaded: Long = 0,
     val sessionUploaded: Long = 0,
+    val allTimeDownloaded: Long? = null,
+    val allTimeUploaded: Long? = null,
     val torrentCount: Int = 0,
-    val error: String? = null,
-)
+    val downloading: Int = 0,
+    val seeding: Int = 0,
+    val errored: Int = 0,
+    val totalSize: Long? = null,
+    val freeSpace: Long? = null,
+    val peerConnections: Long? = null,
+    val altSpeedEnabled: Boolean = false,
+    @StringRes val errorRes: Int? = null,
+) {
+    val isHealthy: Boolean get() = errorRes == null
+}
 
 data class DashboardUiState(
     val cards: List<InstanceCard> = emptyList(),
@@ -40,6 +58,7 @@ data class DashboardUiState(
     val totalDownloadSpeed: Long get() = cards.sumOf { it.downloadSpeed }
     val totalUploadSpeed: Long get() = cards.sumOf { it.uploadSpeed }
     val totalTorrents: Int get() = cards.sumOf { it.torrentCount }
+    val totalSize: Long get() = cards.sumOf { it.totalSize ?: 0L }
 }
 
 @HiltViewModel
@@ -57,8 +76,8 @@ class DashboardViewModel @Inject constructor(
     private var pollJob: Job? = null
 
     /**
-     * Polls transfer info per instance. The dashboard has no stream of its own in qui
-     * either; it refreshes on an interval.
+     * Polls per instance. The dashboard has no stream of its own in qui either; it
+     * refreshes on an interval.
      */
     fun start() {
         if (pollJob?.isActive == true) return
@@ -67,6 +86,13 @@ class DashboardViewModel @Inject constructor(
                 refresh()
                 delay(preferences.value.refreshSeconds.coerceAtLeast(2) * 1000L)
             }
+        }
+    }
+
+    fun toggleAltSpeedLimits(instanceId: Int) {
+        viewModelScope.launch {
+            repository.toggleAltSpeedLimits(instanceId)
+            refresh()
         }
     }
 
@@ -79,14 +105,12 @@ class DashboardViewModel @Inject constructor(
         val cards = instances.map { instance ->
             viewModelScope.async {
                 if (!instance.isActive) {
-                    return@async InstanceCard(instance, error = "Disabled")
+                    return@async InstanceCard(instance, errorRes = R.string.instances_disabled)
                 }
 
-                val transfer = repository.transferInfo(instance.id).getOrNull()
-                    ?: return@async InstanceCard(instance, error = "Not reachable")
-
-                // A one-row listing is the cheapest way to read the server-side total.
-                val total = repository.torrents(
+                // A one-row listing is the cheapest way to read the server-side totals:
+                // the response carries stats, counts and serverState regardless of limit.
+                val response = repository.torrents(
                     instanceId = instance.id,
                     page = 0,
                     limit = 1,
@@ -94,15 +118,31 @@ class DashboardViewModel @Inject constructor(
                     order = "desc",
                     search = null,
                     filters = null,
-                ).getOrNull()?.total ?: 0
+                ).getOrNull()
+                    ?: return@async InstanceCard(
+                        instance,
+                        errorRes = R.string.instances_not_reachable,
+                    )
+
+                val stats = response.stats
+                val server = response.serverState
 
                 InstanceCard(
                     instance = instance,
-                    downloadSpeed = transfer.dlInfoSpeed,
-                    uploadSpeed = transfer.upInfoSpeed,
-                    sessionDownloaded = transfer.dlInfoData,
-                    sessionUploaded = transfer.upInfoData,
-                    torrentCount = total,
+                    downloadSpeed = server?.dlInfoSpeed ?: stats?.totalDownloadSpeed ?: 0,
+                    uploadSpeed = server?.upInfoSpeed ?: stats?.totalUploadSpeed ?: 0,
+                    sessionDownloaded = server?.dlInfoData ?: stats?.totalDownloadData ?: 0,
+                    sessionUploaded = server?.upInfoData ?: stats?.totalUploadData ?: 0,
+                    allTimeDownloaded = server?.alltimeDl,
+                    allTimeUploaded = server?.alltimeUl,
+                    torrentCount = response.total,
+                    downloading = stats?.downloading ?: 0,
+                    seeding = stats?.seeding ?: 0,
+                    errored = stats?.error ?: 0,
+                    totalSize = stats?.totalSize,
+                    freeSpace = server?.freeSpaceOnDisk,
+                    peerConnections = server?.totalPeerConnections,
+                    altSpeedEnabled = server?.useAltSpeedLimits ?: false,
                 )
             }
         }.awaitAll()
