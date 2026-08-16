@@ -104,6 +104,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.qui.android.R
 import dev.qui.android.data.SpeedUnit
@@ -148,6 +150,11 @@ fun TorrentsScreen(
     val scope = rememberCoroutineScope()
 
     val incomingAdd by pendingAdd.collectAsStateWithLifecycle()
+
+    // Coming back from the background can land on a stream whose socket the network
+    // dropped while the process was frozen. The read timeout would catch that on its
+    // own, but only after half a minute of a list that looks alive and is not.
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.onResumed() }
 
     // A torrent handed in from outside opens the add sheet as soon as we are composed.
     LaunchedEffect(incomingAdd) {

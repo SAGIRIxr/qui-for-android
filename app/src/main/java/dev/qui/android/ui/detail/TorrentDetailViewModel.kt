@@ -21,6 +21,7 @@ import dev.qui.android.data.model.WebSeed
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -64,6 +65,8 @@ class TorrentDetailViewModel @Inject constructor(
 
     private var pollJob: Job? = null
 
+    private val resumed = MutableStateFlow(true)
+
     init {
         start()
     }
@@ -76,10 +79,16 @@ class TorrentDetailViewModel @Inject constructor(
         pollJob?.cancel()
         pollJob = viewModelScope.launch {
             while (true) {
+                resumed.first { it }
                 loadForTab(_state.value.tab)
                 delay(preferences.value.refreshSeconds.coerceAtLeast(2) * 1000L)
             }
         }
+    }
+
+    /** Same reason as the dashboard: viewModelScope does not stop at the home button. */
+    fun setResumed(value: Boolean) {
+        resumed.value = value
     }
 
     private suspend fun loadForTab(tab: DetailTab) {

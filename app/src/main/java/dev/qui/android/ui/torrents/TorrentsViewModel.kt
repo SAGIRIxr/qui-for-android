@@ -41,6 +41,16 @@ import javax.inject.Inject
 /** How many rows a page holds. qui's mobile list uses 100 and grows the window. */
 private const val PAGE_SIZE = 100
 
+/**
+ * A stream quiet for longer than this is presumed dead on resume. qui heartbeats
+ * every 5 seconds, so anything past a few of those is not a lull.
+ */
+private const val STREAM_STALE_MS = 20_000L
+
+/** How long a free-space reading stays good for, and how long it waits its turn. */
+private const val FREE_SPACE_TTL_MS = 60_000L
+private const val FREE_SPACE_DELAY_MS = 1_500L
+
 data class TorrentsUiState(
     val instances: List<Instance> = emptyList(),
     val selectedInstanceId: Int? = null,
@@ -117,6 +127,16 @@ class TorrentsViewModel @Inject constructor(
 
     private var streamJob: Job? = null
     private var loadedPages = 1
+
+    /**
+     * When the last stream frame arrived. Android freezes the process in the
+     * background, so a stream can come back to a socket the network dropped hours
+     * ago; comparing against this on resume is what tells the two apart.
+     */
+    private var lastEventAt = 0L
+
+    private var freeSpaceJob: Job? = null
+    private var freeSpaceAt = 0L
 
     init {
         viewModelScope.launch {
@@ -220,12 +240,24 @@ class TorrentsViewModel @Inject constructor(
     }
 
     /**
-     * One cheap listing per client, purely for its serverState. Free space moves
-     * slowly, so this runs on scope entry and on pull-to-refresh rather than on every
-     * poll — N requests on the list's normal cadence would not be worth the number.
+     * One listing per client, purely for its serverState — qui has no free-space
+     * endpoint and the cross-instance response carries no server state at all.
+     *
+     * Not cheap on a large library: limit=1 still makes the server build that
+     * instance's full stats and counts. So it waits for the list itself to arrive
+     * before asking, holds the answer for a minute, and never runs on the stream's
+     * cadence. Firing all of them alongside the first page is what made the unified
+     * view feel slow.
      */
-    private fun loadUnifiedFreeSpace() {
-        viewModelScope.launch {
+    private fun loadUnifiedFreeSpace(force: Boolean = false) {
+        if (freeSpaceJob?.isActive == true) return
+        if (!force && System.currentTimeMillis() - freeSpaceAt < FREE_SPACE_TTL_MS) return
+
+        freeSpaceJob = viewModelScope.launch {
+            // Let the page the user is actually waiting for go first.
+            _state.first { !it.isLoading }
+            delay(FREE_SPACE_DELAY_MS)
+
             val instances = _state.value.instances.filter { it.isActive }
             val spaces = instances.mapNotNull { instance ->
                 val free = repository.torrents(
@@ -240,6 +272,7 @@ class TorrentsViewModel @Inject constructor(
 
                 free.takeIf { it > 0 }?.let { InstanceFreeSpace(instance.name, it) }
             }
+            if (spaces.isNotEmpty()) freeSpaceAt = System.currentTimeMillis()
             _state.update { it.copy(unifiedFreeSpace = spaces) }
         }
     }
@@ -296,6 +329,7 @@ class TorrentsViewModel @Inject constructor(
                 try {
                     streamClient.stream(listOf(subscription)).collect { event ->
                         backoffSeconds = 1
+                        lastEventAt = System.currentTimeMillis()
                         handleStreamEvent(event)
                     }
                 } catch (_: Exception) {
@@ -442,9 +476,24 @@ class TorrentsViewModel @Inject constructor(
         restart()
     }
 
+    /**
+     * Called when the screen comes back to the foreground. The read timeout would
+     * notice a dead stream on its own within half a minute, but half a minute of a
+     * frozen list is exactly what this is meant to avoid.
+     */
+    fun onResumed() {
+        val current = _state.value
+        if (current.selectedInstanceId == null && !current.unifiedScope) return
+
+        val silentFor = System.currentTimeMillis() - lastEventAt
+        if (streamJob?.isActive == true && silentFor < STREAM_STALE_MS) return
+
+        restart()
+    }
+
     fun refresh() {
         _state.update { it.copy(isRefreshing = true) }
-        if (_state.value.unifiedScope) loadUnifiedFreeSpace()
+        if (_state.value.unifiedScope) loadUnifiedFreeSpace(force = true)
         viewModelScope.launch {
             loadInstances()
             fetchPage(reset = true)

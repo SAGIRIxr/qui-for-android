@@ -6,10 +6,13 @@
  * the web UI consumes decodes here unchanged.
  */
 
+@file:OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
+
 package dev.qui.android.data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 @Serializable
 data class Torrent(
@@ -70,8 +73,14 @@ data class Torrent(
     val uploaded: Long = 0,
     @SerialName("uploaded_session") val uploadedSession: Long = 0,
     val upspeed: Long = 0,
-    // Only present on the cross-instance endpoint.
+    // Only present on the cross-instance endpoint, where qui's Go model serialises
+    // them as snake_case over both REST and the stream. Its own web client accepts
+    // either casing (web/src/lib/cross-instance-torrents.ts), so we do the same.
+    @SerialName("instance_id")
+    @JsonNames("instanceId")
     val instanceId: Int? = null,
+    @SerialName("instance_name")
+    @JsonNames("instanceName")
     val instanceName: String? = null,
 ) {
     val tagList: List<String>

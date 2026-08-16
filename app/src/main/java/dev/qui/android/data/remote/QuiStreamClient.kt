@@ -80,6 +80,9 @@ sealed interface StreamEvent {
     data object Heartbeat : StreamEvent
 }
 
+/** Six missed heartbeats. Long enough to ride out a stall, short enough to notice a death. */
+private const val STREAM_READ_TIMEOUT_SECONDS = 30L
+
 @Singleton
 class QuiStreamClient @Inject constructor(
     private val client: OkHttpClient,
@@ -110,9 +113,14 @@ class QuiStreamClient @Inject constructor(
         session.currentCookie()?.takeIf { it.isNotBlank() }
             ?.let { requestBuilder.header("Cookie", it) }
 
-        // SSE connections stay idle between frames, so the read timeout has to go.
+        // qui heartbeats every 5 seconds (internal/api/sse/manager.go), so a read
+        // timeout comfortably above that is a liveness check rather than a limit on
+        // how long the stream may stay open. Disabling it entirely — the obvious
+        // reading of "SSE connections are idle between frames" — means a socket that
+        // dies silently while the phone is asleep never throws, and the list simply
+        // stops updating with no reconnect.
         val streamingClient = client.newBuilder()
-            .readTimeout(0, TimeUnit.MILLISECONDS)
+            .readTimeout(STREAM_READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .build()
 
         val call = streamingClient.newCall(requestBuilder.build())

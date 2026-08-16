@@ -85,10 +85,16 @@ class QuiRepository @Inject constructor(
             session.setApiKey(apiKey)
             apiProvider.invalidate()
 
-            // /api/auth/me round-trips the key through the same middleware the rest
-            // of the app uses, so a bad key fails here rather than on the first screen.
-            val user = apiProvider.api().me()
-            session.setUsername(user.username)
+            // Not /api/auth/me: that handler answers from the session alone
+            // (handlers/auth.go GetCurrentUser), so it returns 401 for a perfectly
+            // valid API key. /api/instances sits behind the same IsAuthenticated
+            // middleware, which does honour X-API-Key, so a bad key still fails here
+            // rather than on the first screen.
+            apiProvider.api().instances()
+
+            // An API key is not tied to a username, and the endpoint that would
+            // report one is session-only; the account row shows the server instead.
+            session.setUsername(null)
             Unit
         }
     }.onFailure {

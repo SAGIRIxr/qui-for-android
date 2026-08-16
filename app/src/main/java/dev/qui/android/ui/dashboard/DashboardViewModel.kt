@@ -28,6 +28,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -129,6 +130,13 @@ class DashboardViewModel @Inject constructor(
     private var pollJob: Job? = null
 
     /**
+     * Whether the screen is in front. The loop lives in viewModelScope, which outlives
+     * the app going to the background, so without this it keeps hitting every client
+     * every few seconds behind a screen nobody is looking at.
+     */
+    private val resumed = MutableStateFlow(true)
+
+    /**
      * Polls per instance. The dashboard has no stream of its own in qui either; it
      * refreshes on an interval.
      */
@@ -136,10 +144,15 @@ class DashboardViewModel @Inject constructor(
         if (pollJob?.isActive == true) return
         pollJob = viewModelScope.launch {
             while (true) {
+                resumed.first { it }
                 refresh()
                 delay(preferences.value.refreshSeconds.coerceAtLeast(2) * 1000L)
             }
         }
+    }
+
+    fun setResumed(value: Boolean) {
+        resumed.value = value
     }
 
     /** The eye on each card is qui's global incognito, not a per-card state. */

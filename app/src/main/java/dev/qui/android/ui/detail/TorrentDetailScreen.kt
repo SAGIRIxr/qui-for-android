@@ -61,6 +61,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.qui.android.R
 import dev.qui.android.data.model.TorrentFile
@@ -89,6 +91,9 @@ fun TorrentDetailScreen(
     viewModel: TorrentDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.setResumed(true) }
+    LifecycleEventEffect(Lifecycle.Event.ON_PAUSE) { viewModel.setResumed(false) }
     val prefs by viewModel.preferences.collectAsStateWithLifecycle()
     val palette = QuiTheme.palette
     var showRename by remember { mutableStateOf(false) }
