@@ -40,8 +40,40 @@ rebuild of that mobile experience for Android.
 - **Incognito mode** — swaps names, categories, tags and trackers for a deterministic
   Linux-distro vocabulary using the same hash arithmetic as qui, and masks instance
   addresses on the dashboard. Toggleable from the list, as in qui.
-- **Home-screen widget** with total download and upload speed.
+- **Two home-screen widgets** — see [Widgets](#widgets).
 - **Tracker favicons** from qui's own icon cache.
+
+## Widgets
+
+Two providers appear in the launcher's widget picker:
+
+- **qui stats** — resizable from 2×1 to 4×2. At 2×1 it is just the two speeds; at 2×2 it
+  adds the header, a refresh button and the downloading/seeding counts; at 4×2 it fills
+  in the stopped and errored counts, total size and free disk space. Widths in between
+  pick the largest layout that fits.
+- **qui transfers** — a 4×4 list of whatever is transferring right now, with a progress
+  bar and speed per row. With nothing active it falls back to the most recently added.
+  Tapping a row opens that torrent's detail screen; the `+` opens the add sheet.
+
+Both follow the system light/dark setting and borrow the launcher's own corner radius on
+Android 12 and above, so they sit flush with stock widgets.
+
+### Refreshing
+
+Android will not run a widget's own update schedule more often than every 30 minutes,
+and HyperOS, MIUI, EMUI and ColorOS stretch that further or skip it entirely. So the
+periodic update is a backstop, not the mechanism. What actually keeps the widgets current:
+
+- opening the app — every dashboard poll pushes fresh numbers to every placed widget;
+- the refresh button in the widget's own header.
+
+On a Xiaomi device, *Settings → Apps → qui → Autostart* on and *Battery saver → No
+restrictions* is what lets the periodic update fire at all. Without it the widget shows
+the last numbers it managed to fetch, timestamped, until you tap refresh.
+
+There is no *超级小部件* (HyperOS's interactive widget format) build: that needs Xiaomi's
+MiuiWidget SDK and an app registered through their store review. These are standard
+`AppWidgetProvider` widgets, which HyperOS lists and renders normally.
 
 ## Languages
 
@@ -192,9 +224,8 @@ Manage those in qui itself; this app is a torrent client for day-to-day use.
 
 Two limits worth knowing about:
 
-- The **widget** refreshes on Android's own schedule, which will not go below 30
-  minutes. It also refreshes whenever the app's dashboard polls, so it is current
-  while you are using the app and a rough figure otherwise.
+- The **widgets** refresh on Android's own schedule, which will not go below 30
+  minutes — see [Refreshing](#refreshing).
 - **Dashboard section visibility** is stored on the device, not synced through qui's
   `/api/dashboard-settings`, so it does not follow you to the web UI.
 

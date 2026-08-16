@@ -22,6 +22,7 @@ import dev.qui.android.ui.RootViewModel
 import dev.qui.android.ui.addintent.AddIntent
 import dev.qui.android.ui.addintent.parseAddIntent
 import dev.qui.android.ui.theme.QuiAppTheme
+import dev.qui.android.widget.WidgetLaunch
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @AndroidEntryPoint
@@ -34,6 +35,9 @@ class MainActivity : ComponentActivity() {
      */
     private val pendingAdd = MutableStateFlow<AddIntent?>(null)
 
+    /** A row tapped on the list widget: open that torrent instead of the list. */
+    private val pendingTorrent = MutableStateFlow<Pair<Int, String>?>(null)
+
     /** Applies a language chosen in Settings on Android 12 and below. */
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(AppLocale.wrap(newBase))
@@ -44,6 +48,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         pendingAdd.value = parseAddIntent(intent, contentResolver)
+        consumeWidgetIntent(intent)
 
         setContent {
             val root: RootViewModel = hiltViewModel()
@@ -55,7 +60,7 @@ class MainActivity : ComponentActivity() {
                 themeMode = prefs.themeMode,
                 dynamicColor = prefs.dynamicColor,
             ) {
-                QuiApp(pendingAdd = pendingAdd)
+                QuiApp(pendingAdd = pendingAdd, pendingTorrent = pendingTorrent)
             }
         }
     }
@@ -64,5 +69,26 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         parseAddIntent(intent, contentResolver)?.let { pendingAdd.value = it }
+        consumeWidgetIntent(intent)
+    }
+
+    /**
+     * Widget taps arrive as extras rather than a Uri, so they cannot be confused with
+     * a magnet link handed in by another app. The extras are stripped once read,
+     * otherwise returning to the task would replay them.
+     */
+    private fun consumeWidgetIntent(intent: Intent) {
+        if (intent.getBooleanExtra(WidgetLaunch.EXTRA_OPEN_ADD, false)) {
+            intent.removeExtra(WidgetLaunch.EXTRA_OPEN_ADD)
+            // An empty AddIntent opens the sheet with nothing prefilled.
+            pendingAdd.value = AddIntent()
+            return
+        }
+
+        val hash = intent.getStringExtra(WidgetLaunch.EXTRA_HASH) ?: return
+        val instanceId = intent.getIntExtra(WidgetLaunch.EXTRA_INSTANCE_ID, -1)
+        intent.removeExtra(WidgetLaunch.EXTRA_HASH)
+        intent.removeExtra(WidgetLaunch.EXTRA_INSTANCE_ID)
+        if (instanceId >= 0) pendingTorrent.value = instanceId to hash
     }
 }

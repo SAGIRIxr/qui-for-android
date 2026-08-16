@@ -144,9 +144,15 @@
     <string name="storage_clear">Leeren</string>
     <string name="storage_entries">%1$d Einträge</string>
     <string name="storage_cleared">Geleert</string>
-    <string name="widget_name">qui-Geschwindigkeiten</string>
-    <string name="widget_description">Gesamte Download- und Upload-Geschwindigkeit über alle Clients.</string>
+    <string name="widget_name">qui-Statistik</string>
+    <string name="widget_description">Geschwindigkeiten und Torrent-Zahlen über alle Clients. Größer ziehen zeigt mehr.</string>
+    <string name="widget_torrents_name">qui-Übertragungen</string>
+    <string name="widget_torrents_description">Was gerade übertragen wird, mit Fortschritt. Auf eine Zeile tippen, um sie zu öffnen.</string>
     <string name="widget_not_signed_in">Bei qui anmelden</string>
+    <string name="widget_refresh">Aktualisieren</string>
+    <string name="widget_no_active">Es wird nichts übertragen</string>
+    <string name="widget_free_space">%1$s frei</string>
+    <string name="widget_stale">Zuletzt aktualisiert %1$s</string>
     <string name="speed_limits_hint">Werte in KiB/s. Ein leeres Feld lässt das Limit unverändert; 0 bedeutet unbegrenzt.</string>
     <string name="speed_limit_download">Download-Limit</string>
     <string name="speed_limit_upload">Upload-Limit</string>

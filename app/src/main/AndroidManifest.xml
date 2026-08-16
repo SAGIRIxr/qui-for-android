@@ -62,11 +62,32 @@
             android:label="@string/widget_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <!-- The refresh button broadcasts to the provider itself. -->
+                <action android:name="dev.qui.android.widget.REFRESH" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_speeds_info" />
         </receiver>
+
+        <receiver
+            android:name=".widget.QuiTorrentsWidgetProvider"
+            android:exported="false"
+            android:label="@string/widget_torrents_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="dev.qui.android.widget.REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_torrents_info" />
+        </receiver>
+
+        <!-- BIND_REMOTEVIEWS keeps the row adapter reachable by the launcher only. -->
+        <service
+            android:name=".widget.TorrentsWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

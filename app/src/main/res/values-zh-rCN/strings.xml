@@ -144,9 +144,15 @@
     <string name="storage_clear">清除</string>
     <string name="storage_entries">%1$d 条</string>
     <string name="storage_cleared">已清除</string>
-    <string name="widget_name">qui 速度</string>
-    <string name="widget_description">所有客户端的总下载和上传速度。</string>
+    <string name="widget_name">qui 统计</string>
+    <string name="widget_description">所有客户端的速度与种子数量。放大可显示更多信息。</string>
+    <string name="widget_torrents_name">qui 传输中</string>
+    <string name="widget_torrents_description">当前正在传输的种子及进度。点击某一行可直接打开。</string>
     <string name="widget_not_signed_in">请先登录 qui</string>
+    <string name="widget_refresh">刷新</string>
+    <string name="widget_no_active">当前没有传输中的种子</string>
+    <string name="widget_free_space">剩余 %1$s</string>
+    <string name="widget_stale">最后更新于 %1$s</string>
     <string name="speed_limits_hint">单位为 KiB/s。留空表示不改动该项限制，填 0 表示不限速。</string>
     <string name="speed_limit_download">下载限制</string>
     <string name="speed_limit_upload">上传限制</string>

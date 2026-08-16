@@ -144,9 +144,15 @@
     <string name="storage_clear">Очистити</string>
     <string name="storage_entries">Записів: %1$d</string>
     <string name="storage_cleared">Очищено</string>
-    <string name="widget_name">Швидкості qui</string>
-    <string name="widget_description">Загальна швидкість завантаження та вивантаження на всіх клієнтах.</string>
+    <string name="widget_name">Статистика qui</string>
+    <string name="widget_description">Швидкості та кількість торентів на всіх клієнтах. Змініть розмір, щоб побачити більше.</string>
+    <string name="widget_torrents_name">Передавання qui</string>
+    <string name="widget_torrents_description">Що передається просто зараз, із поступом. Торкніться рядка, щоб відкрити.</string>
     <string name="widget_not_signed_in">Увійдіть у qui</string>
+    <string name="widget_refresh">Оновити</string>
+    <string name="widget_no_active">Немає активних передавань</string>
+    <string name="widget_free_space">%1$s вільно</string>
+    <string name="widget_stale">Останнє оновлення %1$s</string>
     <string name="speed_limits_hint">Значення в KiB/s. Порожнє поле залишає обмеження без змін; 0 — без обмежень.</string>
     <string name="speed_limit_download">Обмеження завантаження</string>
     <string name="speed_limit_upload">Обмеження вивантаження</string>

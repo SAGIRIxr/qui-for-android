@@ -144,9 +144,15 @@
     <string name="storage_clear">Limpar</string>
     <string name="storage_entries">%1$d entradas</string>
     <string name="storage_cleared">Limpo</string>
-    <string name="widget_name">Velocidades do qui</string>
-    <string name="widget_description">Velocidade total de download e envio em todos os clientes.</string>
+    <string name="widget_name">Estatísticas do qui</string>
+    <string name="widget_description">Velocidades e contagens de torrents em todos os clientes. Redimensione para ver mais.</string>
+    <string name="widget_torrents_name">Transferências do qui</string>
+    <string name="widget_torrents_description">O que está sendo transferido agora, com o progresso. Toque em uma linha para abri-la.</string>
     <string name="widget_not_signed_in">Entre no qui</string>
+    <string name="widget_refresh">Atualizar</string>
+    <string name="widget_no_active">Nada sendo transferido</string>
+    <string name="widget_free_space">%1$s livres</string>
+    <string name="widget_stale">Atualizado às %1$s</string>
     <string name="speed_limits_hint">Valores em KiB/s. Deixe um campo vazio para manter o limite; use 0 para ilimitado.</string>
     <string name="speed_limit_download">Limite de Download</string>
     <string name="speed_limit_upload">Limite de Upload</string>

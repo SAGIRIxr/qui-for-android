@@ -144,9 +144,15 @@
     <string name="storage_clear">Svuota</string>
     <string name="storage_entries">%1$d voci</string>
     <string name="storage_cleared">Svuotato</string>
-    <string name="widget_name">Velocità qui</string>
-    <string name="widget_description">Velocità totale di download e upload su tutti i client.</string>
+    <string name="widget_name">Statistiche qui</string>
+    <string name="widget_description">Velocità e conteggi dei torrent su tutti i client. Ridimensiona per vedere di più.</string>
+    <string name="widget_torrents_name">Trasferimenti qui</string>
+    <string name="widget_torrents_description">Cosa si sta trasferendo ora, con l\'avanzamento. Tocca una riga per aprirla.</string>
     <string name="widget_not_signed_in">Accedi a qui</string>
+    <string name="widget_refresh">Aggiorna</string>
+    <string name="widget_no_active">Nessun trasferimento in corso</string>
+    <string name="widget_free_space">%1$s liberi</string>
+    <string name="widget_stale">Ultimo aggiornamento %1$s</string>
     <string name="speed_limits_hint">Valori in KiB/s. Lascia vuoto un campo per non modificare quel limite; 0 significa illimitato.</string>
     <string name="speed_limit_download">Limite di download</string>
     <string name="speed_limit_upload">Limite di upload</string>

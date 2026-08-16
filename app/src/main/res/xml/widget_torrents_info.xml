@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The list widget needs height to be worth placing, so it starts at 4x4 and refuses to
+  shrink below roughly 4x2. HyperOS's picker reads targetCellWidth/Height for the size
+  chip it highlights by default.
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/widget_torrents_description"
+    android:initialLayout="@layout/widget_torrents"
+    android:minHeight="180dp"
+    android:minResizeHeight="150dp"
+    android:minResizeWidth="180dp"
+    android:minWidth="250dp"
+    android:maxResizeHeight="500dp"
+    android:maxResizeWidth="330dp"
+    android:previewLayout="@layout/widget_torrents"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellHeight="4"
+    android:targetCellWidth="4"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen" />

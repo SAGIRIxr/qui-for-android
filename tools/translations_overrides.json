@@ -241,24 +241,24 @@
     "zh-CN": "已清除"
   },
   "widget_name": {
-    "cs": "Rychlosti qui",
-    "de": "qui-Geschwindigkeiten",
-    "fr": "Vitesses qui",
-    "it": "Velocità qui",
-    "ko": "qui 속도",
-    "pt-BR": "Velocidades do qui",
-    "uk": "Швидкості qui",
-    "zh-CN": "qui 速度"
+    "cs": "Statistiky qui",
+    "de": "qui-Statistik",
+    "fr": "Statistiques qui",
+    "it": "Statistiche qui",
+    "ko": "qui 통계",
+    "pt-BR": "Estatísticas do qui",
+    "uk": "Статистика qui",
+    "zh-CN": "qui 统计"
   },
   "widget_description": {
-    "cs": "Celková rychlost stahování a nahrávání napříč klienty.",
-    "de": "Gesamte Download- und Upload-Geschwindigkeit über alle Clients.",
-    "fr": "Vitesse totale de téléchargement et d'envoi sur tous vos clients.",
-    "it": "Velocità totale di download e upload su tutti i client.",
-    "ko": "모든 클라이언트의 총 다운로드·업로드 속도입니다.",
-    "pt-BR": "Velocidade total de download e envio em todos os clientes.",
-    "uk": "Загальна швидкість завантаження та вивантаження на всіх клієнтах.",
-    "zh-CN": "所有客户端的总下载和上传速度。"
+    "cs": "Rychlosti a počty torrentů napříč klienty. Změnou velikosti zobrazíte více.",
+    "de": "Geschwindigkeiten und Torrent-Zahlen über alle Clients. Größer ziehen zeigt mehr.",
+    "fr": "Vitesses et nombre de torrents sur tous vos clients. Agrandissez pour plus de détails.",
+    "it": "Velocità e conteggi dei torrent su tutti i client. Ridimensiona per vedere di più.",
+    "ko": "모든 클라이언트의 속도와 토렌트 개수입니다. 크기를 늘리면 더 자세히 표시됩니다.",
+    "pt-BR": "Velocidades e contagens de torrents em todos os clientes. Redimensione para ver mais.",
+    "uk": "Швидкості та кількість торентів на всіх клієнтах. Змініть розмір, щоб побачити більше.",
+    "zh-CN": "所有客户端的速度与种子数量。放大可显示更多信息。"
   },
   "widget_not_signed_in": {
     "cs": "Přihlaste se do qui",
@@ -269,6 +269,72 @@
     "pt-BR": "Entre no qui",
     "uk": "Увійдіть у qui",
     "zh-CN": "请先登录 qui"
+  },
+
+  "widget_refresh": {
+    "cs": "Obnovit",
+    "de": "Aktualisieren",
+    "fr": "Actualiser",
+    "it": "Aggiorna",
+    "ko": "새로 고침",
+    "pt-BR": "Atualizar",
+    "uk": "Оновити",
+    "zh-CN": "刷新"
+  },
+
+  "widget_torrents_name": {
+    "cs": "Přenosy qui",
+    "de": "qui-Übertragungen",
+    "fr": "Transferts qui",
+    "it": "Trasferimenti qui",
+    "ko": "qui 전송 중",
+    "pt-BR": "Transferências do qui",
+    "uk": "Передавання qui",
+    "zh-CN": "qui 传输中"
+  },
+
+  "widget_torrents_description": {
+    "cs": "Co se právě přenáší, včetně průběhu. Klepnutím na řádek jej otevřete.",
+    "de": "Was gerade übertragen wird, mit Fortschritt. Auf eine Zeile tippen, um sie zu öffnen.",
+    "fr": "Ce qui est en cours de transfert, avec la progression. Touchez une ligne pour l'ouvrir.",
+    "it": "Cosa si sta trasferendo ora, con l'avanzamento. Tocca una riga per aprirla.",
+    "ko": "지금 전송 중인 항목과 진행률입니다. 항목을 누르면 열립니다.",
+    "pt-BR": "O que está sendo transferido agora, com o progresso. Toque em uma linha para abri-la.",
+    "uk": "Що передається просто зараз, із поступом. Торкніться рядка, щоб відкрити.",
+    "zh-CN": "当前正在传输的种子及进度。点击某一行可直接打开。"
+  },
+
+  "widget_no_active": {
+    "cs": "Nic se nepřenáší",
+    "de": "Es wird nichts übertragen",
+    "fr": "Aucun transfert en cours",
+    "it": "Nessun trasferimento in corso",
+    "ko": "전송 중인 항목이 없습니다",
+    "pt-BR": "Nada sendo transferido",
+    "uk": "Немає активних передавань",
+    "zh-CN": "当前没有传输中的种子"
+  },
+
+  "widget_free_space": {
+    "cs": "%1$s volných",
+    "de": "%1$s frei",
+    "fr": "%1$s libres",
+    "it": "%1$s liberi",
+    "ko": "%1$s 남음",
+    "pt-BR": "%1$s livres",
+    "uk": "%1$s вільно",
+    "zh-CN": "剩余 %1$s"
+  },
+
+  "widget_stale": {
+    "cs": "Naposledy aktualizováno %1$s",
+    "de": "Zuletzt aktualisiert %1$s",
+    "fr": "Dernière mise à jour %1$s",
+    "it": "Ultimo aggiornamento %1$s",
+    "ko": "마지막 업데이트 %1$s",
+    "pt-BR": "Atualizado às %1$s",
+    "uk": "Останнє оновлення %1$s",
+    "zh-CN": "最后更新于 %1$s"
   },
 
   "dashboard_active_count": {

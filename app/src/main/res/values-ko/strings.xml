@@ -144,9 +144,15 @@
     <string name="storage_clear">지우기</string>
     <string name="storage_entries">%1$d개 항목</string>
     <string name="storage_cleared">지워짐</string>
-    <string name="widget_name">qui 속도</string>
-    <string name="widget_description">모든 클라이언트의 총 다운로드·업로드 속도입니다.</string>
+    <string name="widget_name">qui 통계</string>
+    <string name="widget_description">모든 클라이언트의 속도와 토렌트 개수입니다. 크기를 늘리면 더 자세히 표시됩니다.</string>
+    <string name="widget_torrents_name">qui 전송 중</string>
+    <string name="widget_torrents_description">지금 전송 중인 항목과 진행률입니다. 항목을 누르면 열립니다.</string>
     <string name="widget_not_signed_in">qui에 로그인하세요</string>
+    <string name="widget_refresh">새로 고침</string>
+    <string name="widget_no_active">전송 중인 항목이 없습니다</string>
+    <string name="widget_free_space">%1$s 남음</string>
+    <string name="widget_stale">마지막 업데이트 %1$s</string>
     <string name="speed_limits_hint">단위는 KiB/s입니다. 비워 두면 해당 제한을 그대로 두고, 0은 무제한입니다.</string>
     <string name="speed_limit_download">다운로드 제한</string>
     <string name="speed_limit_upload">업로드 제한</string>

@@ -144,9 +144,15 @@
     <string name="storage_clear">Vymazat</string>
     <string name="storage_entries">Položek: %1$d</string>
     <string name="storage_cleared">Vymazáno</string>
-    <string name="widget_name">Rychlosti qui</string>
-    <string name="widget_description">Celková rychlost stahování a nahrávání napříč klienty.</string>
+    <string name="widget_name">Statistiky qui</string>
+    <string name="widget_description">Rychlosti a počty torrentů napříč klienty. Změnou velikosti zobrazíte více.</string>
+    <string name="widget_torrents_name">Přenosy qui</string>
+    <string name="widget_torrents_description">Co se právě přenáší, včetně průběhu. Klepnutím na řádek jej otevřete.</string>
     <string name="widget_not_signed_in">Přihlaste se do qui</string>
+    <string name="widget_refresh">Obnovit</string>
+    <string name="widget_no_active">Nic se nepřenáší</string>
+    <string name="widget_free_space">%1$s volných</string>
+    <string name="widget_stale">Naposledy aktualizováno %1$s</string>
     <string name="speed_limits_hint">Hodnoty jsou v KiB/s. Prázdné pole ponechá limit beze změny; 0 znamená bez omezení.</string>
     <string name="speed_limit_download">Stahovací limit</string>
     <string name="speed_limit_upload">Odesílací limit</string>

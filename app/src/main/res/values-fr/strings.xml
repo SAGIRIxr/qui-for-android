@@ -144,9 +144,15 @@
     <string name="storage_clear">Effacer</string>
     <string name="storage_entries">%1$d entrées</string>
     <string name="storage_cleared">Effacé</string>
-    <string name="widget_name">Vitesses qui</string>
-    <string name="widget_description">Vitesse totale de téléchargement et d\'envoi sur tous vos clients.</string>
+    <string name="widget_name">Statistiques qui</string>
+    <string name="widget_description">Vitesses et nombre de torrents sur tous vos clients. Agrandissez pour plus de détails.</string>
+    <string name="widget_torrents_name">Transferts qui</string>
+    <string name="widget_torrents_description">Ce qui est en cours de transfert, avec la progression. Touchez une ligne pour l\'ouvrir.</string>
     <string name="widget_not_signed_in">Connectez-vous à qui</string>
+    <string name="widget_refresh">Actualiser</string>
+    <string name="widget_no_active">Aucun transfert en cours</string>
+    <string name="widget_free_space">%1$s libres</string>
+    <string name="widget_stale">Dernière mise à jour %1$s</string>
     <string name="speed_limits_hint">Valeurs en Kio/s. Laissez un champ vide pour ne pas modifier la limite ; 0 signifie illimité.</string>
     <string name="speed_limit_download">Limite de téléchargement</string>
     <string name="speed_limit_upload">Limite d\'envoi</string>

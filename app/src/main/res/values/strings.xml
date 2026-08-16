@@ -194,9 +194,15 @@
     <string name="storage_cleared">Cleared</string>
 
     <!-- Widget -->
-    <string name="widget_name">qui speeds</string>
-    <string name="widget_description">Total download and upload speed across your clients.</string>
+    <string name="widget_name">qui stats</string>
+    <string name="widget_description">Speeds and torrent counts across your clients. Resize for more detail.</string>
+    <string name="widget_torrents_name">qui transfers</string>
+    <string name="widget_torrents_description">What is transferring right now, with progress. Tap a row to open it.</string>
     <string name="widget_not_signed_in">Sign in to qui</string>
+    <string name="widget_refresh">Refresh</string>
+    <string name="widget_no_active">Nothing is transferring</string>
+    <string name="widget_free_space">%1$s free</string>
+    <string name="widget_stale">Last updated %1$s</string>
 
     <!-- Speed limit dialog -->
     <string name="speed_limits_hint">Values are in KiB/s. Leave a field empty to leave that limit unchanged; use 0 for unlimited.</string>

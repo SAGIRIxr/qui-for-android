@@ -81,7 +81,10 @@ private val NAV_ENTRIES = listOf(
 )
 
 @Composable
-fun QuiApp(pendingAdd: MutableStateFlow<AddIntent?>) {
+fun QuiApp(
+    pendingAdd: MutableStateFlow<AddIntent?>,
+    pendingTorrent: MutableStateFlow<Pair<Int, String>?>,
+) {
     val root: RootViewModel = hiltViewModel()
     val isConfigured by root.isConfigured.collectAsStateWithLifecycle()
     val trackerIcons by root.trackerIcons.collectAsStateWithLifecycle()
@@ -103,7 +106,11 @@ fun QuiApp(pendingAdd: MutableStateFlow<AddIntent?>) {
         when (isConfigured) {
             null -> Box(Modifier.fillMaxSize())
             false -> LoginScreen(onAuthenticated = { /* isConfigured flips the tree */ })
-            true -> MainScaffold(navController = navController, pendingAdd = pendingAdd)
+            true -> MainScaffold(
+                navController = navController,
+                pendingAdd = pendingAdd,
+                pendingTorrent = pendingTorrent,
+            )
         }
     }
 }
@@ -112,6 +119,7 @@ fun QuiApp(pendingAdd: MutableStateFlow<AddIntent?>) {
 private fun MainScaffold(
     navController: NavHostController,
     pendingAdd: MutableStateFlow<AddIntent?>,
+    pendingTorrent: MutableStateFlow<Pair<Int, String>?>,
 ) {
     val shell: ShellViewModel = hiltViewModel()
     val instances by shell.instances.collectAsStateWithLifecycle()
@@ -126,6 +134,14 @@ private fun MainScaffold(
     }
 
     LaunchedEffect(Unit) { shell.refresh() }
+
+    // A row tapped on the home-screen widget lands straight on that torrent.
+    val widgetTorrent by pendingTorrent.collectAsStateWithLifecycle()
+    LaunchedEffect(widgetTorrent) {
+        val (instanceId, hash) = widgetTorrent ?: return@LaunchedEffect
+        pendingTorrent.value = null
+        navController.navigate(Routes.detail(instanceId, hash))
+    }
 
     Scaffold(
         bottomBar = {

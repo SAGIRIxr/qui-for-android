@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fallback radii for launchers older than Android 12; v31 swaps in the
+         system values so the widget matches whatever shape the launcher uses. -->
+    <dimen name="widget_corner_radius">16dp</dimen>
+    <dimen name="widget_inner_radius">10dp</dimen>
+</resources>
