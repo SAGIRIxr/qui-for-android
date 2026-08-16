@@ -20,6 +20,20 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            // Supplied by CI from repository secrets. Absent on a normal local build,
+            // in which case the release type falls back to the debug key below.
+            val storePath = System.getenv("QUI_KEYSTORE_FILE")
+            if (!storePath.isNullOrBlank() && file(storePath).exists()) {
+                storeFile = file(storePath)
+                storePassword = System.getenv("QUI_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("QUI_KEY_ALIAS")
+                keyPassword = System.getenv("QUI_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -28,6 +42,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            // A release APK signed with the debug key still installs, so an unsigned
+            // build never lands in a release; see README for configuring a real key.
+            signingConfig = if (signingConfigs.getByName("release").storeFile != null) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
         debug {
             applicationIdSuffix = ".debug"

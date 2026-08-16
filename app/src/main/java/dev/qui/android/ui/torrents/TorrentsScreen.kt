@@ -9,6 +9,8 @@
 @file:OptIn(
     androidx.compose.material3.ExperimentalMaterial3Api::class,
     androidx.compose.foundation.ExperimentalFoundationApi::class,
+    // debounce() on the search field is still marked preview in kotlinx-coroutines.
+    kotlinx.coroutines.FlowPreview::class,
 )
 
 package dev.qui.android.ui.torrents
@@ -39,7 +41,7 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SelectAll
-import androidx.compose.material.icons.filled.Sort
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -378,7 +380,7 @@ private fun TorrentsTopBar(
                     )
                 }
                 IconButton(onClick = onOpenSort) {
-                    Icon(Icons.Default.Sort, contentDescription = "Sort")
+                    Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = "Sort")
                 }
                 IconButton(onClick = onOpenFilters) {
                     val activeFilters = state.filters.activeCount

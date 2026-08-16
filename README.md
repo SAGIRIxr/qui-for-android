@@ -67,6 +67,45 @@ To run the tests:
 ./gradlew testDebugUnitTest
 ```
 
+## Releases
+
+Pushing a `v*` tag builds a release APK and attaches it to a GitHub release:
+
+```bash
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+### Signing
+
+By default the release APK is signed with the Android **debug** key. It installs fine,
+but that key is not yours and is the same one every SDK install ships, so treat it as a
+convenience rather than a real signature.
+
+To sign with your own key, generate a keystore and add four repository secrets. Only you
+ever see the passwords:
+
+```bash
+keytool -genkeypair -v -keystore release.jks -alias qui -keyalg RSA -keysize 4096 -validity 10000
+```
+
+```bash
+base64 -w0 release.jks > release.jks.base64
+```
+
+Then under *Settings → Secrets and variables → Actions*, add:
+
+| Secret | Value |
+| --- | --- |
+| `QUI_KEYSTORE_BASE64` | contents of `release.jks.base64` |
+| `QUI_KEYSTORE_PASSWORD` | the keystore password |
+| `QUI_KEY_ALIAS` | `qui` |
+| `QUI_KEY_PASSWORD` | the key password |
+
+Keep `release.jks` backed up and out of the repository. Android identifies an app by its
+signing key: lose it and you cannot ship an update over an installed copy, and switching
+keys forces users to uninstall first. The release workflow prints the certificate it
+actually signed with, so you can confirm which key was used.
+
 ## How it maps to qui
 
 The app is a client for qui's API, not a reimplementation of qui:

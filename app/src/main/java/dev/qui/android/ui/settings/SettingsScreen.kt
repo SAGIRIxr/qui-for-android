@@ -30,7 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.SettingsBrightness
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
@@ -94,7 +94,11 @@ fun SettingsScreen(
                         )
                     }
                     TextButton(onClick = { showLogout = true }) {
-                        Icon(Icons.Default.Logout, contentDescription = null, Modifier.size(16.dp))
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Logout,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
+                        )
                         Spacer(Modifier.width(6.dp))
                         Text("Sign out")
                     }
