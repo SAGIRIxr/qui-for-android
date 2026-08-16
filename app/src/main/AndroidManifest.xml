@@ -56,6 +56,34 @@
             </intent-filter>
         </activity>
 
+        <!-- One receiver per size: the picker lists them separately so nobody has to
+             know a widget can be resized. They share StatsWidgetProvider. -->
+        <receiver
+            android:name=".widget.QuiSpeedWidgetProvider"
+            android:exported="false"
+            android:label="@string/widget_speed_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="dev.qui.android.widget.REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_speed_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.QuiOverviewWidgetProvider"
+            android:exported="false"
+            android:label="@string/widget_overview_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="dev.qui.android.widget.REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_overview_info" />
+        </receiver>
+
         <receiver
             android:name=".widget.QuiWidgetProvider"
             android:exported="false"
@@ -67,7 +95,7 @@
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_speeds_info" />
+                android:resource="@xml/widget_stats_info" />
         </receiver>
 
         <receiver

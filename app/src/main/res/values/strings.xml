@@ -194,15 +194,31 @@
     <string name="storage_cleared">Cleared</string>
 
     <!-- Widget -->
+    <string name="widget_speed_name">qui speed</string>
+    <string name="widget_speed_description">2×1 — total download and upload speed.</string>
+    <string name="widget_overview_name">qui overview</string>
+    <string name="widget_overview_description">2×2 — speeds plus the downloading and seeding counts.</string>
     <string name="widget_name">qui stats</string>
-    <string name="widget_description">Speeds and torrent counts across your clients. Resize for more detail.</string>
+    <string name="widget_description">4×2 — speeds, all four state counts, total size and free space.</string>
     <string name="widget_torrents_name">qui transfers</string>
-    <string name="widget_torrents_description">What is transferring right now, with progress. Tap a row to open it.</string>
+    <string name="widget_torrents_description">4×4 — what is transferring right now, with progress. Tap a row to open it.</string>
     <string name="widget_not_signed_in">Sign in to qui</string>
     <string name="widget_refresh">Refresh</string>
     <string name="widget_no_active">Nothing is transferring</string>
     <string name="widget_free_space">%1$s free</string>
     <string name="widget_stale">Last updated %1$s</string>
+
+    <!-- Widget settings -->
+    <string name="settings_widgets">Widgets</string>
+    <string name="widget_add">Add</string>
+    <string name="widget_pin_unsupported">This launcher cannot add widgets from inside an app. Long-press the home screen and pick qui from its widget list.</string>
+    <string name="widget_scope">Client</string>
+    <string name="widget_scope_all">All active clients</string>
+    <string name="widget_list_content">Transfer list</string>
+    <string name="widget_list_active">Transferring first</string>
+    <string name="widget_list_recent">Recently added</string>
+    <string name="widget_incognito_note">Torrent names on the widget follow the app\'s incognito switch.</string>
+    <string name="widget_refresh_note">Android refreshes widgets at most every 30 minutes, and HyperOS/MIUI often less. Opening the app and the widget\'s own refresh button update them immediately.</string>
 
     <!-- Speed limit dialog -->
     <string name="speed_limits_hint">Values are in KiB/s. Leave a field empty to leave that limit unchanged; use 0 for unlimited.</string>

@@ -65,6 +65,11 @@ data class TorrentsUiState(
     val selectionMode: Boolean = false,
     // qui calls this scope "Unified": every active client merged into one list.
     val unifiedScope: Boolean = false,
+    /**
+     * Free space per client, gathered separately because qui's cross-instance response
+     * carries no serverState — there is no single disk to report for a merged list.
+     */
+    val unifiedFreeSpace: List<InstanceFreeSpace> = emptyList(),
 ) {
     val selectedInstance: Instance?
         get() = instances.firstOrNull { it.id == selectedInstanceId }
@@ -75,7 +80,22 @@ data class TorrentsUiState(
     /** More than one client is the only case where merging them means anything. */
     val canUnify: Boolean
         get() = activeInstanceIds.size > 1
+
+    /**
+     * What the header shows. In the unified scope the honest single number is the
+     * smallest — the disk that fills up first — with the breakdown a tap away.
+     * Summing would be wrong the moment two clients share a filesystem.
+     */
+    val headlineFreeSpace: Long?
+        get() = if (unifiedScope) {
+            unifiedFreeSpace.minOfOrNull { it.free }
+        } else {
+            serverState?.freeSpaceOnDisk?.takeIf { it > 0 }
+        }
 }
+
+/** One client's remaining disk space, for the unified scope's breakdown. */
+data class InstanceFreeSpace(val name: String, val free: Long)
 
 @HiltViewModel
 class TorrentsViewModel @Inject constructor(
@@ -158,6 +178,9 @@ class TorrentsViewModel @Inject constructor(
                 torrents = emptyList(),
                 selection = emptySet(),
                 selectionMode = false,
+                // Belongs to the client we are leaving, in both directions.
+                serverState = null,
+                unifiedFreeSpace = emptyList(),
                 isLoading = true,
             )
         }
@@ -183,13 +206,42 @@ class TorrentsViewModel @Inject constructor(
                 torrents = emptyList(),
                 selection = emptySet(),
                 selectionMode = false,
+                // The merged list has no single server behind it; anything left here
+                // would still be describing the client we just left.
+                serverState = null,
                 isLoading = true,
             )
         }
         loadedPages = 1
         viewModelScope.launch { prefsStore.setUnifiedScope(true) }
         current.activeInstanceIds.firstOrNull()?.let(::loadMetadata)
+        loadUnifiedFreeSpace()
         restart()
+    }
+
+    /**
+     * One cheap listing per client, purely for its serverState. Free space moves
+     * slowly, so this runs on scope entry and on pull-to-refresh rather than on every
+     * poll — N requests on the list's normal cadence would not be worth the number.
+     */
+    private fun loadUnifiedFreeSpace() {
+        viewModelScope.launch {
+            val instances = _state.value.instances.filter { it.isActive }
+            val spaces = instances.mapNotNull { instance ->
+                val free = repository.torrents(
+                    instanceId = instance.id,
+                    page = 0,
+                    limit = 1,
+                    sort = "added_on",
+                    order = "desc",
+                    search = null,
+                    filters = null,
+                ).getOrNull()?.serverState?.freeSpaceOnDisk ?: return@mapNotNull null
+
+                free.takeIf { it > 0 }?.let { InstanceFreeSpace(instance.name, it) }
+            }
+            _state.update { it.copy(unifiedFreeSpace = spaces) }
+        }
     }
 
     private fun loadMetadata(instanceId: Int) {
@@ -267,7 +319,11 @@ class TorrentsViewModel @Inject constructor(
                         total = data.total,
                         stats = data.stats ?: current.stats,
                         counts = data.counts ?: current.counts,
-                        serverState = data.serverState ?: current.serverState,
+                        // Carrying the last value forward covers gaps in the stream, but
+                        // a merged response has no serverState by design — holding on to
+                        // one there would keep showing a single client's disk.
+                        serverState = data.serverState
+                            ?: current.serverState.takeUnless { current.unifiedScope },
                         categories = data.categories ?: current.categories,
                         tags = data.tags ?: current.tags,
                         supportsTrackerHealth = data.trackerHealthSupported
@@ -358,7 +414,8 @@ class TorrentsViewModel @Inject constructor(
                         total = response.total,
                         stats = response.stats ?: it.stats,
                         counts = response.counts ?: it.counts,
-                        serverState = response.serverState ?: it.serverState,
+                        serverState = response.serverState
+                            ?: it.serverState.takeUnless { _ -> it.unifiedScope },
                         categories = response.categories ?: it.categories,
                         tags = response.tags ?: it.tags,
                         supportsTrackerHealth = response.trackerHealthSupported
@@ -387,6 +444,7 @@ class TorrentsViewModel @Inject constructor(
 
     fun refresh() {
         _state.update { it.copy(isRefreshing = true) }
+        if (_state.value.unifiedScope) loadUnifiedFreeSpace()
         viewModelScope.launch {
             loadInstances()
             fetchPage(reset = true)

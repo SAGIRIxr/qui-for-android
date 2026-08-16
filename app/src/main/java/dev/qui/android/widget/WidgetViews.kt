@@ -11,6 +11,7 @@ package dev.qui.android.widget
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -162,6 +163,9 @@ internal fun torrentsViews(
         // has to be part of the data for each widget to get its own factory.
         data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
     }
+    // Deprecated in favour of RemoteCollectionItems, which is API 31+; the service form
+    // is still the only one that covers this app's minSdk.
+    @Suppress("DEPRECATION")
     setRemoteAdapter(R.id.widget_list, serviceIntent)
     setEmptyView(R.id.widget_list, R.id.widget_empty)
     setPendingIntentTemplate(R.id.widget_list, rowTemplateIntent(context))
@@ -206,7 +210,10 @@ private fun subtitle(context: Context, snapshot: WidgetSnapshot): String = build
     )
     if (snapshot.totalSize > 0) add(formatBytes(snapshot.totalSize))
     snapshot.freeSpace?.let {
-        add(context.getString(R.string.widget_free_space, formatBytes(it)))
+        // Across several clients this is the smallest of several separate disks, not a
+        // total, and the marker is what stops it reading as one.
+        val prefix = if (snapshot.instanceCount > 1) "≥ " else ""
+        add(context.getString(R.string.widget_free_space, prefix + formatBytes(it)))
     }
     // Numbers that survived a failed refresh must say so, or they read as current.
     if (snapshot.stale) {
@@ -225,7 +232,10 @@ private fun timeOf(millis: Long): String =
     DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(millis))
 
 object QuiWidgets {
-    private val PROVIDERS = listOf(
+    /** Every provider the manifest declares; each is offered separately in the picker. */
+    val PROVIDERS: List<Class<out AppWidgetProvider>> = listOf(
+        QuiSpeedWidgetProvider::class.java,
+        QuiOverviewWidgetProvider::class.java,
         QuiWidgetProvider::class.java,
         QuiTorrentsWidgetProvider::class.java,
     )

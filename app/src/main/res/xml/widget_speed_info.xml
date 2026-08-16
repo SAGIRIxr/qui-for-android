@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The 2x1 entry. Same provider code as the other two sizes — only the cell footprint
+  the launcher places it at differs, and it can still be dragged larger.
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/widget_speed_description"
+    android:initialLayout="@layout/widget_compact"
+    android:minHeight="40dp"
+    android:minResizeHeight="40dp"
+    android:minResizeWidth="110dp"
+    android:minWidth="110dp"
+    android:maxResizeHeight="300dp"
+    android:maxResizeWidth="330dp"
+    android:previewLayout="@layout/widget_compact"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellHeight="1"
+    android:targetCellWidth="2"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen" />

@@ -45,18 +45,32 @@ rebuild of that mobile experience for Android.
 
 ## Widgets
 
-Two providers appear in the launcher's widget picker:
+Four entries appear in the launcher's widget picker. The first three share one provider
+and all remain resizable — they are listed separately because most people never discover
+that a widget can be dragged bigger:
 
-- **qui stats** — resizable from 2×1 to 4×2. At 2×1 it is just the two speeds; at 2×2 it
-  adds the header, a refresh button and the downloading/seeding counts; at 4×2 it fills
-  in the stopped and errored counts, total size and free disk space. Widths in between
-  pick the largest layout that fits.
-- **qui transfers** — a 4×4 list of whatever is transferring right now, with a progress
+- **qui speed** — 2×1, the two speeds.
+- **qui overview** — 2×2, adds the header, a refresh button and the downloading/seeding
+  counts.
+- **qui stats** — 4×2, fills in the stopped and errored counts, total size and free space.
+- **qui transfers** — 4×4, a list of whatever is transferring right now, with a progress
   bar and speed per row. With nothing active it falls back to the most recently added.
   Tapping a row opens that torrent's detail screen; the `+` opens the add sheet.
 
-Both follow the system light/dark setting and borrow the launcher's own corner radius on
-Android 12 and above, so they sit flush with stock widgets.
+Resizing any of the first three re-picks the layout, so a *qui speed* dragged out to four
+columns becomes the full stats card.
+
+*Settings → Widgets* adds any of them to the home screen without going through the
+launcher's picker, pins them to a single client instead of summing every active one, and
+chooses what the transfer list leads with. Torrent names on the widgets follow the app's
+incognito switch — a home screen is on show to whoever is standing nearby.
+
+All of them follow the system light/dark setting and borrow the launcher's own corner
+radius on Android 12 and above, so they sit flush with stock widgets.
+
+Where several clients are summed, free space is the *smallest* of them — the disk that
+fills up first — and is marked `≥` rather than presented as a total, since separate
+machines have separate disks. The same rule applies to the torrent list's own header.
 
 ### Refreshing
 

@@ -251,14 +251,14 @@
     "zh-CN": "qui 统计"
   },
   "widget_description": {
-    "cs": "Rychlosti a počty torrentů napříč klienty. Změnou velikosti zobrazíte více.",
-    "de": "Geschwindigkeiten und Torrent-Zahlen über alle Clients. Größer ziehen zeigt mehr.",
-    "fr": "Vitesses et nombre de torrents sur tous vos clients. Agrandissez pour plus de détails.",
-    "it": "Velocità e conteggi dei torrent su tutti i client. Ridimensiona per vedere di più.",
-    "ko": "모든 클라이언트의 속도와 토렌트 개수입니다. 크기를 늘리면 더 자세히 표시됩니다.",
-    "pt-BR": "Velocidades e contagens de torrents em todos os clientes. Redimensione para ver mais.",
-    "uk": "Швидкості та кількість торентів на всіх клієнтах. Змініть розмір, щоб побачити більше.",
-    "zh-CN": "所有客户端的速度与种子数量。放大可显示更多信息。"
+    "cs": "4×2 — rychlosti, všechny čtyři počty stavů, celková velikost a volné místo.",
+    "de": "4×2 — Geschwindigkeiten, alle vier Statuszahlen, Gesamtgröße und freier Speicher.",
+    "fr": "4×2 — vitesses, les quatre compteurs d'état, taille totale et espace libre.",
+    "it": "4×2 — velocità, tutti e quattro i conteggi di stato, dimensione totale e spazio libero.",
+    "ko": "4×2 — 속도, 네 가지 상태 개수, 총 크기와 남은 공간.",
+    "pt-BR": "4×2 — velocidades, as quatro contagens de estado, tamanho total e espaço livre.",
+    "uk": "4×2 — швидкості, усі чотири лічильники станів, загальний розмір і вільне місце.",
+    "zh-CN": "4×2 — 速度、四种状态计数、总大小和剩余空间。"
   },
   "widget_not_signed_in": {
     "cs": "Přihlaste se do qui",
@@ -294,14 +294,14 @@
   },
 
   "widget_torrents_description": {
-    "cs": "Co se právě přenáší, včetně průběhu. Klepnutím na řádek jej otevřete.",
-    "de": "Was gerade übertragen wird, mit Fortschritt. Auf eine Zeile tippen, um sie zu öffnen.",
-    "fr": "Ce qui est en cours de transfert, avec la progression. Touchez une ligne pour l'ouvrir.",
-    "it": "Cosa si sta trasferendo ora, con l'avanzamento. Tocca una riga per aprirla.",
-    "ko": "지금 전송 중인 항목과 진행률입니다. 항목을 누르면 열립니다.",
-    "pt-BR": "O que está sendo transferido agora, com o progresso. Toque em uma linha para abri-la.",
-    "uk": "Що передається просто зараз, із поступом. Торкніться рядка, щоб відкрити.",
-    "zh-CN": "当前正在传输的种子及进度。点击某一行可直接打开。"
+    "cs": "4×4 — co se právě přenáší, včetně průběhu. Klepnutím na řádek jej otevřete.",
+    "de": "4×4 — was gerade übertragen wird, mit Fortschritt. Auf eine Zeile tippen, um sie zu öffnen.",
+    "fr": "4×4 — ce qui est en cours de transfert, avec la progression. Touchez une ligne pour l'ouvrir.",
+    "it": "4×4 — cosa si sta trasferendo ora, con l'avanzamento. Tocca una riga per aprirla.",
+    "ko": "4×4 — 지금 전송 중인 항목과 진행률입니다. 항목을 누르면 열립니다.",
+    "pt-BR": "4×4 — o que está sendo transferido agora, com o progresso. Toque em uma linha para abri-la.",
+    "uk": "4×4 — що передається просто зараз, із поступом. Торкніться рядка, щоб відкрити.",
+    "zh-CN": "4×4 — 当前正在传输的种子及进度。点击某一行可直接打开。"
   },
 
   "widget_no_active": {
@@ -335,6 +335,160 @@
     "pt-BR": "Atualizado às %1$s",
     "uk": "Останнє оновлення %1$s",
     "zh-CN": "最后更新于 %1$s"
+  },
+
+  "widget_speed_name": {
+    "cs": "Rychlost qui",
+    "de": "qui-Tempo",
+    "fr": "Vitesse qui",
+    "it": "Velocità qui",
+    "ko": "qui 속도",
+    "pt-BR": "Velocidade do qui",
+    "uk": "Швидкість qui",
+    "zh-CN": "qui 速度"
+  },
+
+  "widget_speed_description": {
+    "cs": "2×1 — celková rychlost stahování a nahrávání.",
+    "de": "2×1 — gesamte Download- und Upload-Geschwindigkeit.",
+    "fr": "2×1 — vitesse totale de téléchargement et d'envoi.",
+    "it": "2×1 — velocità totale di download e upload.",
+    "ko": "2×1 — 총 다운로드·업로드 속도.",
+    "pt-BR": "2×1 — velocidade total de download e envio.",
+    "uk": "2×1 — загальна швидкість завантаження та вивантаження.",
+    "zh-CN": "2×1 — 总下载和上传速度。"
+  },
+
+  "widget_overview_name": {
+    "cs": "Přehled qui",
+    "de": "qui-Überblick",
+    "fr": "Aperçu qui",
+    "it": "Panoramica qui",
+    "ko": "qui 개요",
+    "pt-BR": "Visão geral do qui",
+    "uk": "Огляд qui",
+    "zh-CN": "qui 概览"
+  },
+
+  "widget_overview_description": {
+    "cs": "2×2 — rychlosti a počty stahovaných a sdílených torrentů.",
+    "de": "2×2 — Geschwindigkeiten sowie die Zahl der ladenden und seedenden Torrents.",
+    "fr": "2×2 — vitesses ainsi que le nombre de torrents en téléchargement et en partage.",
+    "it": "2×2 — velocità più il numero di torrent in download e in seeding.",
+    "ko": "2×2 — 속도와 다운로드 중·시딩 중 개수.",
+    "pt-BR": "2×2 — velocidades e as contagens de download e seed.",
+    "uk": "2×2 — швидкості та кількість завантажень і роздач.",
+    "zh-CN": "2×2 — 速度加下载中和做种数量。"
+  },
+
+  "settings_widgets": {
+    "cs": "Widgety",
+    "de": "Widgets",
+    "fr": "Widgets",
+    "it": "Widget",
+    "ko": "위젯",
+    "pt-BR": "Widgets",
+    "uk": "Віджети",
+    "zh-CN": "小部件"
+  },
+
+  "widget_add": {
+    "cs": "Přidat",
+    "de": "Hinzufügen",
+    "fr": "Ajouter",
+    "it": "Aggiungi",
+    "ko": "추가",
+    "pt-BR": "Adicionar",
+    "uk": "Додати",
+    "zh-CN": "添加"
+  },
+
+  "widget_pin_unsupported": {
+    "cs": "Tento launcher neumí přidat widget z aplikace. Podržte plochu a vyberte qui z jeho seznamu widgetů.",
+    "de": "Dieser Launcher kann Widgets nicht aus der App heraus hinzufügen. Startbildschirm gedrückt halten und qui in der Widget-Liste auswählen.",
+    "fr": "Ce lanceur ne peut pas ajouter de widget depuis l'application. Appuyez longuement sur l'écran d'accueil et choisissez qui dans sa liste de widgets.",
+    "it": "Questo launcher non può aggiungere widget dall'app. Tieni premuta la schermata Home e scegli qui dal suo elenco di widget.",
+    "ko": "이 런처는 앱에서 위젯을 추가할 수 없습니다. 홈 화면을 길게 눌러 위젯 목록에서 qui를 선택하세요.",
+    "pt-BR": "Este launcher não consegue adicionar widgets pelo app. Mantenha a tela inicial pressionada e escolha o qui na lista de widgets.",
+    "uk": "Цей лаунчер не може додати віджет із застосунку. Утримуйте головний екран і виберіть qui у його списку віджетів.",
+    "zh-CN": "当前桌面不支持从应用内添加小部件。请长按桌面，在小部件列表中选择 qui。"
+  },
+
+  "widget_scope": {
+    "cs": "Klient",
+    "de": "Client",
+    "fr": "Client",
+    "it": "Client",
+    "ko": "클라이언트",
+    "pt-BR": "Cliente",
+    "uk": "Клієнт",
+    "zh-CN": "客户端"
+  },
+
+  "widget_scope_all": {
+    "cs": "Všichni aktivní klienti",
+    "de": "Alle aktiven Clients",
+    "fr": "Tous les clients actifs",
+    "it": "Tutti i client attivi",
+    "ko": "활성 클라이언트 전체",
+    "pt-BR": "Todos os clientes ativos",
+    "uk": "Усі активні клієнти",
+    "zh-CN": "全部活动客户端"
+  },
+
+  "widget_list_content": {
+    "cs": "Seznam přenosů",
+    "de": "Übertragungsliste",
+    "fr": "Liste des transferts",
+    "it": "Elenco trasferimenti",
+    "ko": "전송 목록",
+    "pt-BR": "Lista de transferências",
+    "uk": "Список передавань",
+    "zh-CN": "传输列表"
+  },
+
+  "widget_list_active": {
+    "cs": "Nejprve přenášené",
+    "de": "Übertragende zuerst",
+    "fr": "Transferts en cours d'abord",
+    "it": "Prima quelli in trasferimento",
+    "ko": "전송 중 우선",
+    "pt-BR": "Em transferência primeiro",
+    "uk": "Спершу активні",
+    "zh-CN": "传输中优先"
+  },
+
+  "widget_list_recent": {
+    "cs": "Naposledy přidané",
+    "de": "Zuletzt hinzugefügt",
+    "fr": "Ajoutés récemment",
+    "it": "Aggiunti di recente",
+    "ko": "최근 추가됨",
+    "pt-BR": "Adicionados recentemente",
+    "uk": "Нещодавно додані",
+    "zh-CN": "最近添加"
+  },
+
+  "widget_incognito_note": {
+    "cs": "Názvy torrentů ve widgetu se řídí přepínačem anonymního režimu v aplikaci.",
+    "de": "Torrent-Namen im Widget folgen dem Inkognito-Schalter der App.",
+    "fr": "Les noms de torrents du widget suivent l'interrupteur navigation privée de l'application.",
+    "it": "I nomi dei torrent nel widget seguono l'interruttore incognito dell'app.",
+    "ko": "위젯의 토렌트 이름은 앱의 시크릿 모드 설정을 따릅니다.",
+    "pt-BR": "Os nomes de torrents no widget seguem o botão de modo anônimo do app.",
+    "uk": "Назви торентів у віджеті залежать від перемикача анонімного режиму в застосунку.",
+    "zh-CN": "小部件上的种子名称跟随应用的隐身模式开关。"
+  },
+
+  "widget_refresh_note": {
+    "cs": "Android obnovuje widgety nejvýše jednou za 30 minut, HyperOS/MIUI často méně často. Otevření aplikace a tlačítko obnovení na widgetu je aktualizují okamžitě.",
+    "de": "Android aktualisiert Widgets höchstens alle 30 Minuten, HyperOS/MIUI oft seltener. Die App zu öffnen und die Aktualisieren-Schaltfläche des Widgets aktualisieren sie sofort.",
+    "fr": "Android actualise les widgets au maximum toutes les 30 minutes, HyperOS/MIUI souvent moins. Ouvrir l'application et le bouton d'actualisation du widget les mettent à jour immédiatement.",
+    "it": "Android aggiorna i widget al massimo ogni 30 minuti, HyperOS/MIUI spesso meno. Aprire l'app e il pulsante di aggiornamento del widget li aggiornano subito.",
+    "ko": "안드로이드는 위젯을 최대 30분에 한 번 새로 고치며, HyperOS/MIUI에서는 더 드뭅니다. 앱을 열거나 위젯의 새로 고침 버튼을 누르면 즉시 갱신됩니다.",
+    "pt-BR": "O Android atualiza widgets no máximo a cada 30 minutos, e o HyperOS/MIUI muitas vezes menos. Abrir o app e o botão de atualizar do widget os atualizam na hora.",
+    "uk": "Android оновлює віджети щонайбільше раз на 30 хвилин, а HyperOS/MIUI часто рідше. Відкриття застосунку та кнопка оновлення на віджеті оновлюють їх одразу.",
+    "zh-CN": "安卓最快 30 分钟才会自动刷新一次小部件，澎湃/MIUI 往往更久。打开应用或点小部件上的刷新按钮可立即更新。"
   },
 
   "dashboard_active_count": {

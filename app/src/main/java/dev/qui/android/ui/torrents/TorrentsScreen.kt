@@ -68,6 +68,8 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -472,6 +474,81 @@ fun TorrentsScreen(
     }
 }
 
+/**
+ * Free disk space. With one client that is simply its number; merged, it is the
+ * smallest of them — the disk that runs out first — and tapping lists them all,
+ * because one figure cannot stand in for several separate machines.
+ */
+@Composable
+private fun FreeSpaceChip(free: Long, breakdown: List<InstanceFreeSpace>) {
+    val palette = QuiTheme.palette
+    var showBreakdown by remember { mutableStateOf(false) }
+    val expandable = breakdown.size > 1
+
+    Box {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clip(MaterialTheme.shapes.small)
+                .then(
+                    if (expandable) {
+                        Modifier.clickable { showBreakdown = true }
+                    } else {
+                        Modifier
+                    }
+                )
+                .padding(horizontal = 4.dp, vertical = 2.dp),
+        ) {
+            Icon(
+                Icons.Default.Sd,
+                contentDescription = stringResource(R.string.torrents_free_space),
+                tint = palette.mutedForeground,
+                modifier = Modifier.size(13.dp),
+            )
+            Spacer(Modifier.width(3.dp))
+            Text(
+                // The "at least" marker is what keeps the merged number from reading as
+                // a total.
+                text = if (expandable) "≥ ${formatBytes(free)}" else formatBytes(free),
+                style = MaterialTheme.typography.labelMedium,
+                color = palette.mutedForeground,
+                maxLines = 1,
+            )
+        }
+
+        DropdownMenu(
+            expanded = showBreakdown,
+            onDismissRequest = { showBreakdown = false },
+            containerColor = palette.popover,
+        ) {
+            breakdown.sortedBy { it.free }.forEach { entry ->
+                DropdownMenuItem(
+                    text = {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = entry.name,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = palette.popoverForeground,
+                            )
+                            Spacer(Modifier.width(16.dp))
+                            Text(
+                                text = formatBytes(entry.free),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = palette.mutedForeground,
+                            )
+                        }
+                    },
+                    onClick = { showBreakdown = false },
+                )
+            }
+        }
+    }
+}
+
 @Composable
 private fun TorrentsTopBar(
     state: TorrentsUiState,
@@ -512,25 +589,8 @@ private fun TorrentsTopBar(
 
                 // qui shows free disk space in its status bar; on a phone the scope row
                 // is the only place with room for it.
-                state.serverState?.freeSpaceOnDisk?.takeIf { it > 0 }?.let { free ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(end = 4.dp),
-                    ) {
-                        Icon(
-                            Icons.Default.Sd,
-                            contentDescription = stringResource(R.string.torrents_free_space),
-                            tint = palette.mutedForeground,
-                            modifier = Modifier.size(13.dp),
-                        )
-                        Spacer(Modifier.width(3.dp))
-                        Text(
-                            text = formatBytes(free),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = palette.mutedForeground,
-                            maxLines = 1,
-                        )
-                    }
+                state.headlineFreeSpace?.let { free ->
+                    FreeSpaceChip(free = free, breakdown = state.unifiedFreeSpace)
                 }
 
                 IconButton(onClick = onOpenFilters) {

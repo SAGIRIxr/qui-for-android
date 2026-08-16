@@ -4,6 +4,11 @@
  *
  * Speeds and torrent counts on the home screen.
  *
+ * Three providers rather than one resizable entry: most people never discover that a
+ * widget can be dragged bigger, so each size is offered separately in the picker. They
+ * share this class and stay resizable — only the size the launcher starts them at
+ * differs.
+ *
  * Android will not let a widget refresh itself faster than every 30 minutes, and MIUI /
  * HyperOS is stricter still, so the periodic update is a backstop rather than the
  * mechanism: the refresh button and QuiWidgets.refresh() — called whenever the app has
@@ -29,10 +34,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class QuiWidgetProvider : AppWidgetProvider() {
+abstract class StatsWidgetProvider : AppWidgetProvider() {
 
-    @Inject lateinit var dataSource: WidgetDataSource
+    /**
+     * Declared by each subclass rather than injected here: Hilt injects the fields of
+     * the class carrying @AndroidEntryPoint, which is always the concrete provider.
+     */
+    protected abstract val dataSource: WidgetDataSource
+
+    /** What a launcher that does not ask for a size gets. */
+    protected abstract val fallbackLayout: Int
 
     override fun onUpdate(
         context: Context,
@@ -75,13 +86,14 @@ class QuiWidgetProvider : AppWidgetProvider() {
     }
 
     /**
-     * One RemoteViews per size the launcher may hand us, so a 2x1 shows only the
-     * speeds while a 4x2 gets the counts and free space. Launchers before Android 12
-     * ask for a single layout, which is the widest one.
+     * One RemoteViews per size the launcher may hand us, so a widget dragged down to
+     * 2x1 shows only the speeds while a 4x2 gets the counts and free space. Launchers
+     * before Android 12 ask for a single layout, which is the provider's own.
      */
     private fun responsiveViews(context: Context, snapshot: WidgetSnapshot): RemoteViews {
-        val wide = statsViews(context, R.layout.widget_stats_wide, snapshot, javaClass)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return wide
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            return statsViews(context, fallbackLayout, snapshot, javaClass)
+        }
 
         return RemoteViews(
             mapOf(
@@ -89,7 +101,8 @@ class QuiWidgetProvider : AppWidgetProvider() {
                     statsViews(context, R.layout.widget_compact, snapshot, javaClass),
                 SizeF(150f, 110f) to
                     statsViews(context, R.layout.widget_stats_small, snapshot, javaClass),
-                SizeF(250f, 110f) to wide,
+                SizeF(250f, 110f) to
+                    statsViews(context, R.layout.widget_stats_wide, snapshot, javaClass),
             )
         )
     }
@@ -97,4 +110,28 @@ class QuiWidgetProvider : AppWidgetProvider() {
     private companion object {
         const val WORK_BUDGET_MS = 8_000L
     }
+}
+
+/** 4x2 by default: speeds, all four state counts, total size and free space. */
+@AndroidEntryPoint
+class QuiWidgetProvider : StatsWidgetProvider() {
+    @Inject lateinit var source: WidgetDataSource
+    override val dataSource: WidgetDataSource get() = source
+    override val fallbackLayout: Int = R.layout.widget_stats_wide
+}
+
+/** 2x1 by default: the two speeds and nothing else. */
+@AndroidEntryPoint
+class QuiSpeedWidgetProvider : StatsWidgetProvider() {
+    @Inject lateinit var source: WidgetDataSource
+    override val dataSource: WidgetDataSource get() = source
+    override val fallbackLayout: Int = R.layout.widget_compact
+}
+
+/** 2x2 by default: speeds plus the downloading and seeding counts. */
+@AndroidEntryPoint
+class QuiOverviewWidgetProvider : StatsWidgetProvider() {
+    @Inject lateinit var source: WidgetDataSource
+    override val dataSource: WidgetDataSource get() = source
+    override val fallbackLayout: Int = R.layout.widget_stats_small
 }

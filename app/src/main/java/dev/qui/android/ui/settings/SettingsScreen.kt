@@ -73,6 +73,7 @@ import dev.qui.android.data.SpeedUnit
 import dev.qui.android.data.ThemeMode
 import dev.qui.android.data.TrackerSortColumn
 import dev.qui.android.data.ViewMode
+import dev.qui.android.data.WidgetListMode
 import dev.qui.android.ui.AppLocale
 import dev.qui.android.ui.LANGUAGE_NAMES
 import dev.qui.android.ui.RootViewModel
@@ -80,6 +81,9 @@ import dev.qui.android.ui.SUPPORTED_LANGUAGES
 import dev.qui.android.ui.components.QuiCard
 import dev.qui.android.ui.theme.QuiTheme
 import dev.qui.android.ui.theme.QuiThemes
+import dev.qui.android.widget.PINNABLE_WIDGETS
+import dev.qui.android.widget.requestPinWidget
+import dev.qui.android.widget.widgetPinningSupported
 
 private const val SOURCE_URL = "https://github.com/SAGIRIxr/qui-for-android"
 
@@ -99,6 +103,7 @@ fun SettingsScreen(
     val checking by viewModel.checkingUpdate.collectAsStateWithLifecycle()
     val searchHistoryCount by viewModel.searchHistoryCount.collectAsStateWithLifecycle()
     val trackerIconCount by viewModel.trackerIconCount.collectAsStateWithLifecycle()
+    val instances by viewModel.instances.collectAsStateWithLifecycle()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -335,6 +340,83 @@ fun SettingsScreen(
                         }
                     }
                 }
+            }
+        }
+
+        item {
+            SectionCard(stringResource(R.string.settings_widgets)) {
+                val pinnable = remember(context) { widgetPinningSupported(context) }
+
+                PINNABLE_WIDGETS.forEach { widget ->
+                    WidgetRow(
+                        name = stringResource(widget.name),
+                        description = stringResource(widget.description),
+                        canAdd = pinnable,
+                        onAdd = { requestPinWidget(context, widget.provider) },
+                    )
+                }
+
+                if (!pinnable) {
+                    Text(
+                        text = stringResource(R.string.widget_pin_unsupported),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = palette.mutedForeground,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                }
+
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = stringResource(R.string.widget_scope),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(Modifier.height(6.dp))
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(
+                        selected = prefs.widgetInstanceId == null,
+                        onClick = { viewModel.setWidgetInstance(null) },
+                        label = { Text(stringResource(R.string.widget_scope_all)) },
+                    )
+                    instances.forEach { instance ->
+                        FilterChip(
+                            selected = prefs.widgetInstanceId == instance.id,
+                            onClick = { viewModel.setWidgetInstance(instance.id) },
+                            label = { Text(instance.name) },
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = stringResource(R.string.widget_list_content),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(Modifier.height(6.dp))
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(
+                        selected = prefs.widgetListMode == WidgetListMode.Active,
+                        onClick = { viewModel.setWidgetListMode(WidgetListMode.Active) },
+                        label = { Text(stringResource(R.string.widget_list_active)) },
+                    )
+                    FilterChip(
+                        selected = prefs.widgetListMode == WidgetListMode.Recent,
+                        onClick = { viewModel.setWidgetListMode(WidgetListMode.Recent) },
+                        label = { Text(stringResource(R.string.widget_list_recent)) },
+                    )
+                }
+
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = stringResource(R.string.widget_incognito_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = palette.mutedForeground,
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.widget_refresh_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = palette.mutedForeground,
+                )
             }
         }
 
@@ -620,6 +702,35 @@ private val TRACKER_SORT_CHOICES = listOf(
     TrackerSortColumn.Size to R.string.tracker_col_size,
     TrackerSortColumn.Tracker to R.string.tracker_col_tracker,
 )
+
+@Composable
+private fun WidgetRow(
+    name: String,
+    description: String,
+    canAdd: Boolean,
+    onAdd: () -> Unit,
+) {
+    val palette = QuiTheme.palette
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(name, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = description,
+                style = MaterialTheme.typography.labelSmall,
+                color = palette.mutedForeground,
+            )
+        }
+        Spacer(Modifier.width(8.dp))
+        TextButton(onClick = onAdd, enabled = canAdd) {
+            Text(stringResource(R.string.widget_add))
+        }
+    }
+}
 
 @Composable
 private fun StorageRow(

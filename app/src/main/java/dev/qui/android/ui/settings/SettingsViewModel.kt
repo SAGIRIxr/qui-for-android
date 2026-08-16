@@ -8,11 +8,14 @@ package dev.qui.android.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.qui.android.data.AppPreferencesStore
 import dev.qui.android.data.QuiRepository
 import dev.qui.android.data.SearchHistoryStore
 import dev.qui.android.data.TrackerIconStore
 import dev.qui.android.data.UpdateChecker
 import dev.qui.android.data.UpdateStatus
+import dev.qui.android.data.WidgetListMode
+import dev.qui.android.data.model.Instance
 import dev.qui.android.data.remote.SessionStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,7 +40,12 @@ class SettingsViewModel @Inject constructor(
     private val updateChecker: UpdateChecker,
     private val searchHistoryStore: SearchHistoryStore,
     private val trackerIconStore: TrackerIconStore,
+    private val prefsStore: AppPreferencesStore,
 ) : ViewModel() {
+
+    /** Populates the widget's client picker. */
+    private val _instances = MutableStateFlow<List<Instance>>(emptyList())
+    val instances: StateFlow<List<Instance>> = _instances.asStateFlow()
 
     private val _account = MutableStateFlow(AccountInfo())
     val account: StateFlow<AccountInfo> = _account.asStateFlow()
@@ -60,6 +68,10 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             _account.update { it.copy(serverUrl = session.currentServerUrl()) }
 
+            repository.instances().onSuccess { list ->
+                _instances.value = list.filter { it.isActive }
+            }
+
             repository.currentUser().onSuccess { user ->
                 _account.update { it.copy(username = user.username) }
             }
@@ -79,6 +91,11 @@ class SettingsViewModel @Inject constructor(
             _checkingUpdate.value = false
         }
     }
+
+    fun setWidgetInstance(id: Int?) = viewModelScope.launch { prefsStore.setWidgetInstance(id) }
+
+    fun setWidgetListMode(mode: WidgetListMode) =
+        viewModelScope.launch { prefsStore.setWidgetListMode(mode) }
 
     fun clearSearchHistory() = viewModelScope.launch { searchHistoryStore.clear() }
 

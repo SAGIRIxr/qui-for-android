@@ -13,7 +13,9 @@ import dev.qui.android.data.AppPreferencesStore
 import dev.qui.android.data.QuiRepository
 import dev.qui.android.data.SpeedUnit
 import dev.qui.android.data.model.TorrentFilters
+import dev.qui.android.data.WidgetListMode
 import dev.qui.android.data.remote.SessionStore
+import dev.qui.android.ui.torrents.incognitoName
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -104,9 +106,18 @@ class WidgetDataSource @Inject constructor(
             return WidgetSnapshot(signedIn = false)
         }
 
-        val speedUnit = prefs.snapshot.first().speedUnit
-        val instances = repository.instances().getOrNull()?.filter { it.isActive }
+        val settings = prefs.snapshot.first()
+        val speedUnit = settings.speedUnit
+        val active = repository.instances().getOrNull()?.filter { it.isActive }
             ?: return WidgetSnapshot(error = ERROR_UNREACHABLE, speedUnit = speedUnit)
+
+        // Settings can pin the widgets to one client; an id that no longer exists
+        // falls back to every active one rather than showing nothing.
+        val instances = settings.widgetInstanceId
+            ?.let { id -> active.filter { it.id == id } }
+            ?.takeIf { it.isNotEmpty() }
+            ?: active
+
         if (instances.isEmpty()) {
             return WidgetSnapshot(error = ERROR_NO_CLIENTS, speedUnit = speedUnit)
         }
@@ -168,7 +179,7 @@ class WidgetDataSource @Inject constructor(
             errored = errored,
             totalSize = totalSize,
             freeSpace = freeSpace,
-            rows = fetchRows(instances.map { it.id }),
+            rows = fetchRows(instances.map { it.id }, settings.widgetListMode, settings.incognito),
             speedUnit = speedUnit,
         )
     }
@@ -176,15 +187,24 @@ class WidgetDataSource @Inject constructor(
     /**
      * Transferring torrents first — that is what someone glances at a widget for.
      * With nothing moving the list would be empty and useless, so it falls back to
-     * the most recently added.
+     * the most recently added, which is also what Settings can ask for outright.
      */
-    private suspend fun fetchRows(instanceIds: List<Int>): List<WidgetRow> {
-        val active = query(instanceIds, TorrentFilters(status = listOf("active")), "dlspeed")
-        val rows = if (active.isEmpty()) {
-            query(instanceIds, null, "added_on")
-        } else {
-            active
+    private suspend fun fetchRows(
+        instanceIds: List<Int>,
+        mode: WidgetListMode,
+        incognito: Boolean,
+    ): List<WidgetRow> {
+        if (mode == WidgetListMode.Recent) {
+            return query(instanceIds, null, "added_on", incognito).take(ROW_LIMIT)
         }
+
+        val active = query(
+            instanceIds,
+            TorrentFilters(status = listOf("active")),
+            "dlspeed",
+            incognito,
+        )
+        val rows = active.ifEmpty { query(instanceIds, null, "added_on", incognito) }
         return rows.take(ROW_LIMIT)
     }
 
@@ -192,6 +212,7 @@ class WidgetDataSource @Inject constructor(
         instanceIds: List<Int>,
         filters: TorrentFilters?,
         sort: String,
+        incognito: Boolean,
     ): List<WidgetRow> {
         val response = if (instanceIds.size > 1) {
             repository.crossInstanceTorrents(
@@ -219,7 +240,9 @@ class WidgetDataSource @Inject constructor(
             WidgetRow(
                 instanceId = torrent.instanceId ?: instanceIds.first(),
                 hash = torrent.hash,
-                name = torrent.name,
+                // A home screen is on show to whoever is standing nearby, so the
+                // widget honours the same incognito switch the list does.
+                name = if (incognito) incognitoName(torrent.hash) else torrent.name,
                 state = torrent.state,
                 progress = (torrent.progress * 100).toInt().coerceIn(0, 100),
                 dlspeed = torrent.dlspeed,

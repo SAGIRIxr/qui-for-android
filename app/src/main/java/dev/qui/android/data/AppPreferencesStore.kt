@@ -35,6 +35,9 @@ enum class SpeedUnit { Bytes, Bits }
 /** The tracker-breakdown columns qui lets you sort that table by. */
 enum class TrackerSortColumn { Tracker, Uploaded, Downloaded, Ratio, Torrents, Size }
 
+/** What the list widget puts at the top. */
+enum class WidgetListMode { Active, Recent }
+
 @Singleton
 class AppPreferencesStore @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -57,6 +60,8 @@ class AppPreferencesStore @Inject constructor(
         val showInstanceCards = booleanPreferencesKey("dash_instance_cards")
         val trackerSortColumn = stringPreferencesKey("dash_tracker_sort")
         val unifiedScope = booleanPreferencesKey("unified_scope")
+        val widgetInstanceId = intPreferencesKey("widget_instance_id")
+        val widgetListMode = stringPreferencesKey("widget_list_mode")
     }
 
     data class Snapshot(
@@ -80,6 +85,9 @@ class AppPreferencesStore @Inject constructor(
         // Persisted so the nav bar can label its tab without the torrent screen
         // being on screen to tell it.
         val unifiedScope: Boolean = false,
+        // Which client the home-screen widgets report on; null sums every active one.
+        val widgetInstanceId: Int? = null,
+        val widgetListMode: WidgetListMode = WidgetListMode.Active,
     )
 
     val snapshot: Flow<Snapshot> = context.prefsDataStore.data.map { prefs ->
@@ -106,7 +114,19 @@ class AppPreferencesStore @Inject constructor(
                 ?.let { runCatching { TrackerSortColumn.valueOf(it) }.getOrNull() }
                 ?: TrackerSortColumn.Uploaded,
             unifiedScope = prefs[Keys.unifiedScope] ?: false,
+            widgetInstanceId = prefs[Keys.widgetInstanceId],
+            widgetListMode = prefs[Keys.widgetListMode]
+                ?.let { runCatching { WidgetListMode.valueOf(it) }.getOrNull() }
+                ?: WidgetListMode.Active,
         )
+    }
+
+    suspend fun setWidgetInstance(id: Int?) = context.prefsDataStore.edit {
+        if (id == null) it.remove(Keys.widgetInstanceId) else it[Keys.widgetInstanceId] = id
+    }
+
+    suspend fun setWidgetListMode(mode: WidgetListMode) = context.prefsDataStore.edit {
+        it[Keys.widgetListMode] = mode.name
     }
 
     suspend fun setTheme(id: String, variation: String?) = context.prefsDataStore.edit {
