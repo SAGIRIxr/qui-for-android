@@ -187,6 +187,9 @@
     <string name="update_check">Check for updates</string>
     <string name="update_from_to">%1$s → %2$s</string>
     <string name="update_notes">What\'s new</string>
+    <!-- Names this locale's section in a bilingual GitHub release body. Only
+         Simplified Chinese has its own section; every other locale reads English. -->
+    <string name="release_notes_heading">English</string>
     <string name="update_no_notes">No release notes for this version.</string>
     <string name="update_open">Open release</string>
     <string name="update_later">Later</string>

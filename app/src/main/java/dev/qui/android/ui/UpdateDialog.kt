@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.qui.android.R
 import dev.qui.android.data.UpdateStatus
+import dev.qui.android.data.localizedReleaseNotes
 import dev.qui.android.ui.theme.QuiTheme
 
 @Composable
@@ -66,8 +67,10 @@ fun UpdateDialog(
                     // The body is GitHub markdown; rendering it properly would mean
                     // pulling in a markdown engine for one dialog, so it is shown as
                     // written. Release notes here are plain bullet lists anyway.
-                    text = status.appReleaseNotes
-                        ?: stringResource(R.string.update_no_notes),
+                    text = localizedReleaseNotes(
+                        status.appReleaseNotes,
+                        stringResource(R.string.release_notes_heading),
+                    ) ?: stringResource(R.string.update_no_notes),
                     style = MaterialTheme.typography.bodySmall,
                     color = palette.foreground,
                     modifier = Modifier

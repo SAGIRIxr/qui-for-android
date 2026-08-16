@@ -141,6 +141,7 @@
     <string name="update_check">Zkontrolovat aktualizace</string>
     <string name="update_from_to">%1$s → %2$s</string>
     <string name="update_notes">Novinky</string>
+    <string name="release_notes_heading">English</string>
     <string name="update_no_notes">K této verzi nejsou žádné poznámky.</string>
     <string name="update_open">Otevřít vydání</string>
     <string name="update_later">Později</string>

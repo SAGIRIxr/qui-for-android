@@ -370,6 +370,17 @@
     "zh-CN": "更新内容"
   },
 
+  "release_notes_heading": {
+    "cs": "English",
+    "de": "English",
+    "fr": "English",
+    "it": "English",
+    "ko": "English",
+    "pt-BR": "English",
+    "uk": "English",
+    "zh-CN": "简体中文"
+  },
+
   "update_no_notes": {
     "cs": "K této verzi nejsou žádné poznámky.",
     "de": "Für diese Version gibt es keine Anmerkungen.",

@@ -141,6 +141,7 @@
     <string name="update_check">Verificar atualizações</string>
     <string name="update_from_to">%1$s → %2$s</string>
     <string name="update_notes">Novidades</string>
+    <string name="release_notes_heading">English</string>
     <string name="update_no_notes">Sem notas para esta versão.</string>
     <string name="update_open">Abrir a versão</string>
     <string name="update_later">Depois</string>

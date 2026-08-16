@@ -1,5 +1,7 @@
 # qui for Android
 
+**English** · [简体中文](README.zh-CN.md)
+
 A native Android client for [qui](https://github.com/autobrr/qui), autobrr's single-binary
 qBittorrent web UI. It talks to your qui server's REST and SSE API — the same one the web
 UI uses — and reproduces qui's mobile experience as a Compose app.
@@ -149,6 +151,11 @@ Pushing a `v*` tag builds a release APK and attaches it to a GitHub release:
 ```bash
 git tag v0.1.0 && git push origin v0.1.0
 ```
+
+The release notes are the section matching that tag in [CHANGELOG.md](CHANGELOG.md) and
+[CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md), published together; the app's update dialog
+reads the same text and picks the half matching the device language. So write the new
+version's section in both files before tagging.
 
 ### Signing
 

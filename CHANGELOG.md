@@ -1,7 +1,16 @@
 # Changelog
 
+**English** · [简体中文](CHANGELOG.zh-CN.md)
+
 The section for a tag becomes that release's notes on GitHub, and the app shows the
-same text in its update dialog. Add the new version at the top before tagging.
+same text in its update dialog. Add the new version at the top before tagging, in this
+file and in [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md).
+
+## 0.4.4
+
+### Added
+- Simplified Chinese README and changelog. GitHub releases now carry both languages,
+  and the app's update dialog shows the half matching the device language.
 
 ## 0.4.3
 

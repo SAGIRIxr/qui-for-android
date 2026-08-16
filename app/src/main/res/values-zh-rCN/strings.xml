@@ -141,6 +141,7 @@
     <string name="update_check">检查更新</string>
     <string name="update_from_to">%1$s → %2$s</string>
     <string name="update_notes">更新内容</string>
+    <string name="release_notes_heading">简体中文</string>
     <string name="update_no_notes">该版本没有更新说明。</string>
     <string name="update_open">前往下载</string>
     <string name="update_later">稍后</string>

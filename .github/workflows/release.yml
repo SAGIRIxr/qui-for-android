@@ -70,14 +70,32 @@ jobs:
       # GitHub's own generator lists merged pull requests, and this repository has
       # none, so it produces an empty body. The CHANGELOG section for the tag is the
       # release notes instead — the same text the app shows in its update dialog.
+      # The "## 简体中文" / "## English" headings are load-bearing: the app splits the
+      # release body on them to show one language in its update dialog.
       - name: Extract release notes
         run: |
           version="${VERSION#v}"
-          awk -v v="$version" '
-            $0 ~ "^## " v "$" { found = 1; next }
-            found && /^## / { exit }
-            found { print }
-          ' CHANGELOG.md > dist/notes.md
+
+          section() {
+            awk -v v="$version" '
+              $0 ~ "^## " v "$" { found = 1; next }
+              found && /^## / { exit }
+              found { print }
+            ' "$1"
+          }
+
+          section CHANGELOG.md > dist/notes-en.md
+          section CHANGELOG.zh-CN.md > dist/notes-zh.md
+
+          : > dist/notes.md
+          if [ -s dist/notes-zh.md ]; then
+            printf '## 简体中文\n' >> dist/notes.md
+            cat dist/notes-zh.md >> dist/notes.md
+          fi
+          if [ -s dist/notes-en.md ]; then
+            printf '## English\n' >> dist/notes.md
+            cat dist/notes-en.md >> dist/notes.md
+          fi
 
           if [ ! -s dist/notes.md ]; then
             echo "::warning::No CHANGELOG section for $version; falling back to commits"
@@ -88,6 +106,7 @@ jobs:
               git log --pretty='- %s' -20 "$VERSION" > dist/notes.md
             fi
           fi
+          rm -f dist/notes-en.md dist/notes-zh.md
           cat dist/notes.md
 
       - name: Publish release

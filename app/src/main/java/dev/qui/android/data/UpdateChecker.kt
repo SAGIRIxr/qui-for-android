@@ -82,6 +82,26 @@ class UpdateChecker @Inject constructor(
 }
 
 /**
+ * Release bodies carry every language under a "## <name>" heading, built by the release
+ * workflow from the per-language CHANGELOGs. This picks one out.
+ *
+ * Anything that does not follow that shape — an older release, or notes written by
+ * hand — comes back whole, which is the only safe answer when the structure is absent.
+ */
+internal fun localizedReleaseNotes(body: String?, heading: String): String? {
+    val text = body?.takeIf { it.isNotBlank() } ?: return null
+
+    val headings = Regex("(?m)^## (.+?)\\s*$").findAll(text).toList()
+    if (headings.size < 2) return text.trim()
+
+    val match = headings.firstOrNull { it.groupValues[1].trim() == heading } ?: return text.trim()
+    val next = headings.firstOrNull { it.range.first > match.range.first }
+
+    return text.substring(match.range.last + 1, next?.range?.first ?: text.length).trim()
+        .ifEmpty { text.trim() }
+}
+
+/**
  * Compares two release tags. Anything unparseable is treated as "not newer" so a
  * malformed tag can never nag the user about an update that does not exist.
  */
