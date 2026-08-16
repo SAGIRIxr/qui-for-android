@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- qui default theme background token, light mode: oklch(1 0 0) -->
+    <color name="window_background">#FFFFFFFF</color>
+    <color name="ic_launcher_background">#171717</color>
+</resources>
