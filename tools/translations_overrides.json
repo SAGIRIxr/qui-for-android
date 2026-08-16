@@ -140,6 +140,178 @@
     "uk": "Альтернативні обмеження швидкості",
     "zh-CN": "备用速度限制"
   },
+  "search_recent": {
+    "cs": "Nedávné",
+    "de": "Zuletzt",
+    "fr": "Récents",
+    "it": "Recenti",
+    "ko": "최근",
+    "pt-BR": "Recentes",
+    "uk": "Нещодавні",
+    "zh-CN": "最近"
+  },
+  "search_clear_history": {
+    "cs": "Vymazat historii hledání",
+    "de": "Suchverlauf löschen",
+    "fr": "Effacer l'historique de recherche",
+    "it": "Cancella cronologia ricerche",
+    "ko": "검색 기록 지우기",
+    "pt-BR": "Limpar histórico de busca",
+    "uk": "Очистити історію пошуку",
+    "zh-CN": "清除搜索历史"
+  },
+  "search_fuzzy_example": {
+    "cs": "„breaking bad“ najde „Breaking.Bad“",
+    "de": "„breaking bad“ findet „Breaking.Bad“",
+    "fr": "« breaking bad » trouve « Breaking.Bad »",
+    "it": "«breaking bad» trova «Breaking.Bad»",
+    "ko": "'breaking bad'로 'Breaking.Bad'를 찾습니다",
+    "pt-BR": "“breaking bad” encontra “Breaking.Bad”",
+    "uk": "«breaking bad» знаходить «Breaking.Bad»",
+    "zh-CN": "输入「breaking bad」可匹配「Breaking.Bad」"
+  },
+  "scope_back_to_top": {
+    "cs": "Zpět nahoru",
+    "de": "Nach oben",
+    "fr": "Retour en haut",
+    "it": "Torna su",
+    "ko": "맨 위로",
+    "pt-BR": "Voltar ao topo",
+    "uk": "Догори",
+    "zh-CN": "回到顶部"
+  },
+  "update_version": {
+    "cs": "Verze %1$s",
+    "de": "Version %1$s",
+    "fr": "Version %1$s",
+    "it": "Versione %1$s",
+    "ko": "버전 %1$s",
+    "pt-BR": "Versão %1$s",
+    "uk": "Версія %1$s",
+    "zh-CN": "版本 %1$s"
+  },
+  "update_qui_server": {
+    "cs": "Je dostupný novější server qui",
+    "de": "Ein neuerer qui-Server ist verfügbar",
+    "fr": "Un serveur qui plus récent est disponible",
+    "it": "È disponibile un server qui più recente",
+    "ko": "최신 qui 서버가 있습니다",
+    "pt-BR": "Há uma versão mais recente do servidor qui",
+    "uk": "Доступна новіша версія сервера qui",
+    "zh-CN": "qui 服务端有新版本"
+  },
+  "update_check": {
+    "cs": "Zkontrolovat aktualizace",
+    "de": "Nach Updates suchen",
+    "fr": "Rechercher des mises à jour",
+    "it": "Controlla aggiornamenti",
+    "ko": "업데이트 확인",
+    "pt-BR": "Verificar atualizações",
+    "uk": "Перевірити оновлення",
+    "zh-CN": "检查更新"
+  },
+  "storage_tracker_icons": {
+    "cs": "Ikony trackerů",
+    "de": "Tracker-Symbole",
+    "fr": "Icônes de trackers",
+    "it": "Icone dei tracker",
+    "ko": "트래커 아이콘",
+    "pt-BR": "Ícones de trackers",
+    "uk": "Піктограми трекерів",
+    "zh-CN": "Tracker 图标"
+  },
+  "storage_entries": {
+    "cs": "Položek: %1$d",
+    "de": "%1$d Einträge",
+    "fr": "%1$d entrées",
+    "it": "%1$d voci",
+    "ko": "%1$d개 항목",
+    "pt-BR": "%1$d entradas",
+    "uk": "Записів: %1$d",
+    "zh-CN": "%1$d 条"
+  },
+  "storage_cleared": {
+    "cs": "Vymazáno",
+    "de": "Geleert",
+    "fr": "Effacé",
+    "it": "Svuotato",
+    "ko": "지워짐",
+    "pt-BR": "Limpo",
+    "uk": "Очищено",
+    "zh-CN": "已清除"
+  },
+  "widget_name": {
+    "cs": "Rychlosti qui",
+    "de": "qui-Geschwindigkeiten",
+    "fr": "Vitesses qui",
+    "it": "Velocità qui",
+    "ko": "qui 속도",
+    "pt-BR": "Velocidades do qui",
+    "uk": "Швидкості qui",
+    "zh-CN": "qui 速度"
+  },
+  "widget_description": {
+    "cs": "Celková rychlost stahování a nahrávání napříč klienty.",
+    "de": "Gesamte Download- und Upload-Geschwindigkeit über alle Clients.",
+    "fr": "Vitesse totale de téléchargement et d'envoi sur tous vos clients.",
+    "it": "Velocità totale di download e upload su tutti i client.",
+    "ko": "모든 클라이언트의 총 다운로드·업로드 속도입니다.",
+    "pt-BR": "Velocidade total de download e envio em todos os clientes.",
+    "uk": "Загальна швидкість завантаження та вивантаження на всіх клієнтах.",
+    "zh-CN": "所有客户端的总下载和上传速度。"
+  },
+  "widget_not_signed_in": {
+    "cs": "Přihlaste se do qui",
+    "de": "Bei qui anmelden",
+    "fr": "Connectez-vous à qui",
+    "it": "Accedi a qui",
+    "ko": "qui에 로그인하세요",
+    "pt-BR": "Entre no qui",
+    "uk": "Увійдіть у qui",
+    "zh-CN": "请先登录 qui"
+  },
+
+  "dashboard_active_count": {
+    "cs": "%1$d aktivních",
+    "de": "%1$d aktiv",
+    "fr": "%1$d actifs",
+    "it": "%1$d attivi",
+    "ko": "%1$d개 활성",
+    "pt-BR": "%1$d ativos",
+    "uk": "%1$d активних",
+    "zh-CN": "%1$d 个活动"
+  },
+  "dashboard_hide_address": {
+    "cs": "Skrýt adresu",
+    "de": "Adresse verbergen",
+    "fr": "Masquer l'adresse",
+    "it": "Nascondi indirizzo",
+    "ko": "주소 숨기기",
+    "pt-BR": "Ocultar endereço",
+    "uk": "Приховати адресу",
+    "zh-CN": "隐藏地址"
+  },
+  "dashboard_show_address": {
+    "cs": "Zobrazit adresu",
+    "de": "Adresse anzeigen",
+    "fr": "Afficher l'adresse",
+    "it": "Mostra indirizzo",
+    "ko": "주소 표시",
+    "pt-BR": "Mostrar endereço",
+    "uk": "Показати адресу",
+    "zh-CN": "显示地址"
+  },
+  "dashboard_no_tracker_data": {
+    "cs": "Zatím žádná data o trackerech.",
+    "de": "Noch keine Tracker-Daten.",
+    "fr": "Aucune donnée de tracker pour l'instant.",
+    "it": "Nessun dato sui tracker al momento.",
+    "ko": "아직 트래커 데이터가 없습니다.",
+    "pt-BR": "Ainda não há dados de trackers.",
+    "uk": "Даних про трекери ще немає.",
+    "zh-CN": "暂无 Tracker 数据。"
+  },
+
   "dashboard_no_instances_title": {
     "cs": "Zatím žádní klienti",
     "de": "Noch keine Clients",
@@ -769,6 +941,46 @@
     "pt-BR": "Não funciona",
     "uk": "Не працює",
     "zh-CN": "无法工作"
+  },
+
+  "instances_active": {
+    "cs": {
+      "one": "%1$d aktivní klient",
+      "few": "%1$d aktivní klienti",
+      "many": "%1$d aktivních klientů",
+      "other": "%1$d aktivních klientů"
+    },
+    "de": {
+      "one": "%1$d aktiver Client",
+      "other": "%1$d aktive Clients"
+    },
+    "fr": {
+      "one": "%1$d client actif",
+      "many": "%1$d clients actifs",
+      "other": "%1$d clients actifs"
+    },
+    "it": {
+      "one": "%1$d client attivo",
+      "many": "%1$d client attivi",
+      "other": "%1$d client attivi"
+    },
+    "ko": {
+      "other": "활성 클라이언트 %1$d개"
+    },
+    "pt-BR": {
+      "one": "%1$d cliente ativo",
+      "many": "%1$d clientes ativos",
+      "other": "%1$d clientes ativos"
+    },
+    "uk": {
+      "one": "%1$d активний клієнт",
+      "few": "%1$d активні клієнти",
+      "many": "%1$d активних клієнтів",
+      "other": "%1$d активних клієнтів"
+    },
+    "zh-CN": {
+      "other": "%1$d 个活动客户端"
+    }
   },
 
   "torrents_count": {

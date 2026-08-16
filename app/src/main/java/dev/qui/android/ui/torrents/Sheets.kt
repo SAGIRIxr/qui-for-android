@@ -33,8 +33,10 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DriveFileRenameOutline
 import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.LowPriority
 import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.Percent
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.PriorityHigh
 import androidx.compose.material.icons.filled.Refresh
@@ -46,6 +48,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -321,8 +324,11 @@ fun SortSheet(
 fun InstanceSheet(
     instances: List<Instance>,
     selectedId: Int?,
+    unifiedScope: Boolean,
+    canUnify: Boolean,
     onDismiss: () -> Unit,
     onSelect: (Int) -> Unit,
+    onSelectUnified: () -> Unit,
 ) {
     val palette = QuiTheme.palette
     val sheetState = rememberModalBottomSheetState()
@@ -334,6 +340,49 @@ fun InstanceSheet(
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
+
+            if (canUnify) {
+                // qui's unified scope, listed above the individual clients the same way.
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = onSelectUnified)
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        Icons.Default.Layers,
+                        contentDescription = null,
+                        tint = palette.foreground,
+                        modifier = Modifier.size(18.dp),
+                    )
+                    Spacer(Modifier.width(10.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.scope_all_clients),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                        Text(
+                            text = pluralStringResource(
+                                R.plurals.instances_active,
+                                instances.count { it.isActive },
+                                instances.count { it.isActive },
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = palette.mutedForeground,
+                        )
+                    }
+                    if (unifiedScope) {
+                        Icon(
+                            Icons.Default.Check,
+                            contentDescription = stringResource(R.string.instances_selected),
+                            tint = palette.primary,
+                            modifier = Modifier.size(18.dp),
+                        )
+                    }
+                }
+                HorizontalDivider(color = palette.border)
+            }
 
             instances.forEach { instance ->
                 Row(
@@ -370,7 +419,7 @@ fun InstanceSheet(
                             overflow = TextOverflow.Ellipsis,
                         )
                     }
-                    if (instance.id == selectedId) {
+                    if (instance.id == selectedId && !unifiedScope) {
                         Icon(
                             Icons.Default.Check,
                             contentDescription = stringResource(R.string.instances_selected),
@@ -407,6 +456,7 @@ fun TorrentActionsSheet(
     var showCategory by remember { mutableStateOf(false) }
     var showTags by remember { mutableStateOf(false) }
     var showSpeed by remember { mutableStateOf(false) }
+    var showShareLimits by remember { mutableStateOf(false) }
 
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
         Column(
@@ -439,6 +489,9 @@ fun TorrentActionsSheet(
             ActionRow(Icons.Default.Folder, stringResource(R.string.action_set_category)) { showCategory = true }
             ActionRow(Icons.Default.Sell, stringResource(R.string.action_set_tags)) { showTags = true }
             ActionRow(Icons.Default.Speed, stringResource(R.string.action_speed_limits)) { showSpeed = true }
+            ActionRow(Icons.Default.Percent, stringResource(R.string.share_limits_action)) {
+                showShareLimits = true
+            }
             ActionRow(
                 icon = Icons.Default.Delete,
                 label = stringResource(R.string.action_delete),
@@ -484,6 +537,22 @@ fun TorrentActionsSheet(
             onConfirm = { value ->
                 showTags = false
                 onAction("setTags") { copy(tags = value) }
+            },
+        )
+    }
+
+    if (showShareLimits) {
+        ShareLimitDialog(
+            onDismiss = { showShareLimits = false },
+            onConfirm = { ratio, seeding, inactive ->
+                showShareLimits = false
+                onAction("setShareLimit") {
+                    copy(
+                        ratioLimit = ratio,
+                        seedingTimeLimit = seeding,
+                        inactiveSeedingTimeLimit = inactive,
+                    )
+                }
             },
         )
     }

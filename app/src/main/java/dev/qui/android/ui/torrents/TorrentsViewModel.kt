@@ -10,12 +10,15 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.qui.android.data.AppPreferencesStore
 import dev.qui.android.data.QuiRepository
+import dev.qui.android.data.SearchHistoryStore
 import dev.qui.android.data.SpeedUnit
+import dev.qui.android.data.ViewMode
 import dev.qui.android.data.model.ActionTarget
 import dev.qui.android.data.model.BulkActionRequest
 import dev.qui.android.data.model.Category
 import dev.qui.android.data.model.FilterState
 import dev.qui.android.data.model.Instance
+import dev.qui.android.data.model.ServerState
 import dev.qui.android.data.model.Torrent
 import dev.qui.android.data.model.TorrentCounts
 import dev.qui.android.data.model.TorrentFilters
@@ -45,6 +48,7 @@ data class TorrentsUiState(
     val total: Int = 0,
     val stats: TorrentStats? = null,
     val counts: TorrentCounts? = null,
+    val serverState: ServerState? = null,
     val categories: Map<String, Category> = emptyMap(),
     val tags: List<String> = emptyList(),
     val supportsTrackerHealth: Boolean = false,
@@ -59,9 +63,18 @@ data class TorrentsUiState(
     val streamConnected: Boolean = false,
     val selection: Set<String> = emptySet(),
     val selectionMode: Boolean = false,
+    // qui calls this scope "Unified": every active client merged into one list.
+    val unifiedScope: Boolean = false,
 ) {
     val selectedInstance: Instance?
         get() = instances.firstOrNull { it.id == selectedInstanceId }
+
+    val activeInstanceIds: List<Int>
+        get() = instances.filter { it.isActive }.map { it.id }
+
+    /** More than one client is the only case where merging them means anything. */
+    val canUnify: Boolean
+        get() = activeInstanceIds.size > 1
 }
 
 @HiltViewModel
@@ -69,6 +82,7 @@ class TorrentsViewModel @Inject constructor(
     private val repository: QuiRepository,
     private val streamClient: QuiStreamClient,
     private val prefsStore: AppPreferencesStore,
+    private val searchHistoryStore: SearchHistoryStore,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(TorrentsUiState())
@@ -76,6 +90,10 @@ class TorrentsViewModel @Inject constructor(
 
     val preferences: StateFlow<AppPreferencesStore.Snapshot> = prefsStore.snapshot
         .stateIn(viewModelScope, SharingStarted.Eagerly, AppPreferencesStore.Snapshot())
+
+    /** Recent queries, newest first, for the search sheet. */
+    val searchHistory: StateFlow<List<String>> = searchHistoryStore.entries
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     private var streamJob: Job? = null
     private var loadedPages = 1
@@ -116,12 +134,17 @@ class TorrentsViewModel @Inject constructor(
     }
 
     fun selectInstance(instanceId: Int) {
-        if (_state.value.selectedInstanceId == instanceId && _state.value.torrents.isNotEmpty()) {
+        val current = _state.value
+        if (!current.unifiedScope &&
+            current.selectedInstanceId == instanceId &&
+            current.torrents.isNotEmpty()
+        ) {
             return
         }
         _state.update {
             it.copy(
                 selectedInstanceId = instanceId,
+                unifiedScope = false,
                 torrents = emptyList(),
                 selection = emptySet(),
                 selectionMode = false,
@@ -131,6 +154,27 @@ class TorrentsViewModel @Inject constructor(
         loadedPages = 1
         viewModelScope.launch { prefsStore.setLastInstance(instanceId) }
         loadMetadata(instanceId)
+        restart()
+    }
+
+    /**
+     * Switches to qui's unified scope. Categories and tags still come from one client
+     * because qBittorrent defines them per instance; the list itself is merged.
+     */
+    fun selectUnified() {
+        val current = _state.value
+        if (current.unifiedScope || !current.canUnify) return
+        _state.update {
+            it.copy(
+                unifiedScope = true,
+                torrents = emptyList(),
+                selection = emptySet(),
+                selectionMode = false,
+                isLoading = true,
+            )
+        }
+        loadedPages = 1
+        current.activeInstanceIds.firstOrNull()?.let(::loadMetadata)
         restart()
     }
 
@@ -158,7 +202,8 @@ class TorrentsViewModel @Inject constructor(
      */
     private fun restart() {
         streamJob?.cancel()
-        val instanceId = _state.value.selectedInstanceId ?: return
+        val unified = _state.value.unifiedScope
+        val instanceId = if (unified) 0 else _state.value.selectedInstanceId ?: return
 
         // A REST fetch fills the list immediately; the stream then keeps it live. This
         // is the same ordering the web UI uses so the screen is never blank while the
@@ -170,8 +215,10 @@ class TorrentsViewModel @Inject constructor(
             while (true) {
                 val current = _state.value
                 val subscription = StreamSubscription(
-                    key = "android-${current.selectedInstanceId}",
+                    key = if (unified) "android-unified" else "android-${current.selectedInstanceId}",
                     instanceId = instanceId,
+                    // qui's aggregated subscription is instanceId 0 plus the members.
+                    instanceIds = current.activeInstanceIds.takeIf { unified },
                     page = 0,
                     limit = PAGE_SIZE * loadedPages,
                     sort = current.sortField,
@@ -206,6 +253,7 @@ class TorrentsViewModel @Inject constructor(
                         total = data.total,
                         stats = data.stats ?: current.stats,
                         counts = data.counts ?: current.counts,
+                        serverState = data.serverState ?: current.serverState,
                         categories = data.categories ?: current.categories,
                         tags = data.tags ?: current.tags,
                         supportsTrackerHealth = data.trackerHealthSupported
@@ -265,17 +313,30 @@ class TorrentsViewModel @Inject constructor(
 
     private suspend fun fetchPage(reset: Boolean) {
         val current = _state.value
-        val instanceId = current.selectedInstanceId ?: return
 
-        repository.torrents(
-            instanceId = instanceId,
-            page = 0,
-            limit = PAGE_SIZE * loadedPages,
-            sort = current.sortField,
-            order = current.sortOrder,
-            search = current.search,
-            filters = current.filters,
-        )
+        val request = if (current.unifiedScope) {
+            repository.crossInstanceTorrents(
+                instanceIds = current.activeInstanceIds,
+                page = 0,
+                limit = PAGE_SIZE * loadedPages,
+                sort = current.sortField,
+                order = current.sortOrder,
+                search = current.search,
+                filters = current.filters,
+            )
+        } else {
+            repository.torrents(
+                instanceId = current.selectedInstanceId ?: return,
+                page = 0,
+                limit = PAGE_SIZE * loadedPages,
+                sort = current.sortField,
+                order = current.sortOrder,
+                search = current.search,
+                filters = current.filters,
+            )
+        }
+
+        request
             .onSuccess { response ->
                 _state.update {
                     it.copy(
@@ -283,6 +344,7 @@ class TorrentsViewModel @Inject constructor(
                         total = response.total,
                         stats = response.stats ?: it.stats,
                         counts = response.counts ?: it.counts,
+                        serverState = response.serverState ?: it.serverState,
                         categories = response.categories ?: it.categories,
                         tags = response.tags ?: it.tags,
                         supportsTrackerHealth = response.trackerHealthSupported
@@ -323,11 +385,44 @@ class TorrentsViewModel @Inject constructor(
         restart()
     }
 
+    /** Runs a query from the search sheet and remembers it. */
+    fun submitSearch(query: String) {
+        setSearch(query)
+        viewModelScope.launch { searchHistoryStore.record(query) }
+    }
+
+    fun removeSearchHistory(query: String) {
+        viewModelScope.launch { searchHistoryStore.remove(query) }
+    }
+
+    fun clearSearchHistory() {
+        viewModelScope.launch { searchHistoryStore.clear() }
+    }
+
     fun setSort(field: String, order: String) {
         _state.update { it.copy(sortField = field, sortOrder = order, isLoading = true) }
         viewModelScope.launch { prefsStore.setSort(field, order) }
         loadedPages = 1
         restart()
+    }
+
+    /**
+     * Incognito lives in qui's mobile action bar rather than a settings page, because
+     * it is something you flip on the spot before handing someone your phone.
+     */
+    fun toggleIncognito() {
+        val next = !preferences.value.incognito
+        viewModelScope.launch { prefsStore.setIncognito(next) }
+    }
+
+    /** Cycles the list density, in the order qui lists the three modes. */
+    fun cycleViewMode() {
+        val next = when (preferences.value.viewMode) {
+            ViewMode.Normal -> ViewMode.Compact
+            ViewMode.Compact -> ViewMode.UltraCompact
+            ViewMode.UltraCompact -> ViewMode.Normal
+        }
+        viewModelScope.launch { prefsStore.setViewMode(next) }
     }
 
     /** qui's mobile header lets you flip the unit inline, without opening settings. */
@@ -409,7 +504,9 @@ class TorrentsViewModel @Inject constructor(
         configure: BulkActionRequest.() -> BulkActionRequest = { this },
         onResult: (Result<Unit>) -> Unit = {},
     ) {
-        val instanceId = _state.value.selectedInstanceId ?: return
+        val current = _state.value
+        // Instance 0 is qui's all-instances sentinel; the targets carry the real ids.
+        val instanceId = if (current.unifiedScope) 0 else current.selectedInstanceId ?: return
         if (keys.isEmpty()) return
 
         val hashes = keys.map { it.substringAfterLast(':') }

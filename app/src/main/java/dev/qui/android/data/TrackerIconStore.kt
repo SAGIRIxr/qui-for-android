@@ -49,6 +49,14 @@ class TrackerIconStore @Inject constructor(
         }
     }
 
+    /** Drops the decoded bitmaps; the next refresh re-fetches them from qui. */
+    suspend fun clear() {
+        mutex.withLock {
+            _icons.value = emptyMap()
+            lastFetch = 0L
+        }
+    }
+
     private fun decodeAll(raw: Map<String, String>): Map<String, ImageBitmap> =
         raw.mapNotNull { (host, dataUrl) ->
             decode(dataUrl)?.let { host.lowercase() to it }

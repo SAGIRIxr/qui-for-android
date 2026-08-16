@@ -53,6 +53,9 @@
     <string name="torrents_empty_message">이 클라이언트에는 아직 토렌트가 없습니다.</string>
     <string name="torrents_clear_search">검색 지우기</string>
     <string name="torrents_ratio">비율:</string>
+    <string name="torrents_free_space">여유 공간</string>
+    <string name="torrents_incognito">시크릿</string>
+    <string name="torrents_view_mode">보기 모드</string>
     <string name="torrents_loaded_of">%2$d개 중 %1$d개</string>
     <string name="selection_clear">선택 해제</string>
     <string name="selection_select_all">모두 선택</string>
@@ -102,6 +105,48 @@
     <string name="common_no">아니요</string>
     <string name="common_or_type_new">또는 새로 입력</string>
     <string name="common_retry">다시 시도</string>
+    <string name="search_title">토렌트 검색</string>
+    <string name="search_description">이름, 카테고리 또는 태그로 검색합니다. *.mkv 또는 *1080p* 같은 glob 패턴을 지원합니다.</string>
+    <string name="search_placeholder">토렌트 검색</string>
+    <string name="search_glob_label">Glob 패턴:</string>
+    <string name="search_fuzzy_label">유사 일치:</string>
+    <string name="search_fuzzy_example">\'breaking bad\'로 \'Breaking.Bad\'를 찾습니다</string>
+    <string name="search_dots">점, 밑줄, 대괄호를 처리합니다</string>
+    <string name="search_fields">이름, 카테고리, 태그를 검색합니다</string>
+    <string name="search_recent">최근</string>
+    <string name="search_clear_history">검색 기록 지우기</string>
+    <string name="search_done">완료</string>
+    <string name="search_clear">지우기</string>
+    <string name="share_limits_action">공유 제한 설정</string>
+    <string name="share_limits_description">선택한 토렌트의 시딩 제한을 구성합니다. 세 필드가 모두 적용됩니다.</string>
+    <string name="share_limit_ratio">비율 제한</string>
+    <string name="share_limit_seeding_time">시딩 시간 제한</string>
+    <string name="share_limit_inactive">비활성 시딩 제한</string>
+    <string name="share_limit_use_global">전역 사용</string>
+    <string name="share_limit_unlimited">무제한</string>
+    <string name="share_limit_custom">사용자 지정</string>
+    <string name="share_limit_ratio_placeholder">예: 2.0</string>
+    <string name="share_limit_seed_time_placeholder">예: 1440</string>
+    <string name="share_limit_inactive_placeholder">예: 10080</string>
+    <string name="share_limit_ratio_help">비율이 이 값에 도달하면 시딩 중지</string>
+    <string name="share_limit_seed_time_help">분(1440 = 24시간)</string>
+    <string name="share_limit_inactive_help">분(10080 = 7일)</string>
+    <string name="scope_all_clients">통합</string>
+    <string name="scope_back_to_top">맨 위로</string>
+    <string name="update_available">업데이트 사용 가능</string>
+    <string name="update_version">버전 %1$s</string>
+    <string name="update_qui_server">최신 qui 서버가 있습니다</string>
+    <string name="update_up_to_date">최신 상태</string>
+    <string name="update_check">업데이트 확인</string>
+    <string name="storage_title">저장소</string>
+    <string name="storage_search_history">검색 기록</string>
+    <string name="storage_tracker_icons">트래커 아이콘</string>
+    <string name="storage_clear">지우기</string>
+    <string name="storage_entries">%1$d개 항목</string>
+    <string name="storage_cleared">지워짐</string>
+    <string name="widget_name">qui 속도</string>
+    <string name="widget_description">모든 클라이언트의 총 다운로드·업로드 속도입니다.</string>
+    <string name="widget_not_signed_in">qui에 로그인하세요</string>
     <string name="speed_limits_hint">단위는 KiB/s입니다. 비워 두면 해당 제한을 그대로 두고, 0은 무제한입니다.</string>
     <string name="speed_limit_download">다운로드 제한</string>
     <string name="speed_limit_upload">업로드 제한</string>
@@ -182,6 +227,23 @@
     <string name="dashboard_show_less">간략히 보기</string>
     <string name="dashboard_no_instances_title">클라이언트 없음</string>
     <string name="dashboard_no_instances_message">qui에서 qBittorrent 인스턴스를 추가하면 여기에 표시됩니다.</string>
+    <string name="dashboard_instances">인스턴스</string>
+    <string name="dashboard_connected">연결됨</string>
+    <string name="dashboard_active_count">%1$d개 활성</string>
+    <string name="dashboard_hide_address">주소 숨기기</string>
+    <string name="dashboard_show_address">주소 표시</string>
+    <string name="dashboard_section_global_stats">전체 통계 카드</string>
+    <string name="dashboard_section_tracker_breakdown">트래커 분석</string>
+    <string name="dashboard_section_instances">인스턴스 카드</string>
+    <string name="dashboard_sections">섹션</string>
+    <string name="dashboard_default_sort">기본 정렬</string>
+    <string name="dashboard_no_tracker_data">아직 트래커 데이터가 없습니다.</string>
+    <string name="tracker_col_tracker">트래커</string>
+    <string name="tracker_col_uploaded">업로드됨</string>
+    <string name="tracker_col_downloaded">다운로드됨</string>
+    <string name="tracker_col_ratio">비율</string>
+    <string name="tracker_col_torrents">토렌트</string>
+    <string name="tracker_col_size">크기:</string>
     <string name="settings_account">계정</string>
     <string name="settings_signed_in">로그인됨</string>
     <string name="settings_sign_out">로그아웃</string>
@@ -208,6 +270,7 @@
     <string name="settings_dynamic_color">시스템 색상 사용</string>
     <string name="settings_dynamic_color_hint">qui 테마 대신 Android 배경화면 색상을 따릅니다.</string>
     <string name="settings_selected">선택됨</string>
+    <string name="settings_dashboard">대시보드 설정</string>
     <string name="settings_about">정보</string>
     <string name="settings_source_code">소스 코드</string>
     <string name="state_downloading">다운로드 중</string>
@@ -288,5 +351,8 @@
     </plurals>
     <plurals name="selection_count">
         <item quantity="other">%1$d개 선택됨</item>
+    </plurals>
+    <plurals name="instances_active">
+        <item quantity="other">활성 클라이언트 %1$d개</item>
     </plurals>
 </resources>

@@ -53,6 +53,9 @@
     <string name="torrents_empty_message">У цього клієнта ще немає торентів.</string>
     <string name="torrents_clear_search">Очистити пошук</string>
     <string name="torrents_ratio">Співвідношення:</string>
+    <string name="torrents_free_space">Вільний простір</string>
+    <string name="torrents_incognito">Інкогніто</string>
+    <string name="torrents_view_mode">Режим перегляду</string>
     <string name="torrents_loaded_of">%1$d з %2$d</string>
     <string name="selection_clear">Очистити вибір</string>
     <string name="selection_select_all">Виберіть усі</string>
@@ -102,6 +105,48 @@
     <string name="common_no">Ні</string>
     <string name="common_or_type_new">Або введіть нову</string>
     <string name="common_retry">Повторити</string>
+    <string name="search_title">Пошук торентів</string>
+    <string name="search_description">Пошук за назвою, категорією або тегами. Підтримує глобальні шаблони, як-от *.mkv або *1080p*.</string>
+    <string name="search_placeholder">Пошук торентів</string>
+    <string name="search_glob_label">Glob шаблони:</string>
+    <string name="search_fuzzy_label">Нечіткий пошук:</string>
+    <string name="search_fuzzy_example">«breaking bad» знаходить «Breaking.Bad»</string>
+    <string name="search_dots">Обробляє крапки, підкреслення та дужки</string>
+    <string name="search_fields">Пошук за назвою, категорією та тегами</string>
+    <string name="search_recent">Нещодавні</string>
+    <string name="search_clear_history">Очистити історію пошуку</string>
+    <string name="search_done">Готово</string>
+    <string name="search_clear">Очистити</string>
+    <string name="share_limits_action">Встановіть ліміти спільного доступу</string>
+    <string name="share_limits_description">Налаштувати обмеження роздачі для вибраних торентів. Будуть застосовані усі три поля.</string>
+    <string name="share_limit_ratio">Ліміт співвідношення</string>
+    <string name="share_limit_seeding_time">Обмеження часу роздавання</string>
+    <string name="share_limit_inactive">Ліміт неактивної роздачі</string>
+    <string name="share_limit_use_global">Використовувати глобальні</string>
+    <string name="share_limit_unlimited">Без обмежень</string>
+    <string name="share_limit_custom">Власна</string>
+    <string name="share_limit_ratio_placeholder">напр. 2.0</string>
+    <string name="share_limit_seed_time_placeholder">напр. 1440</string>
+    <string name="share_limit_inactive_placeholder">напр. 10080</string>
+    <string name="share_limit_ratio_help">Припиніть роздавання, коли співвідношення досягне цього значення</string>
+    <string name="share_limit_seed_time_help">Хвилини (1440 = 24 години)</string>
+    <string name="share_limit_inactive_help">Хвилини (10080 = 7 днів)</string>
+    <string name="scope_all_clients">Об\'єднано</string>
+    <string name="scope_back_to_top">Догори</string>
+    <string name="update_available">Доступне оновлення</string>
+    <string name="update_version">Версія %1$s</string>
+    <string name="update_qui_server">Доступна новіша версія сервера qui</string>
+    <string name="update_up_to_date">Актуально</string>
+    <string name="update_check">Перевірити оновлення</string>
+    <string name="storage_title">Зберігання</string>
+    <string name="storage_search_history">Історія пошуку</string>
+    <string name="storage_tracker_icons">Піктограми трекерів</string>
+    <string name="storage_clear">Очистити</string>
+    <string name="storage_entries">Записів: %1$d</string>
+    <string name="storage_cleared">Очищено</string>
+    <string name="widget_name">Швидкості qui</string>
+    <string name="widget_description">Загальна швидкість завантаження та вивантаження на всіх клієнтах.</string>
+    <string name="widget_not_signed_in">Увійдіть у qui</string>
     <string name="speed_limits_hint">Значення в KiB/s. Порожнє поле залишає обмеження без змін; 0 — без обмежень.</string>
     <string name="speed_limit_download">Обмеження завантаження</string>
     <string name="speed_limit_upload">Обмеження вивантаження</string>
@@ -182,6 +227,23 @@
     <string name="dashboard_show_less">Показати менше</string>
     <string name="dashboard_no_instances_title">Клієнтів ще немає</string>
     <string name="dashboard_no_instances_message">Додайте екземпляр qBittorrent у qui — і він з\'явиться тут.</string>
+    <string name="dashboard_instances">Екземпляри</string>
+    <string name="dashboard_connected">Підключено</string>
+    <string name="dashboard_active_count">%1$d активних</string>
+    <string name="dashboard_hide_address">Приховати адресу</string>
+    <string name="dashboard_show_address">Показати адресу</string>
+    <string name="dashboard_section_global_stats">Загальна статистика</string>
+    <string name="dashboard_section_tracker_breakdown">Розбивка за трекерами</string>
+    <string name="dashboard_section_instances">Картки екземплярів</string>
+    <string name="dashboard_sections">Розділи</string>
+    <string name="dashboard_default_sort">Сортування за замовчуванням</string>
+    <string name="dashboard_no_tracker_data">Даних про трекери ще немає.</string>
+    <string name="tracker_col_tracker">Трекер</string>
+    <string name="tracker_col_uploaded">Вивантажено</string>
+    <string name="tracker_col_downloaded">Завантажено</string>
+    <string name="tracker_col_ratio">Співвідношення</string>
+    <string name="tracker_col_torrents">Торенти</string>
+    <string name="tracker_col_size">Розмір:</string>
     <string name="settings_account">Обліковий запис</string>
     <string name="settings_signed_in">Ви увійшли</string>
     <string name="settings_sign_out">Вийти</string>
@@ -208,6 +270,7 @@
     <string name="settings_dynamic_color">Використовувати системні кольори</string>
     <string name="settings_dynamic_color_hint">Використовувати палітру шпалер Android замість теми qui.</string>
     <string name="settings_selected">Вибрано</string>
+    <string name="settings_dashboard">Налаштування панелі керування</string>
     <string name="settings_about">Про застосунок</string>
     <string name="settings_source_code">Вихідний код</string>
     <string name="state_downloading">Завантаження</string>
@@ -294,5 +357,11 @@
         <item quantity="few">Вибрано %1$d</item>
         <item quantity="many">Вибрано %1$d</item>
         <item quantity="other">Вибрано %1$d</item>
+    </plurals>
+    <plurals name="instances_active">
+        <item quantity="one">%1$d активний клієнт</item>
+        <item quantity="few">%1$d активні клієнти</item>
+        <item quantity="many">%1$d активних клієнтів</item>
+        <item quantity="other">%1$d активних клієнтів</item>
     </plurals>
 </resources>

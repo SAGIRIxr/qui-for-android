@@ -53,6 +53,9 @@
     <string name="torrents_empty_message">Tento klient zatím nemá žádné torrenty.</string>
     <string name="torrents_clear_search">Vymazat hledání</string>
     <string name="torrents_ratio">Poměr:</string>
+    <string name="torrents_free_space">Volné místo</string>
+    <string name="torrents_incognito">Anonymní</string>
+    <string name="torrents_view_mode">Zobrazení režimu</string>
     <string name="torrents_loaded_of">%1$d z %2$d</string>
     <string name="selection_clear">Vymazat výběr</string>
     <string name="selection_select_all">Vybrat vše</string>
@@ -102,6 +105,48 @@
     <string name="common_no">Ne</string>
     <string name="common_or_type_new">Nebo zadejte novou</string>
     <string name="common_retry">Zkusit znovu</string>
+    <string name="search_title">Hledat torrenty</string>
+    <string name="search_description">Hledat podle názvu, kategorie nebo tagů. Podporuje globální vzory jako *.mkv nebo *1080p*.</string>
+    <string name="search_placeholder">Hledat torrenty</string>
+    <string name="search_glob_label">Vzorové hledání:</string>
+    <string name="search_fuzzy_label">Hrubé hledání:</string>
+    <string name="search_fuzzy_example">„breaking bad“ najde „Breaking.Bad“</string>
+    <string name="search_dots">Zpracovává tečky, podtržítka a závorky</string>
+    <string name="search_fields">Hledá název, kategorii a tagy</string>
+    <string name="search_recent">Nedávné</string>
+    <string name="search_clear_history">Vymazat historii hledání</string>
+    <string name="search_done">Hotovo</string>
+    <string name="search_clear">Vymazat</string>
+    <string name="share_limits_action">Nastavit limit sdílení</string>
+    <string name="share_limits_description">Nastavte limity seedování pro vybrané torrenty. Všechny tři pole budou použity.</string>
+    <string name="share_limit_ratio">Limit poměru</string>
+    <string name="share_limit_seeding_time">Limit času seedování</string>
+    <string name="share_limit_inactive">Limit neaktivního seedování</string>
+    <string name="share_limit_use_global">Použít globální</string>
+    <string name="share_limit_unlimited">Neomezené</string>
+    <string name="share_limit_custom">Vlastní</string>
+    <string name="share_limit_ratio_placeholder">např. 2.0</string>
+    <string name="share_limit_seed_time_placeholder">např. 1440</string>
+    <string name="share_limit_inactive_placeholder">např. 10080</string>
+    <string name="share_limit_ratio_help">Zastavit seedování, když poměr dosáhne této hodnoty</string>
+    <string name="share_limit_seed_time_help">Minuty (1440 = 24 hodin)</string>
+    <string name="share_limit_inactive_help">Minuty (10080 = 7 dní)</string>
+    <string name="scope_all_clients">Unifikované</string>
+    <string name="scope_back_to_top">Zpět nahoru</string>
+    <string name="update_available">Aktualizace dostupná</string>
+    <string name="update_version">Verze %1$s</string>
+    <string name="update_qui_server">Je dostupný novější server qui</string>
+    <string name="update_up_to_date">Aktuální</string>
+    <string name="update_check">Zkontrolovat aktualizace</string>
+    <string name="storage_title">Úložiště</string>
+    <string name="storage_search_history">Historie vyhledávání</string>
+    <string name="storage_tracker_icons">Ikony trackerů</string>
+    <string name="storage_clear">Vymazat</string>
+    <string name="storage_entries">Položek: %1$d</string>
+    <string name="storage_cleared">Vymazáno</string>
+    <string name="widget_name">Rychlosti qui</string>
+    <string name="widget_description">Celková rychlost stahování a nahrávání napříč klienty.</string>
+    <string name="widget_not_signed_in">Přihlaste se do qui</string>
     <string name="speed_limits_hint">Hodnoty jsou v KiB/s. Prázdné pole ponechá limit beze změny; 0 znamená bez omezení.</string>
     <string name="speed_limit_download">Stahovací limit</string>
     <string name="speed_limit_upload">Odesílací limit</string>
@@ -182,6 +227,23 @@
     <string name="dashboard_show_less">Zobrazit méně</string>
     <string name="dashboard_no_instances_title">Zatím žádní klienti</string>
     <string name="dashboard_no_instances_message">Přidejte instanci qBittorrentu v qui a objeví se zde.</string>
+    <string name="dashboard_instances">Instance</string>
+    <string name="dashboard_connected">Připojeno</string>
+    <string name="dashboard_active_count">%1$d aktivních</string>
+    <string name="dashboard_hide_address">Skrýt adresu</string>
+    <string name="dashboard_show_address">Zobrazit adresu</string>
+    <string name="dashboard_section_global_stats">Globální statistiky</string>
+    <string name="dashboard_section_tracker_breakdown">Rozložení podle jednotlivých trackerů</string>
+    <string name="dashboard_section_instances">Karty instancí</string>
+    <string name="dashboard_sections">Sekce</string>
+    <string name="dashboard_default_sort">Výchozí řazení</string>
+    <string name="dashboard_no_tracker_data">Zatím žádná data o trackerech.</string>
+    <string name="tracker_col_tracker">Tracker</string>
+    <string name="tracker_col_uploaded">Odesláno</string>
+    <string name="tracker_col_downloaded">Stáhnuto</string>
+    <string name="tracker_col_ratio">Poměr</string>
+    <string name="tracker_col_torrents">Torrenty</string>
+    <string name="tracker_col_size">Velikost:</string>
     <string name="settings_account">Účet</string>
     <string name="settings_signed_in">Přihlášeno</string>
     <string name="settings_sign_out">Odhlásit se</string>
@@ -208,6 +270,7 @@
     <string name="settings_dynamic_color">Použít systémové barvy</string>
     <string name="settings_dynamic_color_hint">Řídit se paletou tapety Androidu místo motivu qui.</string>
     <string name="settings_selected">Vybráno</string>
+    <string name="settings_dashboard">Domů</string>
     <string name="settings_about">O aplikaci</string>
     <string name="settings_source_code">Zdrojový kód</string>
     <string name="state_downloading">Stahování</string>
@@ -294,5 +357,11 @@
         <item quantity="few">Vybrány %1$d</item>
         <item quantity="many">Vybráno %1$d</item>
         <item quantity="other">Vybráno %1$d</item>
+    </plurals>
+    <plurals name="instances_active">
+        <item quantity="one">%1$d aktivní klient</item>
+        <item quantity="few">%1$d aktivní klienti</item>
+        <item quantity="many">%1$d aktivních klientů</item>
+        <item quantity="other">%1$d aktivních klientů</item>
     </plurals>
 </resources>

@@ -3,4 +3,13 @@
     <!-- qui default theme background token, light mode: oklch(1 0 0) -->
     <color name="window_background">#FFFFFFFF</color>
     <color name="ic_launcher_background">#171717</color>
+
+    <!-- Widget palette. RemoteViews cannot read the Compose theme, so these track
+         qui's default theme tokens by hand: card, foreground, muted-foreground,
+         chart-2 (download) and chart-3 (upload). -->
+    <color name="widget_background">#FFFFFFFF</color>
+    <color name="widget_foreground">#FF0A0A0A</color>
+    <color name="widget_muted">#FF737373</color>
+    <color name="widget_download">#FF2F7DD1</color>
+    <color name="widget_upload">#FF3D9A50</color>
 </resources>

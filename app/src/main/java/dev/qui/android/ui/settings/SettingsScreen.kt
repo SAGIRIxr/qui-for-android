@@ -7,6 +7,8 @@
  * language, incognito mode, and the signed-in account.
  */
 
+@file:OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+
 package dev.qui.android.ui.settings
 
 import android.content.Intent
@@ -17,6 +19,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,10 +38,14 @@ import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Dns
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.SettingsBrightness
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -64,6 +71,7 @@ import dev.qui.android.BuildConfig
 import dev.qui.android.R
 import dev.qui.android.data.SpeedUnit
 import dev.qui.android.data.ThemeMode
+import dev.qui.android.data.TrackerSortColumn
 import dev.qui.android.data.ViewMode
 import dev.qui.android.ui.AppLocale
 import dev.qui.android.ui.LANGUAGE_NAMES
@@ -86,6 +94,11 @@ fun SettingsScreen(
     val context = LocalContext.current
     var showLogout by remember { mutableStateOf(false) }
     var showLanguages by remember { mutableStateOf(false) }
+
+    val update by viewModel.update.collectAsStateWithLifecycle()
+    val checking by viewModel.checkingUpdate.collectAsStateWithLifecycle()
+    val searchHistoryCount by viewModel.searchHistoryCount.collectAsStateWithLifecycle()
+    val trackerIconCount by viewModel.trackerIconCount.collectAsStateWithLifecycle()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -239,6 +252,51 @@ fun SettingsScreen(
         }
 
         item {
+            // Mirrors qui's dashboard settings dialog: which sections show, and the
+            // column the tracker table sorts by.
+            SectionCard(stringResource(R.string.settings_dashboard)) {
+                Text(
+                    text = stringResource(R.string.dashboard_sections),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = palette.mutedForeground,
+                )
+                Spacer(Modifier.height(4.dp))
+                CheckRow(
+                    label = stringResource(R.string.dashboard_section_global_stats),
+                    checked = prefs.showGlobalStats,
+                    onChange = root::setShowGlobalStats,
+                )
+                CheckRow(
+                    label = stringResource(R.string.dashboard_section_tracker_breakdown),
+                    checked = prefs.showTrackerBreakdown,
+                    onChange = root::setShowTrackerBreakdown,
+                )
+                CheckRow(
+                    label = stringResource(R.string.dashboard_section_instances),
+                    checked = prefs.showInstanceCards,
+                    onChange = root::setShowInstanceCards,
+                )
+
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    text = stringResource(R.string.dashboard_default_sort),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = palette.mutedForeground,
+                )
+                Spacer(Modifier.height(6.dp))
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    TRACKER_SORT_CHOICES.forEach { (column, label) ->
+                        FilterChip(
+                            selected = prefs.trackerSortColumn == column,
+                            onClick = { root.setTrackerSortColumn(column) },
+                            label = { Text(stringResource(label)) },
+                        )
+                    }
+                }
+            }
+        }
+
+        item {
             SectionCard(stringResource(R.string.settings_theme)) {
                 QuiThemes.forEach { theme ->
                     ThemeRow(
@@ -281,13 +339,127 @@ fun SettingsScreen(
         }
 
         item {
+            SectionCard(stringResource(R.string.storage_title)) {
+                StorageRow(
+                    label = stringResource(R.string.storage_search_history),
+                    detail = stringResource(R.string.storage_entries, searchHistoryCount),
+                    enabled = searchHistoryCount > 0,
+                    onClear = viewModel::clearSearchHistory,
+                )
+                StorageRow(
+                    label = stringResource(R.string.storage_tracker_icons),
+                    detail = stringResource(R.string.storage_entries, trackerIconCount),
+                    enabled = trackerIconCount > 0,
+                    onClear = viewModel::clearTrackerIcons,
+                )
+            }
+        }
+
+        item {
             SectionCard(stringResource(R.string.settings_about)) {
                 Text(
                     text = "qui for Android ${BuildConfig.VERSION_NAME}",
                     style = MaterialTheme.typography.bodySmall,
                     color = palette.mutedForeground,
                 )
+
                 Spacer(Modifier.height(8.dp))
+                if (update.appUpdateAvailable && update.appReleaseUrl != null) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                context.startActivity(
+                                    Intent(Intent.ACTION_VIEW, Uri.parse(update.appReleaseUrl))
+                                )
+                            }
+                            .padding(vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            Icons.Default.Download,
+                            contentDescription = null,
+                            tint = palette.chart3,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(Modifier.width(10.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.update_available),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = palette.chart3,
+                                fontWeight = FontWeight.Medium,
+                            )
+                            Text(
+                                text = stringResource(
+                                    R.string.update_version,
+                                    update.appLatest.orEmpty(),
+                                ),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = palette.mutedForeground,
+                            )
+                        }
+                    }
+                } else {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(enabled = !checking) { viewModel.checkForUpdates() }
+                            .padding(vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = stringResource(
+                                if (update.checkedAt != null) {
+                                    R.string.update_up_to_date
+                                } else {
+                                    R.string.update_check
+                                }
+                            ),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = palette.mutedForeground,
+                            modifier = Modifier.weight(1f),
+                        )
+                        if (checking) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(14.dp),
+                                strokeWidth = 2.dp,
+                            )
+                        }
+                    }
+                }
+
+                // qui reports its own updates; the server operator applies them, so this
+                // is a notice rather than something the app can act on.
+                if (update.serverLatest != null && update.serverReleaseUrl != null) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                context.startActivity(
+                                    Intent(Intent.ACTION_VIEW, Uri.parse(update.serverReleaseUrl))
+                                )
+                            }
+                            .padding(vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            Icons.Default.Dns,
+                            contentDescription = null,
+                            tint = palette.mutedForeground,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(Modifier.width(10.dp))
+                        Text(
+                            text = stringResource(R.string.update_qui_server) +
+                                " (${update.serverLatest})",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = palette.mutedForeground,
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(4.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -437,6 +609,58 @@ private fun SectionCard(title: String, content: @Composable () -> Unit) {
         )
         Spacer(Modifier.height(10.dp))
         content()
+    }
+}
+
+private val TRACKER_SORT_CHOICES = listOf(
+    TrackerSortColumn.Uploaded to R.string.tracker_col_uploaded,
+    TrackerSortColumn.Downloaded to R.string.tracker_col_downloaded,
+    TrackerSortColumn.Ratio to R.string.tracker_col_ratio,
+    TrackerSortColumn.Torrents to R.string.tracker_col_torrents,
+    TrackerSortColumn.Size to R.string.tracker_col_size,
+    TrackerSortColumn.Tracker to R.string.tracker_col_tracker,
+)
+
+@Composable
+private fun StorageRow(
+    label: String,
+    detail: String,
+    enabled: Boolean,
+    onClear: () -> Unit,
+) {
+    val palette = QuiTheme.palette
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(label, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = detail,
+                style = MaterialTheme.typography.labelSmall,
+                color = palette.mutedForeground,
+            )
+        }
+        TextButton(onClick = onClear, enabled = enabled) {
+            Text(stringResource(R.string.storage_clear))
+        }
+    }
+}
+
+@Composable
+private fun CheckRow(label: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onChange(!checked) }
+            .padding(vertical = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Checkbox(checked = checked, onCheckedChange = onChange)
+        Spacer(Modifier.width(4.dp))
+        Text(label, style = MaterialTheme.typography.bodyMedium)
     }
 }
 

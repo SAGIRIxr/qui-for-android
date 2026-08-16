@@ -22,6 +22,8 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -44,28 +46,37 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
+import androidx.compose.material.icons.automirrored.filled.ViewList
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DensitySmall
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Sd
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material.icons.filled.ViewAgenda
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -75,11 +86,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -90,17 +103,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.qui.android.R
 import dev.qui.android.data.SpeedUnit
+import dev.qui.android.data.ViewMode
 import dev.qui.android.data.model.Torrent
+import dev.qui.android.ui.LocalMobileScroll
 import dev.qui.android.ui.addintent.AddIntent
+import dev.qui.android.ui.nestedScrollConnection
 import dev.qui.android.ui.components.BadgeVariant
 import dev.qui.android.ui.components.QuiBadge
 import dev.qui.android.ui.components.StatusDot
+import dev.qui.android.ui.format.formatBytes
 import dev.qui.android.ui.format.formatSpeed
 import dev.qui.android.ui.theme.QuiTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 
 @Composable
 fun TorrentsScreen(
@@ -116,9 +133,12 @@ fun TorrentsScreen(
     var showAdd by remember { mutableStateOf(false) }
     var showInstances by remember { mutableStateOf(false) }
     var showActions by remember { mutableStateOf(false) }
-    var searchVisible by remember { mutableStateOf(false) }
-    var searchText by remember { mutableStateOf(state.search) }
+    var showSearch by remember { mutableStateOf(false) }
     var actionTarget by remember { mutableStateOf<Torrent?>(null) }
+
+    val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
+    val mobileScroll = LocalMobileScroll.current
+    val scope = rememberCoroutineScope()
 
     val incomingAdd by pendingAdd.collectAsStateWithLifecycle()
 
@@ -127,15 +147,15 @@ fun TorrentsScreen(
         if (incomingAdd != null) showAdd = true
     }
 
-    // Debounced so each keystroke does not re-subscribe the stream.
-    LaunchedEffect(Unit) {
-        snapshotFlow { searchText }
-            .debounce(350)
-            .distinctUntilChanged()
-            .collect { viewModel.setSearch(it) }
-    }
-
     val listState = rememberLazyListState()
+
+    // Reaching the top always restores the bars, so they can never be stranded offscreen.
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset == 0 }
+            .distinctUntilChanged()
+            .filter { it }
+            .collect { mobileScroll.show() }
+    }
 
     // Endless scroll: request the next window as the tail comes into view.
     LaunchedEffect(listState, state.hasMore) {
@@ -154,14 +174,8 @@ fun TorrentsScreen(
             TorrentsTopBar(
                 state = state,
                 speedUnit = prefs.speedUnit,
-                searchVisible = searchVisible,
-                searchText = searchText,
-                onSearchTextChange = { searchText = it },
-                onToggleSearch = {
-                    searchVisible = !searchVisible
-                    if (!searchVisible) searchText = ""
-                },
-                onClearSearch = { searchText = "" },
+                onOpenSearch = { showSearch = true },
+                onClearSearch = { viewModel.setSearch("") },
                 onOpenFilters = { showFilters = true },
                 onOpenSort = { showSort = true },
                 onFlipSortOrder = {
@@ -175,18 +189,10 @@ fun TorrentsScreen(
                 onClearFilters = viewModel::clearFilters,
             )
         },
-        floatingActionButton = {
-            if (!state.selectionMode) {
-                FloatingActionButton(onClick = { showAdd = true }) {
-                    Icon(
-                        Icons.Default.Add,
-                        contentDescription = stringResource(R.string.torrents_add),
-                    )
-                }
-            }
-        },
         bottomBar = {
-            AnimatedVisibility(visible = state.selectionMode) {
+            // qui's mobile view stacks a quick-action row above the footer nav, and
+            // swaps it for the selection bar once rows are picked.
+            if (state.selectionMode) {
                 SelectionBar(
                     count = state.selection.size,
                     onClear = viewModel::clearSelection,
@@ -195,6 +201,24 @@ fun TorrentsScreen(
                     onPause = { viewModel.runAction("pause") },
                     onMore = { showActions = true },
                 )
+            } else {
+                AnimatedVisibility(
+                    visible = mobileScroll.barsVisible,
+                    enter = slideInVertically { it },
+                    exit = slideOutVertically { it },
+                ) {
+                    TorrentsActionBar(
+                        incognito = prefs.incognito,
+                        viewMode = prefs.viewMode,
+                        filterCount = state.filters.activeCount,
+                        searchActive = state.search.isNotBlank(),
+                        onOpenSearch = { showSearch = true },
+                        onToggleIncognito = viewModel::toggleIncognito,
+                        onCycleViewMode = viewModel::cycleViewMode,
+                        onOpenFilters = { showFilters = true },
+                        onAdd = { showAdd = true },
+                    )
+                }
             }
         },
     ) { padding ->
@@ -203,7 +227,8 @@ fun TorrentsScreen(
             onRefresh = viewModel::refresh,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
+                .padding(padding)
+                .nestedScroll(mobileScroll.nestedScrollConnection()),
         ) {
             when {
                 state.isLoading && state.torrents.isEmpty() -> {
@@ -230,7 +255,7 @@ fun TorrentsScreen(
                     )
                 }
 
-                else -> {
+                else -> Box(Modifier.fillMaxSize()) {
                     LazyColumn(
                         state = listState,
                         modifier = Modifier.fillMaxSize(),
@@ -260,6 +285,8 @@ fun TorrentsScreen(
                                 isSelected = torrent.key in state.selection,
                                 selectionMode = state.selectionMode,
                                 incognito = prefs.incognito,
+                                instanceName = torrent.instanceName
+                                    ?.takeIf { state.unifiedScope },
                                 onClick = {
                                     val instanceId = torrent.instanceId
                                         ?: state.selectedInstanceId
@@ -275,6 +302,14 @@ fun TorrentsScreen(
                                     }
                                 },
                                 onToggleSelect = { viewModel.toggleSelection(torrent.key) },
+                                onQuickAction = { action ->
+                                    if (action == "delete" && prefs.confirmDelete) {
+                                        actionTarget = torrent
+                                        showActions = true
+                                    } else {
+                                        viewModel.runAction(action, setOf(torrent.key))
+                                    }
+                                },
                             )
                         }
 
@@ -294,9 +329,45 @@ fun TorrentsScreen(
                             }
                         }
                     }
+
+                    // A phone cannot flick back through thousands of rows, which is why
+                    // qui puts this button on mobile only.
+                    AnimatedVisibility(
+                        visible = listState.firstVisibleItemIndex > 8,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 16.dp, bottom = 16.dp),
+                    ) {
+                        SmallFloatingActionButton(
+                            onClick = { scope.launch { listState.animateScrollToItem(0) } },
+                            containerColor = QuiTheme.palette.card,
+                            contentColor = QuiTheme.palette.foreground,
+                        ) {
+                            Icon(
+                                Icons.Default.KeyboardArrowUp,
+                                contentDescription = stringResource(R.string.scope_back_to_top),
+                            )
+                        }
+                    }
                 }
             }
         }
+    }
+
+    if (showSearch) {
+        SearchSheet(
+            initialQuery = state.search,
+            history = searchHistory,
+            onDismiss = { showSearch = false },
+            onSubmit = { query ->
+                showSearch = false
+                viewModel.submitSearch(query)
+            },
+            onRemoveHistory = viewModel::removeSearchHistory,
+            onClearHistory = viewModel::clearSearchHistory,
+        )
     }
 
     if (showFilters) {
@@ -324,9 +395,15 @@ fun TorrentsScreen(
         InstanceSheet(
             instances = state.instances,
             selectedId = state.selectedInstanceId,
+            unifiedScope = state.unifiedScope,
+            canUnify = state.canUnify,
             onDismiss = { showInstances = false },
             onSelect = {
                 viewModel.selectInstance(it)
+                showInstances = false
+            },
+            onSelectUnified = {
+                viewModel.selectUnified()
                 showInstances = false
             },
         )
@@ -375,10 +452,7 @@ fun TorrentsScreen(
 private fun TorrentsTopBar(
     state: TorrentsUiState,
     speedUnit: SpeedUnit,
-    searchVisible: Boolean,
-    searchText: String,
-    onSearchTextChange: (String) -> Unit,
-    onToggleSearch: () -> Unit,
+    onOpenSearch: () -> Unit,
     onClearSearch: () -> Unit,
     onOpenFilters: () -> Unit,
     onOpenSort: () -> Unit,
@@ -399,22 +473,42 @@ private fun TorrentsTopBar(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 InstanceChip(
-                    name = state.selectedInstance?.name
-                        ?: stringResource(R.string.torrents_select_client),
-                    connected = state.selectedInstance?.connected,
+                    name = when {
+                        state.unifiedScope -> stringResource(R.string.scope_all_clients)
+                        else -> state.selectedInstance?.name
+                            ?: stringResource(R.string.torrents_select_client)
+                    },
+                    connected = state.selectedInstance?.connected.takeIf { !state.unifiedScope },
+                    unified = state.unifiedScope,
                     onClick = onOpenInstances,
                     modifier = Modifier.weight(1f, fill = false),
                 )
 
                 Spacer(Modifier.weight(1f))
 
-                IconButton(onClick = onToggleSearch) {
-                    Icon(
-                        imageVector = if (searchVisible) Icons.Default.Close else Icons.Default.Search,
-                        contentDescription = stringResource(R.string.torrents_search),
-                        tint = if (state.search.isNotBlank()) palette.primary else palette.foreground,
-                    )
+                // qui shows free disk space in its status bar; on a phone the scope row
+                // is the only place with room for it.
+                state.serverState?.freeSpaceOnDisk?.takeIf { it > 0 }?.let { free ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(end = 4.dp),
+                    ) {
+                        Icon(
+                            Icons.Default.Sd,
+                            contentDescription = stringResource(R.string.torrents_free_space),
+                            tint = palette.mutedForeground,
+                            modifier = Modifier.size(13.dp),
+                        )
+                        Spacer(Modifier.width(3.dp))
+                        Text(
+                            text = formatBytes(free),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = palette.mutedForeground,
+                            maxLines = 1,
+                        )
+                    }
                 }
+
                 IconButton(onClick = onOpenFilters) {
                     val activeFilters = state.filters.activeCount
                     val icon = @Composable {
@@ -430,33 +524,6 @@ private fun TorrentsTopBar(
                         icon()
                     }
                 }
-            }
-
-            AnimatedVisibility(
-                visible = searchVisible,
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically(),
-            ) {
-                OutlinedTextField(
-                    value = searchText,
-                    onValueChange = onSearchTextChange,
-                    placeholder = { Text(stringResource(R.string.torrents_search_placeholder)) },
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp),
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                    trailingIcon = {
-                        if (searchText.isNotEmpty()) {
-                            IconButton(onClick = onClearSearch) {
-                                Icon(
-                                    Icons.Default.Close,
-                                    contentDescription = stringResource(R.string.torrents_clear_search),
-                                )
-                            }
-                        }
-                    },
-                )
             }
 
             // Status line, matching qui's mobile header: counts and speeds on the left,
@@ -575,6 +642,7 @@ private fun TorrentsTopBar(
 private fun InstanceChip(
     name: String,
     connected: Boolean?,
+    unified: Boolean = false,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -587,7 +655,7 @@ private fun InstanceChip(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            Icons.Default.Storage,
+            imageVector = if (unified) Icons.Default.Layers else Icons.Default.Storage,
             contentDescription = null,
             tint = palette.mutedForeground,
             modifier = Modifier.size(16.dp),
@@ -696,6 +764,114 @@ private fun DismissibleChip(
             contentDescription = stringResource(R.string.filters_clear_all),
             tint = palette.primary,
             modifier = Modifier.size(13.dp),
+        )
+    }
+}
+
+/**
+ * qui's mobile action row: the controls you reach for mid-scroll, at thumb height,
+ * rather than buried in a settings page.
+ */
+@Composable
+private fun TorrentsActionBar(
+    incognito: Boolean,
+    viewMode: ViewMode,
+    filterCount: Int,
+    searchActive: Boolean,
+    onOpenSearch: () -> Unit,
+    onToggleIncognito: () -> Unit,
+    onCycleViewMode: () -> Unit,
+    onOpenFilters: () -> Unit,
+    onAdd: () -> Unit,
+) {
+    val palette = QuiTheme.palette
+
+    Surface(color = palette.background) {
+        Column {
+            HorizontalDivider(color = palette.border)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                ActionBarButton(
+                    icon = Icons.Default.Search,
+                    label = stringResource(R.string.torrents_search),
+                    active = searchActive,
+                    onClick = onOpenSearch,
+                )
+                ActionBarButton(
+                    icon = if (incognito) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                    label = stringResource(R.string.torrents_incognito),
+                    active = incognito,
+                    onClick = onToggleIncognito,
+                )
+                ActionBarButton(
+                    icon = when (viewMode) {
+                        ViewMode.Normal -> Icons.Default.ViewAgenda
+                        ViewMode.Compact -> Icons.AutoMirrored.Filled.ViewList
+                        ViewMode.UltraCompact -> Icons.Default.DensitySmall
+                    },
+                    label = stringResource(
+                        when (viewMode) {
+                            ViewMode.Normal -> R.string.settings_view_mode_normal
+                            ViewMode.Compact -> R.string.settings_view_mode_compact
+                            ViewMode.UltraCompact -> R.string.settings_view_mode_ultra
+                        }
+                    ),
+                    onClick = onCycleViewMode,
+                )
+                ActionBarButton(
+                    icon = Icons.Default.FilterList,
+                    label = stringResource(R.string.torrents_filters),
+                    active = filterCount > 0,
+                    badge = filterCount.takeIf { it > 0 },
+                    onClick = onOpenFilters,
+                )
+                ActionBarButton(
+                    icon = Icons.Default.Add,
+                    label = stringResource(R.string.add_submit),
+                    onClick = onAdd,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ActionBarButton(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    onClick: () -> Unit,
+    active: Boolean = false,
+    badge: Int? = null,
+) {
+    val palette = QuiTheme.palette
+    val tint = if (active) palette.primary else palette.mutedForeground
+
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 10.dp, vertical = 5.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        if (badge != null) {
+            BadgedBox(badge = { Badge { Text("$badge") } }) {
+                Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(21.dp))
+            }
+        } else {
+            Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(21.dp))
+        }
+        Spacer(Modifier.height(2.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = tint,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

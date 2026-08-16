@@ -2,4 +2,10 @@
 <resources>
     <!-- qui default theme background token, dark mode: oklch(0.1450 0 0) -->
     <color name="window_background">#FF0A0A0A</color>
+
+    <color name="widget_background">#FF171717</color>
+    <color name="widget_foreground">#FFFAFAFA</color>
+    <color name="widget_muted">#FFA1A1A1</color>
+    <color name="widget_download">#FF5FA8E8</color>
+    <color name="widget_upload">#FF56B96C</color>
 </resources>

@@ -12,8 +12,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.qui.android.data.AppPreferencesStore
 import dev.qui.android.data.QuiRepository
 import dev.qui.android.data.SpeedUnit
-import dev.qui.android.data.TrackerIconStore
 import dev.qui.android.data.ThemeMode
+import dev.qui.android.data.TrackerIconStore
+import dev.qui.android.data.TrackerSortColumn
 import dev.qui.android.data.ViewMode
 import dev.qui.android.data.remote.SessionStore
 import kotlinx.coroutines.flow.SharingStarted
@@ -66,6 +67,22 @@ class RootViewModel @Inject constructor(
 
     fun setRefreshSeconds(seconds: Int) = viewModelScope.launch {
         prefsStore.setRefreshSeconds(seconds)
+    }
+
+    fun setShowGlobalStats(enabled: Boolean) = viewModelScope.launch {
+        prefsStore.setShowGlobalStats(enabled)
+    }
+
+    fun setShowTrackerBreakdown(enabled: Boolean) = viewModelScope.launch {
+        prefsStore.setShowTrackerBreakdown(enabled)
+    }
+
+    fun setShowInstanceCards(enabled: Boolean) = viewModelScope.launch {
+        prefsStore.setShowInstanceCards(enabled)
+    }
+
+    fun setTrackerSortColumn(column: TrackerSortColumn) = viewModelScope.launch {
+        prefsStore.setTrackerSortColumn(column)
     }
 
     fun logout() = viewModelScope.launch { repository.logout() }

@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -90,7 +91,13 @@ fun QuiApp(pendingAdd: MutableStateFlow<AddIntent?>) {
         if (isConfigured == true) root.loadTrackerIcons()
     }
 
-    CompositionLocalProvider(LocalTrackerIcons provides trackerIcons) {
+    // Shared so the nav bar and the torrent screen's action bar retract together.
+    val mobileScroll = remember { MobileScrollState() }
+
+    CompositionLocalProvider(
+        LocalTrackerIcons provides trackerIcons,
+        LocalMobileScroll provides mobileScroll,
+    ) {
         // Null means the stored session has not been read yet; showing nothing avoids a
         // login flash for users who are already signed in.
         when (isConfigured) {
@@ -122,7 +129,7 @@ private fun MainScaffold(
     Scaffold(
         bottomBar = {
             AnimatedVisibility(
-                visible = showBottomBar,
+                visible = showBottomBar && LocalMobileScroll.current.barsVisible,
                 enter = slideInVertically { it },
                 exit = slideOutVertically { it },
             ) {

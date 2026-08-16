@@ -8,9 +8,12 @@
 
 package dev.qui.android.ui.torrents
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,29 +21,42 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Sell
+import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import dev.qui.android.R
 import dev.qui.android.data.SpeedUnit
@@ -56,6 +72,8 @@ import dev.qui.android.ui.format.formatProgress
 import dev.qui.android.ui.format.formatRatio
 import dev.qui.android.ui.format.formatSpeed
 import dev.qui.android.ui.theme.QuiTheme
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @androidx.compose.foundation.ExperimentalFoundationApi
 @Composable
@@ -70,6 +88,9 @@ fun TorrentCard(
     onClick: () -> Unit,
     onLongPress: () -> Unit,
     onToggleSelect: () -> Unit,
+    onQuickAction: (String) -> Unit = {},
+    // Set only in the unified scope, where a row's client is not implied by the header.
+    instanceName: String? = null,
     modifier: Modifier = Modifier,
 ) {
     val palette = QuiTheme.palette
@@ -83,9 +104,85 @@ fun TorrentCard(
     // Incognito must not leak the real tracker, and an empty host suppresses the icon.
     val trackerIconHost = if (incognito) "" else trackerHost(torrent.tracker)
 
+    val scope = rememberCoroutineScope()
+    val offsetX = remember { Animatable(0f) }
+    val density = LocalDensity.current
+    val revealPx = with(density) { REVEAL_WIDTH.toPx() }
+
+    // Selection mode owns the tap, so swiping is disabled while it is active.
+    LaunchedEffect(selectionMode) {
+        if (selectionMode) offsetX.animateTo(0f)
+    }
+
+    fun close() = scope.launch { offsetX.animateTo(0f) }
+
+    Box(modifier = modifier.fillMaxWidth()) {
+        // Sits behind the card and is only uncovered as the card slides left.
+        Row(
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 6.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            val paused = torrent.state.startsWith("paused") || torrent.state.startsWith("stopped")
+            QuickActionCircle(
+                icon = if (paused) Icons.Default.PlayArrow else Icons.Default.Pause,
+                description = stringResource(
+                    if (paused) R.string.action_resume else R.string.action_pause
+                ),
+                tint = palette.primary,
+            ) {
+                close()
+                onQuickAction(if (paused) "resume" else "pause")
+            }
+            QuickActionCircle(
+                icon = Icons.Default.Refresh,
+                description = stringResource(R.string.action_recheck),
+                tint = palette.foreground,
+            ) {
+                close()
+                onQuickAction("recheck")
+            }
+            QuickActionCircle(
+                icon = Icons.Default.Delete,
+                description = stringResource(R.string.action_delete),
+                tint = palette.destructive,
+            ) {
+                close()
+                onQuickAction("delete")
+            }
+        }
+
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
+            .offset { IntOffset(offsetX.value.roundToInt(), 0) }
+            .then(
+                if (selectionMode) {
+                    Modifier
+                } else {
+                    Modifier.pointerInput(revealPx) {
+                        detectHorizontalDragGestures(
+                            onDragEnd = {
+                                scope.launch {
+                                    // Past the halfway point the row stays open, so a
+                                    // short flick is enough and a stray nudge is not.
+                                    val target = if (offsetX.value < -revealPx / 2) -revealPx else 0f
+                                    offsetX.animateTo(target)
+                                }
+                            },
+                        ) { change, dragAmount ->
+                            change.consume()
+                            scope.launch {
+                                offsetX.snapTo(
+                                    (offsetX.value + dragAmount).coerceIn(-revealPx, 0f)
+                                )
+                            }
+                        }
+                    }
+                }
+            )
             .clip(RoundedCornerShape(10.dp))
             .background(if (isSelected) palette.accent.copy(alpha = 0.5f) else palette.card)
             .border(1.dp, palette.border, RoundedCornerShape(10.dp))
@@ -97,7 +194,15 @@ fun TorrentCard(
                 }
             )
             .combinedClickable(
-                onClick = { if (selectionMode) onToggleSelect() else onClick() },
+                onClick = {
+                    when {
+                        // An open row swallows the first tap, which is what you want
+                        // when the tap was meant to dismiss it.
+                        offsetX.value != 0f -> close()
+                        selectionMode -> onToggleSelect()
+                        else -> onClick()
+                    }
+                },
                 onLongClick = onLongPress,
             )
             .padding(
@@ -132,6 +237,7 @@ fun TorrentCard(
                         displayRatio = displayRatio,
                         trackerName = trackerName,
                         trackerIconHost = trackerIconHost,
+                        instanceName = instanceName,
                         badge = badge,
                         speedUnit = speedUnit,
                     )
@@ -144,6 +250,7 @@ fun TorrentCard(
                         displayRatio = displayRatio,
                         trackerName = trackerName,
                         trackerIconHost = trackerIconHost,
+                        instanceName = instanceName,
                         badge = badge,
                         speedUnit = speedUnit,
                     )
@@ -158,6 +265,36 @@ fun TorrentCard(
                 )
             }
         }
+    }
+    }
+}
+
+/** How much of the action row a full swipe uncovers. */
+private val REVEAL_WIDTH = 150.dp
+
+@Composable
+private fun QuickActionCircle(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    description: String,
+    tint: androidx.compose.ui.graphics.Color,
+    onClick: () -> Unit,
+) {
+    val palette = QuiTheme.palette
+    Box(
+        modifier = Modifier
+            .size(42.dp)
+            .clip(CircleShape)
+            .background(palette.muted)
+            .border(1.dp, palette.border, CircleShape)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = description,
+            tint = tint,
+            modifier = Modifier.size(20.dp),
+        )
     }
 }
 
@@ -229,6 +366,7 @@ private fun CompactBody(
     displayRatio: Double,
     trackerName: String,
     trackerIconHost: String,
+    instanceName: String?,
     badge: StatusBadge,
     speedUnit: SpeedUnit,
 ) {
@@ -288,6 +426,9 @@ private fun CompactBody(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            if (instanceName != null) {
+                MetaChip(icon = Icons.Default.Storage, text = instanceName)
+            }
             if (trackerName.isNotEmpty()) {
                 MetaChip(text = trackerName, trackerHost = trackerIconHost)
             }
@@ -339,6 +480,7 @@ private fun NormalBody(
     displayRatio: Double,
     trackerName: String,
     trackerIconHost: String,
+    instanceName: String?,
     badge: StatusBadge,
     speedUnit: SpeedUnit,
 ) {
@@ -448,6 +590,9 @@ private fun NormalBody(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            if (instanceName != null) {
+                MetaChip(icon = Icons.Default.Storage, text = instanceName)
+            }
             if (trackerName.isNotEmpty()) {
                 MetaChip(text = trackerName, trackerHost = trackerIconHost)
             }

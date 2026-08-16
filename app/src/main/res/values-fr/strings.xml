@@ -53,6 +53,9 @@
     <string name="torrents_empty_message">Ce client n\'a encore aucun torrent.</string>
     <string name="torrents_clear_search">Effacer la recherche</string>
     <string name="torrents_ratio">Ratio :</string>
+    <string name="torrents_free_space">Espace libre</string>
+    <string name="torrents_incognito">Incognito</string>
+    <string name="torrents_view_mode">Mode de vue</string>
     <string name="torrents_loaded_of">%1$d sur %2$d</string>
     <string name="selection_clear">Effacer la sélection</string>
     <string name="selection_select_all">Tout sélectionner</string>
@@ -102,6 +105,48 @@
     <string name="common_no">Non</string>
     <string name="common_or_type_new">Ou saisissez-en une nouvelle</string>
     <string name="common_retry">Réessayer</string>
+    <string name="search_title">Rechercher des torrents</string>
+    <string name="search_description">Recherche par nom, catégorie, ou tags. Supporte les modèles globaux comme *.mkv ou *1080p*.</string>
+    <string name="search_placeholder">Rechercher des torrents</string>
+    <string name="search_glob_label">Motifs Glob :</string>
+    <string name="search_fuzzy_label">Recherche floue :</string>
+    <string name="search_fuzzy_example">« breaking bad » trouve « Breaking.Bad »</string>
+    <string name="search_dots">Gère les points, tirets bas et crochets</string>
+    <string name="search_fields">Recherche dans le nom, la catégorie et les étiquettes</string>
+    <string name="search_recent">Récents</string>
+    <string name="search_clear_history">Effacer l\'historique de recherche</string>
+    <string name="search_done">Terminé</string>
+    <string name="search_clear">Effacer</string>
+    <string name="share_limits_action">Définir les limites de partage</string>
+    <string name="share_limits_description">Configurez les limites de seed pour les torrents sélectionnés. Les trois champs seront appliqués.</string>
+    <string name="share_limit_ratio">Limite de ratio</string>
+    <string name="share_limit_seeding_time">Limite de temps de seed</string>
+    <string name="share_limit_inactive">Limite de seed inactif</string>
+    <string name="share_limit_use_global">Utiliser global</string>
+    <string name="share_limit_unlimited">Illimité</string>
+    <string name="share_limit_custom">Personnalisé</string>
+    <string name="share_limit_ratio_placeholder">ex. 2.0</string>
+    <string name="share_limit_seed_time_placeholder">ex. 1440</string>
+    <string name="share_limit_inactive_placeholder">ex. 10080</string>
+    <string name="share_limit_ratio_help">Arrêter le seed lorsque le ratio atteint cette valeur</string>
+    <string name="share_limit_seed_time_help">Minutes (1440 = 24 heures)</string>
+    <string name="share_limit_inactive_help">Minutes (10080 = 7 jours)</string>
+    <string name="scope_all_clients">Unifié</string>
+    <string name="scope_back_to_top">Retour en haut</string>
+    <string name="update_available">Mise à jour disponible</string>
+    <string name="update_version">Version %1$s</string>
+    <string name="update_qui_server">Un serveur qui plus récent est disponible</string>
+    <string name="update_up_to_date">À jour</string>
+    <string name="update_check">Rechercher des mises à jour</string>
+    <string name="storage_title">Stockage</string>
+    <string name="storage_search_history">Historique de recherche</string>
+    <string name="storage_tracker_icons">Icônes de trackers</string>
+    <string name="storage_clear">Effacer</string>
+    <string name="storage_entries">%1$d entrées</string>
+    <string name="storage_cleared">Effacé</string>
+    <string name="widget_name">Vitesses qui</string>
+    <string name="widget_description">Vitesse totale de téléchargement et d\'envoi sur tous vos clients.</string>
+    <string name="widget_not_signed_in">Connectez-vous à qui</string>
     <string name="speed_limits_hint">Valeurs en Kio/s. Laissez un champ vide pour ne pas modifier la limite ; 0 signifie illimité.</string>
     <string name="speed_limit_download">Limite de téléchargement</string>
     <string name="speed_limit_upload">Limite d\'envoi</string>
@@ -182,6 +227,23 @@
     <string name="dashboard_show_less">Afficher moins</string>
     <string name="dashboard_no_instances_title">Aucun client</string>
     <string name="dashboard_no_instances_message">Ajoutez une instance qBittorrent dans qui et elle apparaîtra ici.</string>
+    <string name="dashboard_instances">Instances</string>
+    <string name="dashboard_connected">Connecté</string>
+    <string name="dashboard_active_count">%1$d actifs</string>
+    <string name="dashboard_hide_address">Masquer l\'adresse</string>
+    <string name="dashboard_show_address">Afficher l\'adresse</string>
+    <string name="dashboard_section_global_stats">Cartes de Stats Globales</string>
+    <string name="dashboard_section_tracker_breakdown">Répartition par Tracker</string>
+    <string name="dashboard_section_instances">Cartes d\'Instances</string>
+    <string name="dashboard_sections">Sections</string>
+    <string name="dashboard_default_sort">Tri par défaut</string>
+    <string name="dashboard_no_tracker_data">Aucune donnée de tracker pour l\'instant.</string>
+    <string name="tracker_col_tracker">Tracker</string>
+    <string name="tracker_col_uploaded">Envoyé</string>
+    <string name="tracker_col_downloaded">Téléchargé</string>
+    <string name="tracker_col_ratio">Ratio</string>
+    <string name="tracker_col_torrents">Torrents</string>
+    <string name="tracker_col_size">Taille :</string>
     <string name="settings_account">Compte</string>
     <string name="settings_signed_in">Connecté</string>
     <string name="settings_sign_out">Déconnexion</string>
@@ -208,6 +270,7 @@
     <string name="settings_dynamic_color">Utiliser les couleurs du système</string>
     <string name="settings_dynamic_color_hint">Suivre la palette du fond d\'écran Android au lieu d\'un thème qui.</string>
     <string name="settings_selected">Sélectionné</string>
+    <string name="settings_dashboard">Paramètres du tableau de bord</string>
     <string name="settings_about">À propos</string>
     <string name="settings_source_code">Code source</string>
     <string name="state_downloading">Téléchargement</string>
@@ -292,5 +355,10 @@
         <item quantity="one">%1$d sélectionné</item>
         <item quantity="many">%1$d sélectionnés</item>
         <item quantity="other">%1$d sélectionnés</item>
+    </plurals>
+    <plurals name="instances_active">
+        <item quantity="one">%1$d client actif</item>
+        <item quantity="many">%1$d clients actifs</item>
+        <item quantity="other">%1$d clients actifs</item>
     </plurals>
 </resources>

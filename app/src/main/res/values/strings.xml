@@ -64,6 +64,9 @@
     <string name="torrents_empty_message">This client has no torrents yet.</string>
     <string name="torrents_clear_search">Clear search</string>
     <string name="torrents_ratio">Ratio</string>
+    <string name="torrents_free_space">Free Space</string>
+    <string name="torrents_incognito">Incognito</string>
+    <string name="torrents_view_mode">View mode</string>
     <plurals name="torrents_count">
         <item quantity="one">%1$d torrent</item>
         <item quantity="other">%1$d torrents</item>
@@ -115,6 +118,10 @@
     <string name="instances_selected">Selected</string>
     <string name="instances_disabled">Disabled</string>
     <string name="instances_not_reachable">Not reachable</string>
+    <plurals name="instances_active">
+        <item quantity="one">%1$d active client</item>
+        <item quantity="other">%1$d active clients</item>
+    </plurals>
 
     <!-- Delete dialog -->
     <string name="delete_title_one">Delete torrent?</string>
@@ -135,6 +142,61 @@
     <string name="common_no">No</string>
     <string name="common_or_type_new">Or type a new one</string>
     <string name="common_retry">Retry</string>
+
+    <!-- Search modal -->
+    <string name="search_title">Search Torrents</string>
+    <string name="search_description">Search by name, category, or tags. Supports glob patterns like *.mkv or *1080p*.</string>
+    <string name="search_placeholder">Search torrents…</string>
+    <string name="search_glob_label">Glob patterns:</string>
+    <string name="search_glob_examples" translatable="false">*.mkv, *1080p*, S??E??</string>
+    <string name="search_fuzzy_label">Fuzzy matching:</string>
+    <string name="search_fuzzy_example">\"breaking bad\" finds \"Breaking.Bad\"</string>
+    <string name="search_dots">Handles dots, underscores, and brackets</string>
+    <string name="search_fields">Searches name, category, and tags</string>
+    <string name="search_recent">Recent</string>
+    <string name="search_clear_history">Clear search history</string>
+    <string name="search_done">Done</string>
+    <string name="search_clear">Clear</string>
+
+    <!-- Share limits -->
+    <string name="share_limits_action">Set Share Limits</string>
+    <string name="share_limits_description">Configure seeding limits for selected torrents. All three fields will be applied.</string>
+    <string name="share_limit_ratio">Ratio limit</string>
+    <string name="share_limit_seeding_time">Seeding time limit</string>
+    <string name="share_limit_inactive">Inactive seeding limit</string>
+    <string name="share_limit_use_global">Use global</string>
+    <string name="share_limit_unlimited">Unlimited</string>
+    <string name="share_limit_custom">Custom</string>
+    <string name="share_limit_ratio_placeholder">e.g. 2.0</string>
+    <string name="share_limit_seed_time_placeholder">e.g. 1440</string>
+    <string name="share_limit_inactive_placeholder">e.g. 10080</string>
+    <string name="share_limit_ratio_help">Stop seeding when ratio reaches this value</string>
+    <string name="share_limit_seed_time_help">Minutes (1440 = 24 hours)</string>
+    <string name="share_limit_inactive_help">Minutes (10080 = 7 days)</string>
+
+    <!-- Scopes -->
+    <string name="scope_all_clients">Unified</string>
+    <string name="scope_back_to_top">Back to top</string>
+
+    <!-- Updates -->
+    <string name="update_available">Update Available</string>
+    <string name="update_version">Version %1$s</string>
+    <string name="update_qui_server">A newer qui server is available</string>
+    <string name="update_up_to_date">Up to date</string>
+    <string name="update_check">Check for updates</string>
+
+    <!-- Storage -->
+    <string name="storage_title">Storage</string>
+    <string name="storage_search_history">Search history</string>
+    <string name="storage_tracker_icons">Tracker icons</string>
+    <string name="storage_clear">Clear</string>
+    <string name="storage_entries">%1$d entries</string>
+    <string name="storage_cleared">Cleared</string>
+
+    <!-- Widget -->
+    <string name="widget_name">qui speeds</string>
+    <string name="widget_description">Total download and upload speed across your clients.</string>
+    <string name="widget_not_signed_in">Sign in to qui</string>
 
     <!-- Speed limit dialog -->
     <string name="speed_limits_hint">Values are in KiB/s. Leave a field empty to leave that limit unchanged; use 0 for unlimited.</string>
@@ -228,6 +290,27 @@
     <string name="dashboard_show_less">Show less</string>
     <string name="dashboard_no_instances_title">No clients yet</string>
     <string name="dashboard_no_instances_message">Add a qBittorrent instance in qui and it will show up here.</string>
+    <string name="dashboard_instances">Instances</string>
+    <string name="dashboard_connected">Connected</string>
+    <string name="dashboard_active_count">%1$d active</string>
+    <string name="dashboard_hide_address">Hide address</string>
+    <string name="dashboard_show_address">Show address</string>
+
+    <!-- Dashboard sections (qui's dashboard settings dialog) -->
+    <string name="dashboard_section_global_stats">Global Stats Cards</string>
+    <string name="dashboard_section_tracker_breakdown">Tracker Breakdown</string>
+    <string name="dashboard_section_instances">Instance Cards</string>
+    <string name="dashboard_sections">Sections</string>
+    <string name="dashboard_default_sort">Default Sort</string>
+    <string name="dashboard_no_tracker_data">No tracker data yet.</string>
+
+    <!-- Tracker breakdown columns -->
+    <string name="tracker_col_tracker">Tracker</string>
+    <string name="tracker_col_uploaded">Uploaded</string>
+    <string name="tracker_col_downloaded">Downloaded</string>
+    <string name="tracker_col_ratio">Ratio</string>
+    <string name="tracker_col_torrents">Torrents</string>
+    <string name="tracker_col_size">Size</string>
 
     <!-- Settings -->
     <string name="settings_account">Account</string>
@@ -256,6 +339,7 @@
     <string name="settings_dynamic_color">Use system colours</string>
     <string name="settings_dynamic_color_hint">Follow the Android wallpaper palette instead of a qui theme.</string>
     <string name="settings_selected">Selected</string>
+    <string name="settings_dashboard">Dashboard Settings</string>
     <string name="settings_about">About</string>
     <string name="settings_source_code">Source code</string>
 

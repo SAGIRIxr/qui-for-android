@@ -20,7 +20,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private val Context.prefsDataStore by preferencesDataStore("qui_prefs")
+/** Shared with SearchHistoryStore so both live in one DataStore file. */
+internal val Context.prefsDataStore by preferencesDataStore("qui_prefs")
 
 /** Card density in the torrent list, matching qui's mobile view modes. */
 enum class ViewMode { Normal, Compact, UltraCompact }
@@ -30,6 +31,9 @@ enum class ThemeMode { Light, Dark, Auto }
 
 /** qui's speed unit toggle: bytes (B/s) or bits (bps). */
 enum class SpeedUnit { Bytes, Bits }
+
+/** The tracker-breakdown columns qui lets you sort that table by. */
+enum class TrackerSortColumn { Tracker, Uploaded, Downloaded, Ratio, Torrents, Size }
 
 @Singleton
 class AppPreferencesStore @Inject constructor(
@@ -48,6 +52,10 @@ class AppPreferencesStore @Inject constructor(
         val dynamicColor = booleanPreferencesKey("dynamic_color")
         val confirmDelete = booleanPreferencesKey("confirm_delete")
         val refreshSeconds = intPreferencesKey("refresh_seconds")
+        val showGlobalStats = booleanPreferencesKey("dash_global_stats")
+        val showTrackerBreakdown = booleanPreferencesKey("dash_tracker_breakdown")
+        val showInstanceCards = booleanPreferencesKey("dash_instance_cards")
+        val trackerSortColumn = stringPreferencesKey("dash_tracker_sort")
     }
 
     data class Snapshot(
@@ -63,6 +71,11 @@ class AppPreferencesStore @Inject constructor(
         val dynamicColor: Boolean = false,
         val confirmDelete: Boolean = true,
         val refreshSeconds: Int = 3,
+        // Which dashboard sections are shown, mirroring qui's dashboard settings.
+        val showGlobalStats: Boolean = true,
+        val showTrackerBreakdown: Boolean = true,
+        val showInstanceCards: Boolean = true,
+        val trackerSortColumn: TrackerSortColumn = TrackerSortColumn.Uploaded,
     )
 
     val snapshot: Flow<Snapshot> = context.prefsDataStore.data.map { prefs ->
@@ -82,6 +95,12 @@ class AppPreferencesStore @Inject constructor(
             dynamicColor = prefs[Keys.dynamicColor] ?: false,
             confirmDelete = prefs[Keys.confirmDelete] ?: true,
             refreshSeconds = prefs[Keys.refreshSeconds] ?: 3,
+            showGlobalStats = prefs[Keys.showGlobalStats] ?: true,
+            showTrackerBreakdown = prefs[Keys.showTrackerBreakdown] ?: true,
+            showInstanceCards = prefs[Keys.showInstanceCards] ?: true,
+            trackerSortColumn = prefs[Keys.trackerSortColumn]
+                ?.let { runCatching { TrackerSortColumn.valueOf(it) }.getOrNull() }
+                ?: TrackerSortColumn.Uploaded,
         )
     }
 
@@ -125,5 +144,21 @@ class AppPreferencesStore @Inject constructor(
 
     suspend fun setRefreshSeconds(seconds: Int) = context.prefsDataStore.edit {
         it[Keys.refreshSeconds] = seconds.coerceIn(1, 60)
+    }
+
+    suspend fun setShowGlobalStats(enabled: Boolean) = context.prefsDataStore.edit {
+        it[Keys.showGlobalStats] = enabled
+    }
+
+    suspend fun setShowTrackerBreakdown(enabled: Boolean) = context.prefsDataStore.edit {
+        it[Keys.showTrackerBreakdown] = enabled
+    }
+
+    suspend fun setShowInstanceCards(enabled: Boolean) = context.prefsDataStore.edit {
+        it[Keys.showInstanceCards] = enabled
+    }
+
+    suspend fun setTrackerSortColumn(column: TrackerSortColumn) = context.prefsDataStore.edit {
+        it[Keys.trackerSortColumn] = column.name
     }
 }

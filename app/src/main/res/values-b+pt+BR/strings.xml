@@ -53,6 +53,9 @@
     <string name="torrents_empty_message">Este cliente ainda não tem torrents.</string>
     <string name="torrents_clear_search">Limpar busca</string>
     <string name="torrents_ratio">Ratio:</string>
+    <string name="torrents_free_space">Espaço Livre</string>
+    <string name="torrents_incognito">Modo Anônimo</string>
+    <string name="torrents_view_mode">Modo de Visualização</string>
     <string name="torrents_loaded_of">%1$d de %2$d</string>
     <string name="selection_clear">Limpar seleção</string>
     <string name="selection_select_all">Selecionar Todos</string>
@@ -102,6 +105,48 @@
     <string name="common_no">Não</string>
     <string name="common_or_type_new">Ou digite uma nova</string>
     <string name="common_retry">Tentar novamente</string>
+    <string name="search_title">Pesquisar Torrents</string>
+    <string name="search_description">Pesquise por nome, categoria ou tags. Suporta padrões glob (ex: *.mkv).</string>
+    <string name="search_placeholder">Pesquisar Torrents</string>
+    <string name="search_glob_label">Padrões Glob:</string>
+    <string name="search_fuzzy_label">Busca Aproximada (Fuzzy):</string>
+    <string name="search_fuzzy_example">“breaking bad” encontra “Breaking.Bad”</string>
+    <string name="search_dots">Lida com pontos, sublinhados e colchetes</string>
+    <string name="search_fields">Busca no nome, categoria e tags</string>
+    <string name="search_recent">Recentes</string>
+    <string name="search_clear_history">Limpar histórico de busca</string>
+    <string name="search_done">Concluído</string>
+    <string name="search_clear">Limpar</string>
+    <string name="share_limits_action">Definir Limites de Compartilhamento</string>
+    <string name="share_limits_description">Configure limites de seed para torrents selecionados. Todos os três campos serão aplicados.</string>
+    <string name="share_limit_ratio">Limite de ratio</string>
+    <string name="share_limit_seeding_time">Limite de tempo de seed</string>
+    <string name="share_limit_inactive">Limite de seed inativo</string>
+    <string name="share_limit_use_global">Usar global</string>
+    <string name="share_limit_unlimited">Ilimitado</string>
+    <string name="share_limit_custom">Personalizado</string>
+    <string name="share_limit_ratio_placeholder">ex: 2.0</string>
+    <string name="share_limit_seed_time_placeholder">ex: 1440</string>
+    <string name="share_limit_inactive_placeholder">ex: 10080</string>
+    <string name="share_limit_ratio_help">Parar de semear quando atingir este valor</string>
+    <string name="share_limit_seed_time_help">Minutos (1440 = 24 horas)</string>
+    <string name="share_limit_inactive_help">Minutos (10080 = 7 dias)</string>
+    <string name="scope_all_clients">Unificado</string>
+    <string name="scope_back_to_top">Voltar ao topo</string>
+    <string name="update_available">Atualização Disponível</string>
+    <string name="update_version">Versão %1$s</string>
+    <string name="update_qui_server">Há uma versão mais recente do servidor qui</string>
+    <string name="update_up_to_date">Atualizado</string>
+    <string name="update_check">Verificar atualizações</string>
+    <string name="storage_title">Armazenamento</string>
+    <string name="storage_search_history">Histórico de Buscas</string>
+    <string name="storage_tracker_icons">Ícones de trackers</string>
+    <string name="storage_clear">Limpar</string>
+    <string name="storage_entries">%1$d entradas</string>
+    <string name="storage_cleared">Limpo</string>
+    <string name="widget_name">Velocidades do qui</string>
+    <string name="widget_description">Velocidade total de download e envio em todos os clientes.</string>
+    <string name="widget_not_signed_in">Entre no qui</string>
     <string name="speed_limits_hint">Valores em KiB/s. Deixe um campo vazio para manter o limite; use 0 para ilimitado.</string>
     <string name="speed_limit_download">Limite de Download</string>
     <string name="speed_limit_upload">Limite de Upload</string>
@@ -182,6 +227,23 @@
     <string name="dashboard_show_less">Mostrar menos</string>
     <string name="dashboard_no_instances_title">Nenhum cliente ainda</string>
     <string name="dashboard_no_instances_message">Adicione uma instância do qBittorrent no qui e ela aparecerá aqui.</string>
+    <string name="dashboard_instances">Instâncias</string>
+    <string name="dashboard_connected">Conectado</string>
+    <string name="dashboard_active_count">%1$d ativos</string>
+    <string name="dashboard_hide_address">Ocultar endereço</string>
+    <string name="dashboard_show_address">Mostrar endereço</string>
+    <string name="dashboard_section_global_stats">Cartões de Estatísticas Globais</string>
+    <string name="dashboard_section_tracker_breakdown">Detalhamento de Trackers</string>
+    <string name="dashboard_section_instances">Cartões de Instâncias</string>
+    <string name="dashboard_sections">Seções</string>
+    <string name="dashboard_default_sort">Ordenação Padrão</string>
+    <string name="dashboard_no_tracker_data">Ainda não há dados de trackers.</string>
+    <string name="tracker_col_tracker">Tracker</string>
+    <string name="tracker_col_uploaded">Enviado</string>
+    <string name="tracker_col_downloaded">Baixado</string>
+    <string name="tracker_col_ratio">Ratio</string>
+    <string name="tracker_col_torrents">Torrents</string>
+    <string name="tracker_col_size">Tamanho:</string>
     <string name="settings_account">Conta</string>
     <string name="settings_signed_in">Conectado</string>
     <string name="settings_sign_out">Sair</string>
@@ -208,6 +270,7 @@
     <string name="settings_dynamic_color">Usar cores do sistema</string>
     <string name="settings_dynamic_color_hint">Seguir a paleta do papel de parede do Android em vez de um tema do qui.</string>
     <string name="settings_selected">Selecionado</string>
+    <string name="settings_dashboard">Configurações do Painel</string>
     <string name="settings_about">Sobre</string>
     <string name="settings_source_code">Código-fonte</string>
     <string name="state_downloading">Baixando</string>
@@ -292,5 +355,10 @@
         <item quantity="one">%1$d selecionado</item>
         <item quantity="many">%1$d selecionados</item>
         <item quantity="other">%1$d selecionados</item>
+    </plurals>
+    <plurals name="instances_active">
+        <item quantity="one">%1$d cliente ativo</item>
+        <item quantity="many">%1$d clientes ativos</item>
+        <item quantity="other">%1$d clientes ativos</item>
     </plurals>
 </resources>

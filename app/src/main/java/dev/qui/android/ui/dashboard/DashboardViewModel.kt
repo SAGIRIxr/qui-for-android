@@ -10,14 +10,19 @@
 
 package dev.qui.android.ui.dashboard
 
+import android.content.Context
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.qui.android.R
 import dev.qui.android.data.AppPreferencesStore
 import dev.qui.android.data.QuiRepository
+import dev.qui.android.data.TrackerSortColumn
+import dev.qui.android.widget.QuiWidgets
 import dev.qui.android.data.model.Instance
+import dev.qui.android.data.model.TrackerTransferStats
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -46,9 +51,22 @@ data class InstanceCard(
     val freeSpace: Long? = null,
     val peerConnections: Long? = null,
     val altSpeedEnabled: Boolean = false,
+    val trackerTransfers: Map<String, TrackerTransferStats> = emptyMap(),
     @StringRes val errorRes: Int? = null,
 ) {
     val isHealthy: Boolean get() = errorRes == null
+}
+
+/** One row of qui's Tracker Breakdown table, summed across every instance. */
+data class TrackerRow(
+    val host: String,
+    val torrents: Int,
+    val size: Long,
+    val uploaded: Long,
+    val downloaded: Long,
+) {
+    // qui shows an infinite ratio for a tracker that has only ever uploaded.
+    val ratio: Double get() = if (downloaded > 0) uploaded.toDouble() / downloaded else -1.0
 }
 
 data class DashboardUiState(
@@ -59,12 +77,47 @@ data class DashboardUiState(
     val totalUploadSpeed: Long get() = cards.sumOf { it.uploadSpeed }
     val totalTorrents: Int get() = cards.sumOf { it.torrentCount }
     val totalSize: Long get() = cards.sumOf { it.totalSize ?: 0L }
+    val totalDownloading: Int get() = cards.sumOf { it.downloading }
+    val totalSeeding: Int get() = cards.sumOf { it.seeding }
+    val activeTorrents: Int get() = totalDownloading + totalSeeding
+    val connectedCount: Int get() = cards.count { it.instance.connected }
+
+    /**
+     * The per-tracker totals qui charts, merged across instances: a tracker seeded from
+     * two clients is one row, the way the web UI presents it.
+     */
+    fun trackerRows(sort: TrackerSortColumn): List<TrackerRow> {
+        val merged = LinkedHashMap<String, TrackerRow>()
+        cards.forEach { card ->
+            card.trackerTransfers.forEach { (host, stats) ->
+                if (host.isBlank()) return@forEach
+                val existing = merged[host]
+                merged[host] = TrackerRow(
+                    host = host,
+                    torrents = (existing?.torrents ?: 0) + stats.count,
+                    size = (existing?.size ?: 0) + stats.totalSize,
+                    uploaded = (existing?.uploaded ?: 0) + stats.uploaded,
+                    downloaded = (existing?.downloaded ?: 0) + stats.downloaded,
+                )
+            }
+        }
+        val rows = merged.values.toList()
+        return when (sort) {
+            TrackerSortColumn.Tracker -> rows.sortedBy { it.host }
+            TrackerSortColumn.Uploaded -> rows.sortedByDescending { it.uploaded }
+            TrackerSortColumn.Downloaded -> rows.sortedByDescending { it.downloaded }
+            TrackerSortColumn.Ratio -> rows.sortedByDescending { it.ratio }
+            TrackerSortColumn.Torrents -> rows.sortedByDescending { it.torrents }
+            TrackerSortColumn.Size -> rows.sortedByDescending { it.size }
+        }
+    }
 }
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val repository: QuiRepository,
-    prefsStore: AppPreferencesStore,
+    private val prefsStore: AppPreferencesStore,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DashboardUiState())
@@ -87,6 +140,15 @@ class DashboardViewModel @Inject constructor(
                 delay(preferences.value.refreshSeconds.coerceAtLeast(2) * 1000L)
             }
         }
+    }
+
+    /** The eye on each card is qui's global incognito, not a per-card state. */
+    fun toggleIncognito() {
+        viewModelScope.launch { prefsStore.setIncognito(!preferences.value.incognito) }
+    }
+
+    fun setTrackerSort(column: TrackerSortColumn) {
+        viewModelScope.launch { prefsStore.setTrackerSortColumn(column) }
     }
 
     fun toggleAltSpeedLimits(instanceId: Int) {
@@ -143,11 +205,15 @@ class DashboardViewModel @Inject constructor(
                     freeSpace = server?.freeSpaceOnDisk,
                     peerConnections = server?.totalPeerConnections,
                     altSpeedEnabled = server?.useAltSpeedLimits ?: false,
+                    trackerTransfers = response.counts?.trackerTransfers.orEmpty(),
                 )
             }
         }.awaitAll()
 
         _state.value = DashboardUiState(cards = cards, isLoading = false)
+        // The widget cannot poll this often on its own, so it rides along with the
+        // dashboard's refresh whenever the app happens to be open.
+        QuiWidgets.refresh(context)
     }
 
     override fun onCleared() {

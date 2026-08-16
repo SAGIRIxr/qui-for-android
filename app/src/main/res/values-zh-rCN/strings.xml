@@ -53,6 +53,9 @@
     <string name="torrents_empty_message">该客户端还没有种子。</string>
     <string name="torrents_clear_search">清除搜索</string>
     <string name="torrents_ratio">分享率：</string>
+    <string name="torrents_free_space">可用空间</string>
+    <string name="torrents_incognito">隐身模式</string>
+    <string name="torrents_view_mode">视图模式</string>
     <string name="torrents_loaded_of">%1$d / %2$d</string>
     <string name="selection_clear">清除选择</string>
     <string name="selection_select_all">全选</string>
@@ -102,6 +105,48 @@
     <string name="common_no">否</string>
     <string name="common_or_type_new">或输入新的</string>
     <string name="common_retry">重试</string>
+    <string name="search_title">搜索种子</string>
+    <string name="search_description">按名称、分类或标签搜索。支持 glob 模式，如 *.mkv 或 *1080p*。</string>
+    <string name="search_placeholder">搜索种子</string>
+    <string name="search_glob_label">Glob 模式：</string>
+    <string name="search_fuzzy_label">模糊匹配：</string>
+    <string name="search_fuzzy_example">输入「breaking bad」可匹配「Breaking.Bad」</string>
+    <string name="search_dots">自动处理点号、下划线和方括号</string>
+    <string name="search_fields">搜索名称、分类和标签</string>
+    <string name="search_recent">最近</string>
+    <string name="search_clear_history">清除搜索历史</string>
+    <string name="search_done">完成</string>
+    <string name="search_clear">清除</string>
+    <string name="share_limits_action">设置分享限制</string>
+    <string name="share_limits_description">配置所选种子的做种限制。所有三个字段都将被应用。</string>
+    <string name="share_limit_ratio">分享率限制</string>
+    <string name="share_limit_seeding_time">做种时间限制</string>
+    <string name="share_limit_inactive">不活跃做种限制</string>
+    <string name="share_limit_use_global">使用全局</string>
+    <string name="share_limit_unlimited">无限制</string>
+    <string name="share_limit_custom">自定义</string>
+    <string name="share_limit_ratio_placeholder">例如 2.0</string>
+    <string name="share_limit_seed_time_placeholder">例如 1440</string>
+    <string name="share_limit_inactive_placeholder">例如 10080</string>
+    <string name="share_limit_ratio_help">当分享率达到此值时停止做种</string>
+    <string name="share_limit_seed_time_help">分钟数（1440 = 24 小时）</string>
+    <string name="share_limit_inactive_help">分钟数（10080 = 7 天）</string>
+    <string name="scope_all_clients">统一视图</string>
+    <string name="scope_back_to_top">回到顶部</string>
+    <string name="update_available">有可用更新</string>
+    <string name="update_version">版本 %1$s</string>
+    <string name="update_qui_server">qui 服务端有新版本</string>
+    <string name="update_up_to_date">已是最新</string>
+    <string name="update_check">检查更新</string>
+    <string name="storage_title">存储</string>
+    <string name="storage_search_history">搜索历史</string>
+    <string name="storage_tracker_icons">Tracker 图标</string>
+    <string name="storage_clear">清除</string>
+    <string name="storage_entries">%1$d 条</string>
+    <string name="storage_cleared">已清除</string>
+    <string name="widget_name">qui 速度</string>
+    <string name="widget_description">所有客户端的总下载和上传速度。</string>
+    <string name="widget_not_signed_in">请先登录 qui</string>
     <string name="speed_limits_hint">单位为 KiB/s。留空表示不改动该项限制，填 0 表示不限速。</string>
     <string name="speed_limit_download">下载限制</string>
     <string name="speed_limit_upload">上传限制</string>
@@ -182,6 +227,23 @@
     <string name="dashboard_show_less">收起</string>
     <string name="dashboard_no_instances_title">暂无客户端</string>
     <string name="dashboard_no_instances_message">在 qui 中添加 qBittorrent 实例后会显示在这里。</string>
+    <string name="dashboard_instances">实例</string>
+    <string name="dashboard_connected">已连接</string>
+    <string name="dashboard_active_count">%1$d 个活动</string>
+    <string name="dashboard_hide_address">隐藏地址</string>
+    <string name="dashboard_show_address">显示地址</string>
+    <string name="dashboard_section_global_stats">全局统计卡片</string>
+    <string name="dashboard_section_tracker_breakdown">Tracker 明细</string>
+    <string name="dashboard_section_instances">实例卡片</string>
+    <string name="dashboard_sections">板块</string>
+    <string name="dashboard_default_sort">默认排序</string>
+    <string name="dashboard_no_tracker_data">暂无 Tracker 数据。</string>
+    <string name="tracker_col_tracker">Tracker</string>
+    <string name="tracker_col_uploaded">已上传</string>
+    <string name="tracker_col_downloaded">已下载</string>
+    <string name="tracker_col_ratio">分享率</string>
+    <string name="tracker_col_torrents">种子</string>
+    <string name="tracker_col_size">大小：</string>
     <string name="settings_account">账户</string>
     <string name="settings_signed_in">已登录</string>
     <string name="settings_sign_out">退出登录</string>
@@ -208,6 +270,7 @@
     <string name="settings_dynamic_color">使用系统配色</string>
     <string name="settings_dynamic_color_hint">跟随 Android 壁纸取色，而不使用 qui 主题。</string>
     <string name="settings_selected">已选择</string>
+    <string name="settings_dashboard">仪表盘设置</string>
     <string name="settings_about">关于</string>
     <string name="settings_source_code">源代码</string>
     <string name="state_downloading">下载中</string>
@@ -288,5 +351,8 @@
     </plurals>
     <plurals name="selection_count">
         <item quantity="other">已选择 %1$d 项</item>
+    </plurals>
+    <plurals name="instances_active">
+        <item quantity="other">%1$d 个活动客户端</item>
     </plurals>
 </resources>
