@@ -94,6 +94,17 @@ fun QuiApp(
         if (isConfigured == true) root.loadTrackerIcons()
     }
 
+    // Checked once per app start, and only when a newer release exists that the user
+    // has not already told us to stop mentioning.
+    val updatePrompt by root.updatePrompt.collectAsStateWithLifecycle()
+    updatePrompt?.let { status ->
+        UpdateDialog(
+            status = status,
+            onDismiss = root::dismissUpdatePrompt,
+            onSkip = root::skipUpdate,
+        )
+    }
+
     // Shared so the nav bar and the torrent screen's action bar retract together.
     val mobileScroll = remember { MobileScrollState() }
 

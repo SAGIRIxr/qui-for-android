@@ -57,6 +57,7 @@
     <string name="torrents_incognito">Incognito</string>
     <string name="torrents_view_mode">Mode de vue</string>
     <string name="torrents_loaded_of">%1$d sur %2$d</string>
+    <string name="torrents_partial_results">Un client n\'a pas répondu — cette liste est incomplète</string>
     <string name="selection_clear">Effacer la sélection</string>
     <string name="selection_select_all">Tout sélectionner</string>
     <string name="action_resume">Reprendre</string>
@@ -138,6 +139,14 @@
     <string name="update_qui_server">Un serveur qui plus récent est disponible</string>
     <string name="update_up_to_date">À jour</string>
     <string name="update_check">Rechercher des mises à jour</string>
+    <string name="update_from_to">%1$s → %2$s</string>
+    <string name="update_notes">Nouveautés</string>
+    <string name="update_no_notes">Aucune note pour cette version.</string>
+    <string name="update_open">Ouvrir la version</string>
+    <string name="update_later">Plus tard</string>
+    <string name="update_skip">Ignorer cette version</string>
+    <string name="update_auto_check">Vérifier au démarrage</string>
+    <string name="update_auto_check_note">Cherche une version plus récente au démarrage. Rien n\'est téléchargé automatiquement.</string>
     <string name="storage_title">Stockage</string>
     <string name="storage_search_history">Historique de recherche</string>
     <string name="storage_tracker_icons">Icônes de trackers</string>
@@ -159,6 +168,12 @@
     <string name="widget_stale">Dernière mise à jour %1$s</string>
     <string name="settings_widgets">Widgets</string>
     <string name="widget_add">Ajouter</string>
+    <string name="widget_pin_requested">Confirmez sur l\'écran d\'accueil pour le placer.</string>
+    <string name="widget_pin_added">Ajouté à l\'écran d\'accueil</string>
+    <string name="widget_pin_no_response_title">Rien ne s\'est passé ?</string>
+    <string name="widget_pin_no_response">Si le lanceur ne vous a jamais demandé de confirmer, il manque probablement l\'autorisation de créer des raccourcis sur l\'écran d\'accueil. Sur Xiaomi : Paramètres → Applications → qui → Autorisations → Créer un raccourci sur l\'écran d\'accueil.\n\nVous pouvez toujours appuyer longuement sur l\'écran d\'accueil et ajouter qui depuis sa liste de widgets.</string>
+    <string name="widget_pin_open_settings">Paramètres de l\'app</string>
+    <string name="widget_pin_dismiss">Compris</string>
     <string name="widget_pin_unsupported">Ce lanceur ne peut pas ajouter de widget depuis l\'application. Appuyez longuement sur l\'écran d\'accueil et choisissez qui dans sa liste de widgets.</string>
     <string name="widget_scope">Client</string>
     <string name="widget_scope_all">Tous les clients actifs</string>

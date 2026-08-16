@@ -58,10 +58,13 @@ class QuiTorrentsWidgetProvider : AppWidgetProvider() {
 
                 appWidgetIds.forEach { id ->
                     manager.updateAppWidget(id, torrentsViews(context, id, snapshot, javaClass))
+                    // The header is already drawn from the new snapshot; this tells the
+                    // factory its rows are stale too. Deprecated alongside the
+                    // service-backed adapter it belongs to, whose replacement needs
+                    // API 31 — see WidgetViews.torrentsViews.
+                    @Suppress("DEPRECATION")
+                    manager.notifyAppWidgetViewDataChanged(id, R.id.widget_list)
                 }
-                // The header is already drawn from the new snapshot; this tells the
-                // factory its rows are stale too.
-                manager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list)
             } finally {
                 pending.finish()
             }

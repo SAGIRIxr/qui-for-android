@@ -57,6 +57,7 @@
     <string name="torrents_incognito">Modo Anônimo</string>
     <string name="torrents_view_mode">Modo de Visualização</string>
     <string name="torrents_loaded_of">%1$d de %2$d</string>
+    <string name="torrents_partial_results">Um cliente não respondeu — esta lista está incompleta</string>
     <string name="selection_clear">Limpar seleção</string>
     <string name="selection_select_all">Selecionar Todos</string>
     <string name="action_resume">Retomar</string>
@@ -138,6 +139,14 @@
     <string name="update_qui_server">Há uma versão mais recente do servidor qui</string>
     <string name="update_up_to_date">Atualizado</string>
     <string name="update_check">Verificar atualizações</string>
+    <string name="update_from_to">%1$s → %2$s</string>
+    <string name="update_notes">Novidades</string>
+    <string name="update_no_notes">Sem notas para esta versão.</string>
+    <string name="update_open">Abrir a versão</string>
+    <string name="update_later">Depois</string>
+    <string name="update_skip">Pular esta versão</string>
+    <string name="update_auto_check">Verificar ao abrir</string>
+    <string name="update_auto_check_note">Procura uma versão mais recente ao abrir. Nada é baixado automaticamente.</string>
     <string name="storage_title">Armazenamento</string>
     <string name="storage_search_history">Histórico de Buscas</string>
     <string name="storage_tracker_icons">Ícones de trackers</string>
@@ -159,6 +168,12 @@
     <string name="widget_stale">Atualizado às %1$s</string>
     <string name="settings_widgets">Widgets</string>
     <string name="widget_add">Adicionar</string>
+    <string name="widget_pin_requested">Confirme na tela inicial para posicioná-lo.</string>
+    <string name="widget_pin_added">Adicionado à tela inicial</string>
+    <string name="widget_pin_no_response_title">Nada apareceu?</string>
+    <string name="widget_pin_no_response">Se o launcher nunca pediu confirmação, provavelmente falta a permissão para criar atalhos na tela inicial. Na Xiaomi: Configurações → Apps → qui → Permissões → Criar atalho na tela inicial.\n\nVocê sempre pode manter a tela inicial pressionada e adicionar o qui pela lista de widgets.</string>
+    <string name="widget_pin_open_settings">Configurações do app</string>
+    <string name="widget_pin_dismiss">Entendi</string>
     <string name="widget_pin_unsupported">Este launcher não consegue adicionar widgets pelo app. Mantenha a tela inicial pressionada e escolha o qui na lista de widgets.</string>
     <string name="widget_scope">Cliente</string>
     <string name="widget_scope_all">Todos os clientes ativos</string>

@@ -57,6 +57,7 @@
     <string name="torrents_incognito">Anonymní</string>
     <string name="torrents_view_mode">Zobrazení režimu</string>
     <string name="torrents_loaded_of">%1$d z %2$d</string>
+    <string name="torrents_partial_results">Jeden klient neodpověděl — seznam je neúplný</string>
     <string name="selection_clear">Vymazat výběr</string>
     <string name="selection_select_all">Vybrat vše</string>
     <string name="action_resume">Obnovit</string>
@@ -138,6 +139,14 @@
     <string name="update_qui_server">Je dostupný novější server qui</string>
     <string name="update_up_to_date">Aktuální</string>
     <string name="update_check">Zkontrolovat aktualizace</string>
+    <string name="update_from_to">%1$s → %2$s</string>
+    <string name="update_notes">Novinky</string>
+    <string name="update_no_notes">K této verzi nejsou žádné poznámky.</string>
+    <string name="update_open">Otevřít vydání</string>
+    <string name="update_later">Později</string>
+    <string name="update_skip">Tuto verzi přeskočit</string>
+    <string name="update_auto_check">Kontrolovat při spuštění</string>
+    <string name="update_auto_check_note">Při spuštění aplikace hledá novější vydání. Nic se nestahuje automaticky.</string>
     <string name="storage_title">Úložiště</string>
     <string name="storage_search_history">Historie vyhledávání</string>
     <string name="storage_tracker_icons">Ikony trackerů</string>
@@ -159,6 +168,12 @@
     <string name="widget_stale">Naposledy aktualizováno %1$s</string>
     <string name="settings_widgets">Widgety</string>
     <string name="widget_add">Přidat</string>
+    <string name="widget_pin_requested">Potvrďte umístění na ploše.</string>
+    <string name="widget_pin_added">Přidáno na plochu</string>
+    <string name="widget_pin_no_response_title">Nic se neobjevilo?</string>
+    <string name="widget_pin_no_response">Pokud vás plocha nepožádala o potvrzení, aplikaci nejspíš chybí oprávnění vytvářet zástupce na ploše. Na Xiaomi je to Nastavení → Aplikace → qui → Oprávnění → Vytvářet zástupce na ploše.\n\nVždy můžete podržet plochu a přidat qui z jejího seznamu widgetů.</string>
+    <string name="widget_pin_open_settings">Nastavení aplikace</string>
+    <string name="widget_pin_dismiss">Rozumím</string>
     <string name="widget_pin_unsupported">Tento launcher neumí přidat widget z aplikace. Podržte plochu a vyberte qui z jeho seznamu widgetů.</string>
     <string name="widget_scope">Klient</string>
     <string name="widget_scope_all">Všichni aktivní klienti</string>

@@ -23,7 +23,10 @@ jobs:
       # into a job-level env var that steps can test.
       HAS_KEYSTORE: ${{ secrets.QUI_KEYSTORE_BASE64 != '' }}
     steps:
+      # Full history so the release-notes fallback can diff against the previous tag.
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-java@v5
         with:
@@ -64,12 +67,35 @@ jobs:
           cp app/build/outputs/apk/release/app-release.apk "dist/qui-android-${VERSION}.apk"
           ls -l dist
 
+      # GitHub's own generator lists merged pull requests, and this repository has
+      # none, so it produces an empty body. The CHANGELOG section for the tag is the
+      # release notes instead — the same text the app shows in its update dialog.
+      - name: Extract release notes
+        run: |
+          version="${VERSION#v}"
+          awk -v v="$version" '
+            $0 ~ "^## " v "$" { found = 1; next }
+            found && /^## / { exit }
+            found { print }
+          ' CHANGELOG.md > dist/notes.md
+
+          if [ ! -s dist/notes.md ]; then
+            echo "::warning::No CHANGELOG section for $version; falling back to commits"
+            previous=$(git describe --tags --abbrev=0 "${VERSION}^" 2>/dev/null || true)
+            if [ -n "$previous" ]; then
+              git log --pretty='- %s' "$previous..$VERSION" > dist/notes.md
+            else
+              git log --pretty='- %s' -20 "$VERSION" > dist/notes.md
+            fi
+          fi
+          cat dist/notes.md
+
       - name: Publish release
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.VERSION }}
           files: dist/*.apk
-          generate_release_notes: true
+          body_path: dist/notes.md
           fail_on_unmatched_files: true
 
       - name: Remove the keystore

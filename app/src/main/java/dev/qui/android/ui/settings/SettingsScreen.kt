@@ -53,6 +53,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -77,15 +78,25 @@ import dev.qui.android.data.WidgetListMode
 import dev.qui.android.ui.AppLocale
 import dev.qui.android.ui.LANGUAGE_NAMES
 import dev.qui.android.ui.RootViewModel
+import dev.qui.android.ui.UpdateDialog
 import dev.qui.android.ui.SUPPORTED_LANGUAGES
 import dev.qui.android.ui.components.QuiCard
 import dev.qui.android.ui.theme.QuiTheme
 import dev.qui.android.ui.theme.QuiThemes
 import dev.qui.android.widget.PINNABLE_WIDGETS
+import dev.qui.android.widget.WidgetPinTracker
+import dev.qui.android.widget.openAppSettings
 import dev.qui.android.widget.requestPinWidget
 import dev.qui.android.widget.widgetPinningSupported
+import kotlinx.coroutines.delay
 
 private const val SOURCE_URL = "https://github.com/SAGIRIxr/qui-for-android"
+
+/**
+ * How long to wait for the launcher's placement callback before assuming the request
+ * was dropped. Long enough for someone to read the launcher's confirmation dialog.
+ */
+private const val PIN_CONFIRM_GRACE_MS = 12_000L
 
 @Composable
 fun SettingsScreen(
@@ -104,6 +115,20 @@ fun SettingsScreen(
     val searchHistoryCount by viewModel.searchHistoryCount.collectAsStateWithLifecycle()
     val trackerIconCount by viewModel.trackerIconCount.collectAsStateWithLifecycle()
     val instances by viewModel.instances.collectAsStateWithLifecycle()
+    // A pin request the launcher never acknowledged is the signal that the shortcut
+    // permission is missing; there is no API that reports it directly.
+    var pinAwaited by remember { mutableStateOf(false) }
+    var showPinHelp by remember { mutableStateOf(false) }
+    var showUpdateDetails by remember { mutableStateOf(false) }
+    val pinnedCount by WidgetPinTracker.pinned.collectAsStateWithLifecycle()
+
+    LaunchedEffect(pinAwaited, pinnedCount) {
+        if (!pinAwaited) return@LaunchedEffect
+        val before = pinnedCount
+        delay(PIN_CONFIRM_GRACE_MS)
+        pinAwaited = false
+        if (WidgetPinTracker.pinned.value == before) showPinHelp = true
+    }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -352,7 +377,13 @@ fun SettingsScreen(
                         name = stringResource(widget.name),
                         description = stringResource(widget.description),
                         canAdd = pinnable,
-                        onAdd = { requestPinWidget(context, widget.provider) },
+                        onAdd = {
+                            if (requestPinWidget(context, widget.provider)) {
+                                pinAwaited = true
+                            } else {
+                                showPinHelp = true
+                            }
+                        },
                     )
                 }
 
@@ -448,13 +479,11 @@ fun SettingsScreen(
                 Spacer(Modifier.height(8.dp))
                 if (update.appUpdateAvailable && update.appReleaseUrl != null) {
                     Row(
+                        // Opens the same dialog the launch check shows, so the release
+                        // notes are one tap away rather than a trip to the browser.
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
-                                context.startActivity(
-                                    Intent(Intent.ACTION_VIEW, Uri.parse(update.appReleaseUrl))
-                                )
-                            }
+                            .clickable { showUpdateDetails = true }
                             .padding(vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -510,6 +539,13 @@ fun SettingsScreen(
                         }
                     }
                 }
+
+                ToggleRow(
+                    title = stringResource(R.string.update_auto_check),
+                    subtitle = stringResource(R.string.update_auto_check_note),
+                    checked = prefs.autoUpdateCheck,
+                    onChange = root::setAutoUpdateCheck,
+                )
 
                 // qui reports its own updates; the server operator applies them, so this
                 // is a notice rather than something the app can act on.
@@ -584,6 +620,21 @@ fun SettingsScreen(
         )
     }
 
+    if (showUpdateDetails) {
+        UpdateDialog(
+            status = update,
+            onDismiss = { showUpdateDetails = false },
+            onSkip = {
+                showUpdateDetails = false
+                root.skipUpdate()
+            },
+        )
+    }
+
+    if (showPinHelp) {
+        WidgetPinHelpDialog(onDismiss = { showPinHelp = false })
+    }
+
     if (showLogout) {
         AlertDialog(
             onDismissRequest = { showLogout = false },
@@ -615,6 +666,34 @@ fun SettingsScreen(
  * The same list qui's footer nav offers, plus a "system default" row that hands
  * language selection back to Android's own matching.
  */
+@Composable
+private fun WidgetPinHelpDialog(onDismiss: () -> Unit) {
+    val palette = QuiTheme.palette
+    val context = LocalContext.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = palette.popover,
+        title = { Text(stringResource(R.string.widget_pin_no_response_title)) },
+        text = {
+            Text(
+                text = stringResource(R.string.widget_pin_no_response),
+                style = MaterialTheme.typography.bodySmall,
+                color = palette.mutedForeground,
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = { openAppSettings(context); onDismiss() }) {
+                Text(stringResource(R.string.widget_pin_open_settings))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.widget_pin_dismiss))
+            }
+        },
+    )
+}
+
 @Composable
 private fun LanguageDialog(
     current: String?,

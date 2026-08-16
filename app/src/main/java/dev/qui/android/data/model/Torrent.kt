@@ -294,6 +294,8 @@ data class TorrentResponse(
     val hasMore: Boolean? = null,
     val trackerHealthSupported: Boolean? = null,
     val isCrossInstance: Boolean? = null,
+    /** Set when a merged response is missing a client that failed to answer. */
+    val partialResults: Boolean = false,
     val instanceMeta: InstanceMeta? = null,
 ) {
     /** qui returns cross-instance rows under a separate key; callers want one list. */

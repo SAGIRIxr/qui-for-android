@@ -62,6 +62,8 @@ class AppPreferencesStore @Inject constructor(
         val unifiedScope = booleanPreferencesKey("unified_scope")
         val widgetInstanceId = intPreferencesKey("widget_instance_id")
         val widgetListMode = stringPreferencesKey("widget_list_mode")
+        val autoUpdateCheck = booleanPreferencesKey("auto_update_check")
+        val skippedUpdate = stringPreferencesKey("skipped_update")
     }
 
     data class Snapshot(
@@ -88,6 +90,9 @@ class AppPreferencesStore @Inject constructor(
         // Which client the home-screen widgets report on; null sums every active one.
         val widgetInstanceId: Int? = null,
         val widgetListMode: WidgetListMode = WidgetListMode.Active,
+        val autoUpdateCheck: Boolean = true,
+        /** A release the user asked not to be reminded about again. */
+        val skippedUpdate: String? = null,
     )
 
     val snapshot: Flow<Snapshot> = context.prefsDataStore.data.map { prefs ->
@@ -118,7 +123,17 @@ class AppPreferencesStore @Inject constructor(
             widgetListMode = prefs[Keys.widgetListMode]
                 ?.let { runCatching { WidgetListMode.valueOf(it) }.getOrNull() }
                 ?: WidgetListMode.Active,
+            autoUpdateCheck = prefs[Keys.autoUpdateCheck] ?: true,
+            skippedUpdate = prefs[Keys.skippedUpdate],
         )
+    }
+
+    suspend fun setAutoUpdateCheck(enabled: Boolean) = context.prefsDataStore.edit {
+        it[Keys.autoUpdateCheck] = enabled
+    }
+
+    suspend fun setSkippedUpdate(tag: String?) = context.prefsDataStore.edit {
+        if (tag == null) it.remove(Keys.skippedUpdate) else it[Keys.skippedUpdate] = tag
     }
 
     suspend fun setWidgetInstance(id: Int?) = context.prefsDataStore.edit {

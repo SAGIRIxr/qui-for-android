@@ -80,6 +80,11 @@ data class TorrentsUiState(
      * carries no serverState — there is no single disk to report for a merged list.
      */
     val unifiedFreeSpace: List<InstanceFreeSpace> = emptyList(),
+    /**
+     * A client dropped out of the merged response. Without saying so the list just
+     * quietly holds fewer torrents than it should.
+     */
+    val partialResults: Boolean = false,
 ) {
     val selectedInstance: Instance?
         get() = instances.firstOrNull { it.id == selectedInstanceId }
@@ -362,6 +367,7 @@ class TorrentsViewModel @Inject constructor(
                         tags = data.tags ?: current.tags,
                         supportsTrackerHealth = data.trackerHealthSupported
                             ?: current.supportsTrackerHealth,
+                        partialResults = data.partialResults,
                         hasMore = data.hasMore ?: (data.rows.size < data.total),
                         isLoading = false,
                         isRefreshing = false,
@@ -454,6 +460,7 @@ class TorrentsViewModel @Inject constructor(
                         tags = response.tags ?: it.tags,
                         supportsTrackerHealth = response.trackerHealthSupported
                             ?: it.supportsTrackerHealth,
+                        partialResults = response.partialResults,
                         hasMore = response.hasMore ?: (response.rows.size < response.total),
                         isLoading = false,
                         isRefreshing = false,

@@ -57,6 +57,7 @@
     <string name="torrents_incognito">시크릿</string>
     <string name="torrents_view_mode">보기 모드</string>
     <string name="torrents_loaded_of">%2$d개 중 %1$d개</string>
+    <string name="torrents_partial_results">응답하지 않은 클라이언트가 있어 목록이 불완전합니다</string>
     <string name="selection_clear">선택 해제</string>
     <string name="selection_select_all">모두 선택</string>
     <string name="action_resume">재개</string>
@@ -138,6 +139,14 @@
     <string name="update_qui_server">최신 qui 서버가 있습니다</string>
     <string name="update_up_to_date">최신 상태</string>
     <string name="update_check">업데이트 확인</string>
+    <string name="update_from_to">%1$s → %2$s</string>
+    <string name="update_notes">변경 사항</string>
+    <string name="update_no_notes">이 버전에 대한 릴리스 노트가 없습니다.</string>
+    <string name="update_open">릴리스 열기</string>
+    <string name="update_later">나중에</string>
+    <string name="update_skip">이 버전 건너뛰기</string>
+    <string name="update_auto_check">시작할 때 확인</string>
+    <string name="update_auto_check_note">앱을 시작할 때 새 릴리스를 확인합니다. 자동으로 내려받지는 않습니다.</string>
     <string name="storage_title">저장소</string>
     <string name="storage_search_history">검색 기록</string>
     <string name="storage_tracker_icons">트래커 아이콘</string>
@@ -159,6 +168,12 @@
     <string name="widget_stale">마지막 업데이트 %1$s</string>
     <string name="settings_widgets">위젯</string>
     <string name="widget_add">추가</string>
+    <string name="widget_pin_requested">홈 화면에서 확인하면 배치됩니다.</string>
+    <string name="widget_pin_added">홈 화면에 추가됨</string>
+    <string name="widget_pin_no_response_title">아무 일도 없었나요?</string>
+    <string name="widget_pin_no_response">런처가 확인을 요청하지 않았다면 홈 화면 바로가기 생성 권한이 없는 것입니다. 샤오미에서는 설정 → 앱 → qui → 권한 → 홈 화면 바로가기 만들기입니다.\n\n홈 화면을 길게 눌러 위젯 목록에서 qui를 추가해도 됩니다.</string>
+    <string name="widget_pin_open_settings">앱 설정</string>
+    <string name="widget_pin_dismiss">확인</string>
     <string name="widget_pin_unsupported">이 런처는 앱에서 위젯을 추가할 수 없습니다. 홈 화면을 길게 눌러 위젯 목록에서 qui를 선택하세요.</string>
     <string name="widget_scope">클라이언트</string>
     <string name="widget_scope_all">활성 클라이언트 전체</string>

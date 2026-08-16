@@ -337,6 +337,171 @@
     "zh-CN": "最后更新于 %1$s"
   },
 
+  "torrents_partial_results": {
+    "cs": "Jeden klient neodpověděl — seznam je neúplný",
+    "de": "Ein Client hat nicht geantwortet — diese Liste ist unvollständig",
+    "fr": "Un client n'a pas répondu — cette liste est incomplète",
+    "it": "Un client non ha risposto — questo elenco è incompleto",
+    "ko": "응답하지 않은 클라이언트가 있어 목록이 불완전합니다",
+    "pt-BR": "Um cliente não respondeu — esta lista está incompleta",
+    "uk": "Клієнт не відповів — цей список неповний",
+    "zh-CN": "有客户端未响应，列表不完整"
+  },
+
+  "update_from_to": {
+    "cs": "%1$s → %2$s",
+    "de": "%1$s → %2$s",
+    "fr": "%1$s → %2$s",
+    "it": "%1$s → %2$s",
+    "ko": "%1$s → %2$s",
+    "pt-BR": "%1$s → %2$s",
+    "uk": "%1$s → %2$s",
+    "zh-CN": "%1$s → %2$s"
+  },
+
+  "update_notes": {
+    "cs": "Novinky",
+    "de": "Neuerungen",
+    "fr": "Nouveautés",
+    "it": "Novità",
+    "ko": "변경 사항",
+    "pt-BR": "Novidades",
+    "uk": "Що нового",
+    "zh-CN": "更新内容"
+  },
+
+  "update_no_notes": {
+    "cs": "K této verzi nejsou žádné poznámky.",
+    "de": "Für diese Version gibt es keine Anmerkungen.",
+    "fr": "Aucune note pour cette version.",
+    "it": "Nessuna nota per questa versione.",
+    "ko": "이 버전에 대한 릴리스 노트가 없습니다.",
+    "pt-BR": "Sem notas para esta versão.",
+    "uk": "Для цієї версії немає приміток.",
+    "zh-CN": "该版本没有更新说明。"
+  },
+
+  "update_open": {
+    "cs": "Otevřít vydání",
+    "de": "Release öffnen",
+    "fr": "Ouvrir la version",
+    "it": "Apri la release",
+    "ko": "릴리스 열기",
+    "pt-BR": "Abrir a versão",
+    "uk": "Відкрити випуск",
+    "zh-CN": "前往下载"
+  },
+
+  "update_later": {
+    "cs": "Později",
+    "de": "Später",
+    "fr": "Plus tard",
+    "it": "Più tardi",
+    "ko": "나중에",
+    "pt-BR": "Depois",
+    "uk": "Пізніше",
+    "zh-CN": "稍后"
+  },
+
+  "update_skip": {
+    "cs": "Tuto verzi přeskočit",
+    "de": "Diese Version überspringen",
+    "fr": "Ignorer cette version",
+    "it": "Salta questa versione",
+    "ko": "이 버전 건너뛰기",
+    "pt-BR": "Pular esta versão",
+    "uk": "Пропустити цю версію",
+    "zh-CN": "跳过此版本"
+  },
+
+  "update_auto_check": {
+    "cs": "Kontrolovat při spuštění",
+    "de": "Beim Start prüfen",
+    "fr": "Vérifier au démarrage",
+    "it": "Controlla all'avvio",
+    "ko": "시작할 때 확인",
+    "pt-BR": "Verificar ao abrir",
+    "uk": "Перевіряти під час запуску",
+    "zh-CN": "启动时检查更新"
+  },
+
+  "update_auto_check_note": {
+    "cs": "Při spuštění aplikace hledá novější vydání. Nic se nestahuje automaticky.",
+    "de": "Sucht beim Start nach einem neueren Release. Es wird nichts automatisch heruntergeladen.",
+    "fr": "Cherche une version plus récente au démarrage. Rien n'est téléchargé automatiquement.",
+    "it": "Cerca una release più recente all'avvio. Non viene scaricato nulla automaticamente.",
+    "ko": "앱을 시작할 때 새 릴리스를 확인합니다. 자동으로 내려받지는 않습니다.",
+    "pt-BR": "Procura uma versão mais recente ao abrir. Nada é baixado automaticamente.",
+    "uk": "Шукає новіший випуск під час запуску. Нічого не завантажується автоматично.",
+    "zh-CN": "启动应用时查找是否有新版本。不会自动下载任何内容。"
+  },
+
+  "widget_pin_requested": {
+    "cs": "Potvrďte umístění na ploše.",
+    "de": "Zum Platzieren auf dem Startbildschirm bestätigen.",
+    "fr": "Confirmez sur l'écran d'accueil pour le placer.",
+    "it": "Conferma sulla schermata Home per posizionarlo.",
+    "ko": "홈 화면에서 확인하면 배치됩니다.",
+    "pt-BR": "Confirme na tela inicial para posicioná-lo.",
+    "uk": "Підтвердьте на головному екрані, щоб розмістити.",
+    "zh-CN": "请在桌面上确认以完成添加。"
+  },
+
+  "widget_pin_added": {
+    "cs": "Přidáno na plochu",
+    "de": "Zum Startbildschirm hinzugefügt",
+    "fr": "Ajouté à l'écran d'accueil",
+    "it": "Aggiunto alla schermata Home",
+    "ko": "홈 화면에 추가됨",
+    "pt-BR": "Adicionado à tela inicial",
+    "uk": "Додано на головний екран",
+    "zh-CN": "已添加到桌面"
+  },
+
+  "widget_pin_no_response_title": {
+    "cs": "Nic se neobjevilo?",
+    "de": "Nichts passiert?",
+    "fr": "Rien ne s'est passé ?",
+    "it": "Non è successo niente?",
+    "ko": "아무 일도 없었나요?",
+    "pt-BR": "Nada apareceu?",
+    "uk": "Нічого не з’явилося?",
+    "zh-CN": "没有任何反应？"
+  },
+
+  "widget_pin_no_response": {
+    "cs": "Pokud vás plocha nepožádala o potvrzení, aplikaci nejspíš chybí oprávnění vytvářet zástupce na ploše. Na Xiaomi je to Nastavení → Aplikace → qui → Oprávnění → Vytvářet zástupce na ploše.\\n\\nVždy můžete podržet plochu a přidat qui z jejího seznamu widgetů.",
+    "de": "Wenn der Launcher nie um Bestätigung gebeten hat, fehlt vermutlich die Berechtigung, Verknüpfungen auf dem Startbildschirm zu erstellen. Auf Xiaomi: Einstellungen → Apps → qui → Berechtigungen → Verknüpfung auf dem Startbildschirm erstellen.\\n\\nDu kannst den Startbildschirm auch gedrückt halten und qui aus der Widget-Liste hinzufügen.",
+    "fr": "Si le lanceur ne vous a jamais demandé de confirmer, il manque probablement l'autorisation de créer des raccourcis sur l'écran d'accueil. Sur Xiaomi : Paramètres → Applications → qui → Autorisations → Créer un raccourci sur l'écran d'accueil.\\n\\nVous pouvez toujours appuyer longuement sur l'écran d'accueil et ajouter qui depuis sa liste de widgets.",
+    "it": "Se il launcher non ha mai chiesto conferma, probabilmente manca l'autorizzazione a creare collegamenti nella schermata Home. Su Xiaomi: Impostazioni → App → qui → Autorizzazioni → Crea collegamento nella schermata Home.\\n\\nPuoi sempre tenere premuta la schermata Home e aggiungere qui dal suo elenco di widget.",
+    "ko": "런처가 확인을 요청하지 않았다면 홈 화면 바로가기 생성 권한이 없는 것입니다. 샤오미에서는 설정 → 앱 → qui → 권한 → 홈 화면 바로가기 만들기입니다.\\n\\n홈 화면을 길게 눌러 위젯 목록에서 qui를 추가해도 됩니다.",
+    "pt-BR": "Se o launcher nunca pediu confirmação, provavelmente falta a permissão para criar atalhos na tela inicial. Na Xiaomi: Configurações → Apps → qui → Permissões → Criar atalho na tela inicial.\\n\\nVocê sempre pode manter a tela inicial pressionada e adicionar o qui pela lista de widgets.",
+    "uk": "Якщо лаунчер не попросив підтвердження, застосунку, найімовірніше, бракує дозволу створювати ярлики на головному екрані. На Xiaomi це Налаштування → Застосунки → qui → Дозволи → Створення ярлика на головному екрані.\\n\\nВи завжди можете утримати головний екран і додати qui з його списку віджетів.",
+    "zh-CN": "如果桌面没有弹出确认框，通常是缺少「创建桌面快捷方式」权限。小米上的路径是：设置 → 应用设置 → qui → 权限管理 → 桌面快捷方式。\\n\\n你也可以长按桌面，从小部件列表里添加 qui。"
+  },
+
+  "widget_pin_open_settings": {
+    "cs": "Nastavení aplikace",
+    "de": "App-Einstellungen",
+    "fr": "Paramètres de l'app",
+    "it": "Impostazioni app",
+    "ko": "앱 설정",
+    "pt-BR": "Configurações do app",
+    "uk": "Налаштування застосунку",
+    "zh-CN": "应用设置"
+  },
+
+  "widget_pin_dismiss": {
+    "cs": "Rozumím",
+    "de": "Verstanden",
+    "fr": "Compris",
+    "it": "Ho capito",
+    "ko": "확인",
+    "pt-BR": "Entendi",
+    "uk": "Зрозуміло",
+    "zh-CN": "知道了"
+  },
+
   "widget_speed_name": {
     "cs": "Rychlost qui",
     "de": "qui-Tempo",

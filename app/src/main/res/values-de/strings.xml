@@ -57,6 +57,7 @@
     <string name="torrents_incognito">Incognito</string>
     <string name="torrents_view_mode">Ansichtsmodus</string>
     <string name="torrents_loaded_of">%1$d von %2$d</string>
+    <string name="torrents_partial_results">Ein Client hat nicht geantwortet — diese Liste ist unvollständig</string>
     <string name="selection_clear">Auswahl aufheben</string>
     <string name="selection_select_all">Alle auswählen</string>
     <string name="action_resume">Fortsetzen</string>
@@ -138,6 +139,14 @@
     <string name="update_qui_server">Ein neuerer qui-Server ist verfügbar</string>
     <string name="update_up_to_date">Aktuell</string>
     <string name="update_check">Nach Updates suchen</string>
+    <string name="update_from_to">%1$s → %2$s</string>
+    <string name="update_notes">Neuerungen</string>
+    <string name="update_no_notes">Für diese Version gibt es keine Anmerkungen.</string>
+    <string name="update_open">Release öffnen</string>
+    <string name="update_later">Später</string>
+    <string name="update_skip">Diese Version überspringen</string>
+    <string name="update_auto_check">Beim Start prüfen</string>
+    <string name="update_auto_check_note">Sucht beim Start nach einem neueren Release. Es wird nichts automatisch heruntergeladen.</string>
     <string name="storage_title">Speicher</string>
     <string name="storage_search_history">Suchverlauf</string>
     <string name="storage_tracker_icons">Tracker-Symbole</string>
@@ -159,6 +168,12 @@
     <string name="widget_stale">Zuletzt aktualisiert %1$s</string>
     <string name="settings_widgets">Widgets</string>
     <string name="widget_add">Hinzufügen</string>
+    <string name="widget_pin_requested">Zum Platzieren auf dem Startbildschirm bestätigen.</string>
+    <string name="widget_pin_added">Zum Startbildschirm hinzugefügt</string>
+    <string name="widget_pin_no_response_title">Nichts passiert?</string>
+    <string name="widget_pin_no_response">Wenn der Launcher nie um Bestätigung gebeten hat, fehlt vermutlich die Berechtigung, Verknüpfungen auf dem Startbildschirm zu erstellen. Auf Xiaomi: Einstellungen → Apps → qui → Berechtigungen → Verknüpfung auf dem Startbildschirm erstellen.\n\nDu kannst den Startbildschirm auch gedrückt halten und qui aus der Widget-Liste hinzufügen.</string>
+    <string name="widget_pin_open_settings">App-Einstellungen</string>
+    <string name="widget_pin_dismiss">Verstanden</string>
     <string name="widget_pin_unsupported">Dieser Launcher kann Widgets nicht aus der App heraus hinzufügen. Startbildschirm gedrückt halten und qui in der Widget-Liste auswählen.</string>
     <string name="widget_scope">Client</string>
     <string name="widget_scope_all">Alle aktiven Clients</string>

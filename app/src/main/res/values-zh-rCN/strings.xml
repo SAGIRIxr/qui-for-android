@@ -57,6 +57,7 @@
     <string name="torrents_incognito">隐身模式</string>
     <string name="torrents_view_mode">视图模式</string>
     <string name="torrents_loaded_of">%1$d / %2$d</string>
+    <string name="torrents_partial_results">有客户端未响应，列表不完整</string>
     <string name="selection_clear">清除选择</string>
     <string name="selection_select_all">全选</string>
     <string name="action_resume">继续</string>
@@ -138,6 +139,14 @@
     <string name="update_qui_server">qui 服务端有新版本</string>
     <string name="update_up_to_date">已是最新</string>
     <string name="update_check">检查更新</string>
+    <string name="update_from_to">%1$s → %2$s</string>
+    <string name="update_notes">更新内容</string>
+    <string name="update_no_notes">该版本没有更新说明。</string>
+    <string name="update_open">前往下载</string>
+    <string name="update_later">稍后</string>
+    <string name="update_skip">跳过此版本</string>
+    <string name="update_auto_check">启动时检查更新</string>
+    <string name="update_auto_check_note">启动应用时查找是否有新版本。不会自动下载任何内容。</string>
     <string name="storage_title">存储</string>
     <string name="storage_search_history">搜索历史</string>
     <string name="storage_tracker_icons">Tracker 图标</string>
@@ -159,6 +168,12 @@
     <string name="widget_stale">最后更新于 %1$s</string>
     <string name="settings_widgets">小部件</string>
     <string name="widget_add">添加</string>
+    <string name="widget_pin_requested">请在桌面上确认以完成添加。</string>
+    <string name="widget_pin_added">已添加到桌面</string>
+    <string name="widget_pin_no_response_title">没有任何反应？</string>
+    <string name="widget_pin_no_response">如果桌面没有弹出确认框，通常是缺少「创建桌面快捷方式」权限。小米上的路径是：设置 → 应用设置 → qui → 权限管理 → 桌面快捷方式。\n\n你也可以长按桌面，从小部件列表里添加 qui。</string>
+    <string name="widget_pin_open_settings">应用设置</string>
+    <string name="widget_pin_dismiss">知道了</string>
     <string name="widget_pin_unsupported">当前桌面不支持从应用内添加小部件。请长按桌面，在小部件列表中选择 qui。</string>
     <string name="widget_scope">客户端</string>
     <string name="widget_scope_all">全部活动客户端</string>

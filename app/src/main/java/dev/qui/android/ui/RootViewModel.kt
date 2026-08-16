@@ -15,10 +15,15 @@ import dev.qui.android.data.SpeedUnit
 import dev.qui.android.data.ThemeMode
 import dev.qui.android.data.TrackerIconStore
 import dev.qui.android.data.TrackerSortColumn
+import dev.qui.android.data.UpdateChecker
+import dev.qui.android.data.UpdateStatus
 import dev.qui.android.data.ViewMode
 import dev.qui.android.data.remote.SessionStore
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,7 +34,48 @@ class RootViewModel @Inject constructor(
     private val session: SessionStore,
     private val repository: QuiRepository,
     private val trackerIconStore: TrackerIconStore,
+    private val updateChecker: UpdateChecker,
 ) : ViewModel() {
+
+    /**
+     * Set once per app start when a newer release exists and the user has not asked to
+     * be left alone about that particular version. Null the rest of the time, which is
+     * what keeps the dialog from being a nag.
+     */
+    private val _updatePrompt = MutableStateFlow<UpdateStatus?>(null)
+    val updatePrompt: StateFlow<UpdateStatus?> = _updatePrompt.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            if (!prefsStore.snapshot.first().autoUpdateCheck) return@launch
+            // Nothing to update towards until there is a server to use the app with,
+            // and a dialog over the login screen would be in the way.
+            if (session.isConfigured.first { it } != true) return@launch
+
+            val status = updateChecker.check()
+            if (!status.appUpdateAvailable) return@launch
+            if (status.appLatest == prefsStore.snapshot.first().skippedUpdate) return@launch
+
+            _updatePrompt.value = status
+        }
+    }
+
+    fun dismissUpdatePrompt() {
+        _updatePrompt.value = null
+    }
+
+    /** "Do not tell me about this one again"; a later release still prompts. */
+    fun skipUpdate() {
+        val tag = _updatePrompt.value?.appLatest
+        _updatePrompt.value = null
+        viewModelScope.launch { prefsStore.setSkippedUpdate(tag) }
+    }
+
+    fun setAutoUpdateCheck(enabled: Boolean) = viewModelScope.launch {
+        prefsStore.setAutoUpdateCheck(enabled)
+        // Turning it back on should not stay silenced by an old decision.
+        if (enabled) prefsStore.setSkippedUpdate(null)
+    }
 
     val preferences: StateFlow<AppPreferencesStore.Snapshot> = prefsStore.snapshot
         .stateIn(viewModelScope, SharingStarted.Eagerly, AppPreferencesStore.Snapshot())

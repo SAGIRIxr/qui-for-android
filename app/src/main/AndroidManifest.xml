@@ -111,6 +111,12 @@
                 android:resource="@xml/widget_torrents_info" />
         </receiver>
 
+        <!-- The launcher fires this once a pinned widget is actually placed; its
+             silence is how Settings knows the request went nowhere. -->
+        <receiver
+            android:name=".widget.WidgetPinnedReceiver"
+            android:exported="false" />
+
         <!-- BIND_REMOTEVIEWS keeps the row adapter reachable by the launcher only. -->
         <service
             android:name=".widget.TorrentsWidgetService"

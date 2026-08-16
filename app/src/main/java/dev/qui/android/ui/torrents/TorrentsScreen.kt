@@ -65,6 +65,7 @@ import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material.icons.filled.ViewAgenda
 import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.WarningAmber
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -713,6 +714,33 @@ private fun TorrentsTopBar(
                         style = MaterialTheme.typography.labelMedium,
                         color = palette.mutedForeground,
                         maxLines = 1,
+                    )
+                }
+            }
+
+            // A merged response that lost a client is otherwise indistinguishable from
+            // one that simply has fewer torrents.
+            if (state.partialResults) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 2.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(palette.destructive.copy(alpha = 0.12f))
+                        .padding(horizontal = 8.dp, vertical = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        Icons.Default.WarningAmber,
+                        contentDescription = null,
+                        tint = palette.destructive,
+                        modifier = Modifier.size(14.dp),
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        text = stringResource(R.string.torrents_partial_results),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = palette.destructive,
                     )
                 }
             }

@@ -28,6 +28,8 @@ data class UpdateStatus(
     val appVersion: String = BuildConfig.VERSION_NAME,
     val appLatest: String? = null,
     val appReleaseUrl: String? = null,
+    /** The release body, as written on GitHub. Markdown, shown as plain text. */
+    val appReleaseNotes: String? = null,
     val serverLatest: String? = null,
     val serverReleaseUrl: String? = null,
     val checkedAt: Long? = null,
@@ -35,6 +37,8 @@ data class UpdateStatus(
     val appUpdateAvailable: Boolean
         get() = appLatest != null && isNewer(appLatest, appVersion)
 }
+
+private data class GithubRelease(val tag: String?, val url: String?, val notes: String?)
 
 @Singleton
 class UpdateChecker @Inject constructor(
@@ -55,8 +59,11 @@ class UpdateChecker @Inject constructor(
                 if (!response.isSuccessful) return@use null
                 val body = response.body?.string() ?: return@use null
                 val obj = json.parseToJsonElement(body).jsonObject
-                obj["tag_name"]?.jsonPrimitive?.content to
-                    obj["html_url"]?.jsonPrimitive?.content
+                GithubRelease(
+                    tag = obj["tag_name"]?.jsonPrimitive?.content,
+                    url = obj["html_url"]?.jsonPrimitive?.content,
+                    notes = obj["body"]?.jsonPrimitive?.content?.trim()?.takeIf { it.isNotEmpty() },
+                )
             }
         }.getOrNull()
 
@@ -64,8 +71,9 @@ class UpdateChecker @Inject constructor(
         val server = repository.latestVersion().getOrNull()
 
         UpdateStatus(
-            appLatest = app?.first,
-            appReleaseUrl = app?.second,
+            appLatest = app?.tag,
+            appReleaseUrl = app?.url,
+            appReleaseNotes = app?.notes,
             serverLatest = server?.tagName,
             serverReleaseUrl = server?.htmlUrl,
             checkedAt = System.currentTimeMillis(),

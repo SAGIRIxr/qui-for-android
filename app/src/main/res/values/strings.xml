@@ -72,6 +72,7 @@
         <item quantity="other">%1$d torrents</item>
     </plurals>
     <string name="torrents_loaded_of">%1$d of %2$d</string>
+    <string name="torrents_partial_results">A client did not respond — this list is incomplete</string>
 
     <!-- Selection bar -->
     <string name="selection_clear">Clear selection</string>
@@ -184,6 +185,14 @@
     <string name="update_qui_server">A newer qui server is available</string>
     <string name="update_up_to_date">Up to date</string>
     <string name="update_check">Check for updates</string>
+    <string name="update_from_to">%1$s → %2$s</string>
+    <string name="update_notes">What\'s new</string>
+    <string name="update_no_notes">No release notes for this version.</string>
+    <string name="update_open">Open release</string>
+    <string name="update_later">Later</string>
+    <string name="update_skip">Skip this version</string>
+    <string name="update_auto_check">Check on launch</string>
+    <string name="update_auto_check_note">Looks for a newer release when the app starts. Nothing is downloaded automatically.</string>
 
     <!-- Storage -->
     <string name="storage_title">Storage</string>
@@ -211,6 +220,12 @@
     <!-- Widget settings -->
     <string name="settings_widgets">Widgets</string>
     <string name="widget_add">Add</string>
+    <string name="widget_pin_requested">Confirm on your home screen to place it.</string>
+    <string name="widget_pin_added">Added to the home screen</string>
+    <string name="widget_pin_no_response_title">Nothing appeared?</string>
+    <string name="widget_pin_no_response">If your launcher never asked you to confirm, it is probably missing permission to create home-screen shortcuts. On Xiaomi that is Settings → Apps → qui → Permissions → Create home screen shortcut.\n\nYou can always long-press the home screen and add qui from its widget list instead.</string>
+    <string name="widget_pin_open_settings">App settings</string>
+    <string name="widget_pin_dismiss">Got it</string>
     <string name="widget_pin_unsupported">This launcher cannot add widgets from inside an app. Long-press the home screen and pick qui from its widget list.</string>
     <string name="widget_scope">Client</string>
     <string name="widget_scope_all">All active clients</string>

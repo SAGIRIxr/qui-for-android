@@ -57,6 +57,7 @@
     <string name="torrents_incognito">Інкогніто</string>
     <string name="torrents_view_mode">Режим перегляду</string>
     <string name="torrents_loaded_of">%1$d з %2$d</string>
+    <string name="torrents_partial_results">Клієнт не відповів — цей список неповний</string>
     <string name="selection_clear">Очистити вибір</string>
     <string name="selection_select_all">Виберіть усі</string>
     <string name="action_resume">Відновити</string>
@@ -138,6 +139,14 @@
     <string name="update_qui_server">Доступна новіша версія сервера qui</string>
     <string name="update_up_to_date">Актуально</string>
     <string name="update_check">Перевірити оновлення</string>
+    <string name="update_from_to">%1$s → %2$s</string>
+    <string name="update_notes">Що нового</string>
+    <string name="update_no_notes">Для цієї версії немає приміток.</string>
+    <string name="update_open">Відкрити випуск</string>
+    <string name="update_later">Пізніше</string>
+    <string name="update_skip">Пропустити цю версію</string>
+    <string name="update_auto_check">Перевіряти під час запуску</string>
+    <string name="update_auto_check_note">Шукає новіший випуск під час запуску. Нічого не завантажується автоматично.</string>
     <string name="storage_title">Зберігання</string>
     <string name="storage_search_history">Історія пошуку</string>
     <string name="storage_tracker_icons">Піктограми трекерів</string>
@@ -159,6 +168,12 @@
     <string name="widget_stale">Останнє оновлення %1$s</string>
     <string name="settings_widgets">Віджети</string>
     <string name="widget_add">Додати</string>
+    <string name="widget_pin_requested">Підтвердьте на головному екрані, щоб розмістити.</string>
+    <string name="widget_pin_added">Додано на головний екран</string>
+    <string name="widget_pin_no_response_title">Нічого не з’явилося?</string>
+    <string name="widget_pin_no_response">Якщо лаунчер не попросив підтвердження, застосунку, найімовірніше, бракує дозволу створювати ярлики на головному екрані. На Xiaomi це Налаштування → Застосунки → qui → Дозволи → Створення ярлика на головному екрані.\n\nВи завжди можете утримати головний екран і додати qui з його списку віджетів.</string>
+    <string name="widget_pin_open_settings">Налаштування застосунку</string>
+    <string name="widget_pin_dismiss">Зрозуміло</string>
     <string name="widget_pin_unsupported">Цей лаунчер не може додати віджет із застосунку. Утримуйте головний екран і виберіть qui у його списку віджетів.</string>
     <string name="widget_scope">Клієнт</string>
     <string name="widget_scope_all">Усі активні клієнти</string>

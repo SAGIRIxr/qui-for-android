@@ -57,6 +57,7 @@
     <string name="torrents_incognito">Incognito</string>
     <string name="torrents_view_mode">Modalità di visualizzazione</string>
     <string name="torrents_loaded_of">%1$d di %2$d</string>
+    <string name="torrents_partial_results">Un client non ha risposto — questo elenco è incompleto</string>
     <string name="selection_clear">Svuota la selezione</string>
     <string name="selection_select_all">Seleziona tutto</string>
     <string name="action_resume">Riprendi</string>
@@ -138,6 +139,14 @@
     <string name="update_qui_server">È disponibile un server qui più recente</string>
     <string name="update_up_to_date">Aggiornato</string>
     <string name="update_check">Controlla aggiornamenti</string>
+    <string name="update_from_to">%1$s → %2$s</string>
+    <string name="update_notes">Novità</string>
+    <string name="update_no_notes">Nessuna nota per questa versione.</string>
+    <string name="update_open">Apri la release</string>
+    <string name="update_later">Più tardi</string>
+    <string name="update_skip">Salta questa versione</string>
+    <string name="update_auto_check">Controlla all\'avvio</string>
+    <string name="update_auto_check_note">Cerca una release più recente all\'avvio. Non viene scaricato nulla automaticamente.</string>
     <string name="storage_title">Archiviazione</string>
     <string name="storage_search_history">Cronologia ricerche</string>
     <string name="storage_tracker_icons">Icone dei tracker</string>
@@ -159,6 +168,12 @@
     <string name="widget_stale">Ultimo aggiornamento %1$s</string>
     <string name="settings_widgets">Widget</string>
     <string name="widget_add">Aggiungi</string>
+    <string name="widget_pin_requested">Conferma sulla schermata Home per posizionarlo.</string>
+    <string name="widget_pin_added">Aggiunto alla schermata Home</string>
+    <string name="widget_pin_no_response_title">Non è successo niente?</string>
+    <string name="widget_pin_no_response">Se il launcher non ha mai chiesto conferma, probabilmente manca l\'autorizzazione a creare collegamenti nella schermata Home. Su Xiaomi: Impostazioni → App → qui → Autorizzazioni → Crea collegamento nella schermata Home.\n\nPuoi sempre tenere premuta la schermata Home e aggiungere qui dal suo elenco di widget.</string>
+    <string name="widget_pin_open_settings">Impostazioni app</string>
+    <string name="widget_pin_dismiss">Ho capito</string>
     <string name="widget_pin_unsupported">Questo launcher non può aggiungere widget dall\'app. Tieni premuta la schermata Home e scegli qui dal suo elenco di widget.</string>
     <string name="widget_scope">Client</string>
     <string name="widget_scope_all">Tutti i client attivi</string>
