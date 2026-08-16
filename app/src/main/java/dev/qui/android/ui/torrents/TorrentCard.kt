@@ -56,6 +56,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import dev.qui.android.R
@@ -91,6 +92,10 @@ fun TorrentCard(
     onQuickAction: (String) -> Unit = {},
     // Set only in the unified scope, where a row's client is not implied by the header.
     instanceName: String? = null,
+    // Which card is swiped open is screen-level state: opening one closes the rest,
+    // and tapping anywhere else closes all of them.
+    swipeOpen: Boolean = false,
+    onSwipeOpenChange: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val palette = QuiTheme.palette
@@ -107,22 +112,37 @@ fun TorrentCard(
     val scope = rememberCoroutineScope()
     val offsetX = remember { Animatable(0f) }
     val density = LocalDensity.current
-    val revealPx = with(density) { REVEAL_WIDTH.toPx() }
+
+    // The circles have to fit inside the card, and an ultra-compact row is barely
+    // taller than a line of text.
+    val circleSize = if (viewMode == ViewMode.UltraCompact) 28.dp else 40.dp
+    val revealWidth = circleSize * 3 + 28.dp
+    val revealPx = with(density) { revealWidth.toPx() }
 
     // Selection mode owns the tap, so swiping is disabled while it is active.
     LaunchedEffect(selectionMode) {
         if (selectionMode) offsetX.animateTo(0f)
     }
 
-    fun close() = scope.launch { offsetX.animateTo(0f) }
+    // Someone else opened, or the screen cleared the selection: slide back shut.
+    LaunchedEffect(swipeOpen) {
+        if (!swipeOpen && offsetX.value != 0f) offsetX.animateTo(0f)
+    }
+
+    fun close() {
+        onSwipeOpenChange(false)
+        scope.launch { offsetX.animateTo(0f) }
+    }
 
     Box(modifier = modifier.fillMaxWidth()) {
-        // Sits behind the card and is only uncovered as the card slides left.
+        // matchParentSize keeps the row out of the height calculation, so the card
+        // alone decides how tall the item is — otherwise the circles would make every
+        // ultra-compact row as tall as a button.
         Row(
             modifier = Modifier
-                .align(Alignment.CenterEnd)
+                .matchParentSize()
                 .padding(end = 6.dp),
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.End),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             val paused = torrent.state.startsWith("paused") || torrent.state.startsWith("stopped")
@@ -132,6 +152,7 @@ fun TorrentCard(
                     if (paused) R.string.action_resume else R.string.action_pause
                 ),
                 tint = palette.primary,
+                size = circleSize,
             ) {
                 close()
                 onQuickAction(if (paused) "resume" else "pause")
@@ -140,6 +161,7 @@ fun TorrentCard(
                 icon = Icons.Default.Refresh,
                 description = stringResource(R.string.action_recheck),
                 tint = palette.foreground,
+                size = circleSize,
             ) {
                 close()
                 onQuickAction("recheck")
@@ -148,6 +170,7 @@ fun TorrentCard(
                 icon = Icons.Default.Delete,
                 description = stringResource(R.string.action_delete),
                 tint = palette.destructive,
+                size = circleSize,
             ) {
                 close()
                 onQuickAction("delete")
@@ -165,11 +188,12 @@ fun TorrentCard(
                     Modifier.pointerInput(revealPx) {
                         detectHorizontalDragGestures(
                             onDragEnd = {
+                                // Past the halfway point the row stays open, so a short
+                                // flick is enough and a stray nudge is not.
+                                val open = offsetX.value < -revealPx / 2
+                                onSwipeOpenChange(open)
                                 scope.launch {
-                                    // Past the halfway point the row stays open, so a
-                                    // short flick is enough and a stray nudge is not.
-                                    val target = if (offsetX.value < -revealPx / 2) -revealPx else 0f
-                                    offsetX.animateTo(target)
+                                    offsetX.animateTo(if (open) -revealPx else 0f)
                                 }
                             },
                         ) { change, dragAmount ->
@@ -269,20 +293,18 @@ fun TorrentCard(
     }
 }
 
-/** How much of the action row a full swipe uncovers. */
-private val REVEAL_WIDTH = 150.dp
-
 @Composable
 private fun QuickActionCircle(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     description: String,
     tint: androidx.compose.ui.graphics.Color,
+    size: Dp,
     onClick: () -> Unit,
 ) {
     val palette = QuiTheme.palette
     Box(
         modifier = Modifier
-            .size(42.dp)
+            .size(size)
             .clip(CircleShape)
             .background(palette.muted)
             .border(1.dp, palette.border, CircleShape)
@@ -293,7 +315,7 @@ private fun QuickActionCircle(
             imageVector = icon,
             contentDescription = description,
             tint = tint,
-            modifier = Modifier.size(20.dp),
+            modifier = Modifier.size(size * 0.5f),
         )
     }
 }

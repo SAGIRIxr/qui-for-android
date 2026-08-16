@@ -36,9 +36,21 @@ class ShellViewModel @Inject constructor(
      */
     val currentInstanceName: StateFlow<String?> =
         combine(_instances, prefsStore.snapshot) { instances, prefs ->
-            instances.firstOrNull { it.id == prefs.lastInstanceId && it.isActive }?.name
-                ?: instances.firstOrNull { it.isActive }?.name
+            // Null means "no specific client", which the nav bar renders as the unified
+            // label; a stale single-client name there would contradict the list.
+            if (prefs.unifiedScope && instances.count { it.isActive } > 1) {
+                null
+            } else {
+                instances.firstOrNull { it.id == prefs.lastInstanceId && it.isActive }?.name
+                    ?: instances.firstOrNull { it.isActive }?.name
+            }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    /** Whether the torrent list is currently showing every client merged. */
+    val unifiedScope: StateFlow<Boolean> =
+        combine(_instances, prefsStore.snapshot) { instances, prefs ->
+            prefs.unifiedScope && instances.count { it.isActive } > 1
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     fun refresh() = viewModelScope.launch {
         repository.instances().onSuccess { _instances.value = it }

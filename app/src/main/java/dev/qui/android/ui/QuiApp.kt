@@ -116,6 +116,7 @@ private fun MainScaffold(
     val shell: ShellViewModel = hiltViewModel()
     val instances by shell.instances.collectAsStateWithLifecycle()
     val currentInstanceName by shell.currentInstanceName.collectAsStateWithLifecycle()
+    val unifiedScope by shell.unifiedScope.collectAsStateWithLifecycle()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination
 
@@ -145,6 +146,7 @@ private fun MainScaffold(
                         // generic word is only the fallback when nothing is active.
                         val label = when {
                             !isClients -> description
+                            unifiedScope -> stringResource(R.string.scope_all_clients)
                             currentInstanceName != null -> currentInstanceName!!
                             instances.isEmpty() -> description
                             activeCount == 0 -> stringResource(R.string.nav_no_active_clients)

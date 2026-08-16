@@ -92,7 +92,9 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -135,6 +137,9 @@ fun TorrentsScreen(
     var showActions by remember { mutableStateOf(false) }
     var showSearch by remember { mutableStateOf(false) }
     var actionTarget by remember { mutableStateOf<Torrent?>(null) }
+    // Only one card shows its action circles at a time; tapping or scrolling anywhere
+    // else puts it back.
+    var openSwipeKey by remember { mutableStateOf<String?>(null) }
 
     val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
     val mobileScroll = LocalMobileScroll.current
@@ -148,6 +153,13 @@ fun TorrentsScreen(
     }
 
     val listState = rememberLazyListState()
+
+    // Scrolling is a clear signal that the swiped-open row is no longer the target.
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.isScrollInProgress }
+            .filter { it }
+            .collect { openSwipeKey = null }
+    }
 
     // Reaching the top always restores the bars, so they can never be stranded offscreen.
     LaunchedEffect(listState) {
@@ -255,7 +267,15 @@ fun TorrentsScreen(
                     )
                 }
 
-                else -> Box(Modifier.fillMaxSize()) {
+                else -> Box(
+                    Modifier
+                        .fillMaxSize()
+                        // Taps on a card are consumed by the card itself, so anything
+                        // reaching here landed on empty space.
+                        .pointerInput(Unit) {
+                            detectTapGestures { openSwipeKey = null }
+                        },
+                ) {
                     LazyColumn(
                         state = listState,
                         modifier = Modifier.fillMaxSize(),
@@ -287,6 +307,10 @@ fun TorrentsScreen(
                                 incognito = prefs.incognito,
                                 instanceName = torrent.instanceName
                                     ?.takeIf { state.unifiedScope },
+                                swipeOpen = openSwipeKey == torrent.key,
+                                onSwipeOpenChange = { open ->
+                                    openSwipeKey = if (open) torrent.key else null
+                                },
                                 onClick = {
                                     val instanceId = torrent.instanceId
                                         ?: state.selectedInstanceId

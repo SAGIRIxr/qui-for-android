@@ -11,6 +11,7 @@
 package dev.qui.android.ui.detail
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,6 +54,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -139,42 +141,33 @@ fun TorrentDetailScreen(
         ) {
             DetailHeader(state = state, speedUnit = prefs.speedUnit)
 
+            // Icons alone were guesswork, so each action carries its own label.
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                IconButton(onClick = { viewModel.action("resume") }) {
-                    Icon(
-                        imageVector = Icons.Default.PlayArrow,
-                        contentDescription = stringResource(R.string.action_resume),
-                    )
-                }
-                IconButton(onClick = { viewModel.action("pause") }) {
-                    Icon(
-                        imageVector = Icons.Default.Pause,
-                        contentDescription = stringResource(R.string.action_pause),
-                    )
-                }
-                IconButton(onClick = { viewModel.action("recheck") }) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = stringResource(R.string.action_recheck),
-                    )
-                }
-                IconButton(onClick = { viewModel.action("reannounce") }) {
-                    Icon(
-                        imageVector = Icons.Default.Campaign,
-                        contentDescription = stringResource(R.string.action_reannounce),
-                    )
-                }
-                IconButton(onClick = { showRename = true }) {
-                    Icon(
-                        imageVector = Icons.Default.DriveFileRenameOutline,
-                        contentDescription = stringResource(R.string.action_rename),
-                    )
-                }
+                DetailAction(
+                    icon = Icons.Default.PlayArrow,
+                    label = stringResource(R.string.action_resume),
+                ) { viewModel.action("resume") }
+                DetailAction(
+                    icon = Icons.Default.Pause,
+                    label = stringResource(R.string.action_pause),
+                ) { viewModel.action("pause") }
+                DetailAction(
+                    icon = Icons.Default.Refresh,
+                    label = stringResource(R.string.action_recheck),
+                ) { viewModel.action("recheck") }
+                DetailAction(
+                    icon = Icons.Default.Campaign,
+                    label = stringResource(R.string.action_reannounce),
+                ) { viewModel.action("reannounce") }
+                DetailAction(
+                    icon = Icons.Default.DriveFileRenameOutline,
+                    label = stringResource(R.string.action_rename),
+                ) { showRename = true }
             }
 
             val tabs = DetailTab.entries
@@ -226,6 +219,37 @@ fun TorrentDetailScreen(
                 showRename = false
                 viewModel.rename(it)
             },
+        )
+    }
+}
+
+@Composable
+private fun DetailAction(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    onClick: () -> Unit,
+) {
+    val palette = QuiTheme.palette
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 8.dp, vertical = 6.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = palette.foreground,
+            modifier = Modifier.size(22.dp),
+        )
+        Spacer(Modifier.height(3.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = palette.mutedForeground,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

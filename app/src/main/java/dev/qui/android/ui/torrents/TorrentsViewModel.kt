@@ -108,6 +108,7 @@ class TorrentsViewModel @Inject constructor(
                     sortField = prefs.sortField,
                     sortOrder = prefs.sortOrder,
                     selectedInstanceId = prefs.lastInstanceId,
+                    unifiedScope = prefs.unifiedScope,
                 )
             }
             loadInstances()
@@ -126,7 +127,16 @@ class TorrentsViewModel @Inject constructor(
                     ?: active.firstOrNull()?.id
 
                 _state.update { it.copy(instances = instances, selectedInstanceId = target) }
-                target?.let { selectInstance(it) }
+
+                // A stored unified scope only survives if there is still more than one
+                // active client to merge; otherwise fall back to a single one.
+                if (_state.value.unifiedScope && _state.value.canUnify) {
+                    _state.update { it.copy(unifiedScope = false) }
+                    selectUnified()
+                } else {
+                    _state.update { it.copy(unifiedScope = false) }
+                    target?.let { selectInstance(it) }
+                }
             }
             .onFailure { error ->
                 _state.update { it.copy(error = error.message, isLoading = false) }
@@ -152,7 +162,10 @@ class TorrentsViewModel @Inject constructor(
             )
         }
         loadedPages = 1
-        viewModelScope.launch { prefsStore.setLastInstance(instanceId) }
+        viewModelScope.launch {
+            prefsStore.setLastInstance(instanceId)
+            prefsStore.setUnifiedScope(false)
+        }
         loadMetadata(instanceId)
         restart()
     }
@@ -174,6 +187,7 @@ class TorrentsViewModel @Inject constructor(
             )
         }
         loadedPages = 1
+        viewModelScope.launch { prefsStore.setUnifiedScope(true) }
         current.activeInstanceIds.firstOrNull()?.let(::loadMetadata)
         restart()
     }

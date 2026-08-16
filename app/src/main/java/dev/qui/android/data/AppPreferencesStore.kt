@@ -56,6 +56,7 @@ class AppPreferencesStore @Inject constructor(
         val showTrackerBreakdown = booleanPreferencesKey("dash_tracker_breakdown")
         val showInstanceCards = booleanPreferencesKey("dash_instance_cards")
         val trackerSortColumn = stringPreferencesKey("dash_tracker_sort")
+        val unifiedScope = booleanPreferencesKey("unified_scope")
     }
 
     data class Snapshot(
@@ -76,6 +77,9 @@ class AppPreferencesStore @Inject constructor(
         val showTrackerBreakdown: Boolean = true,
         val showInstanceCards: Boolean = true,
         val trackerSortColumn: TrackerSortColumn = TrackerSortColumn.Uploaded,
+        // Persisted so the nav bar can label its tab without the torrent screen
+        // being on screen to tell it.
+        val unifiedScope: Boolean = false,
     )
 
     val snapshot: Flow<Snapshot> = context.prefsDataStore.data.map { prefs ->
@@ -101,6 +105,7 @@ class AppPreferencesStore @Inject constructor(
             trackerSortColumn = prefs[Keys.trackerSortColumn]
                 ?.let { runCatching { TrackerSortColumn.valueOf(it) }.getOrNull() }
                 ?: TrackerSortColumn.Uploaded,
+            unifiedScope = prefs[Keys.unifiedScope] ?: false,
         )
     }
 
@@ -160,5 +165,9 @@ class AppPreferencesStore @Inject constructor(
 
     suspend fun setTrackerSortColumn(column: TrackerSortColumn) = context.prefsDataStore.edit {
         it[Keys.trackerSortColumn] = column.name
+    }
+
+    suspend fun setUnifiedScope(enabled: Boolean) = context.prefsDataStore.edit {
+        it[Keys.unifiedScope] = enabled
     }
 }

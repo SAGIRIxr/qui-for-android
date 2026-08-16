@@ -494,6 +494,43 @@ private fun TrackerBreakdownCard(
             }
         }
 
+        // Column headings, aligned to the same cells the rows use below.
+        Spacer(Modifier.height(10.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Bottom,
+        ) {
+            Column(Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.tracker_col_tracker),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = palette.mutedForeground,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = stringResource(R.string.tracker_col_torrents) + " · " +
+                        stringResource(R.string.tracker_col_size),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = palette.mutedForeground,
+                )
+            }
+            Text(
+                text = stringResource(R.string.tracker_col_uploaded) + " / " +
+                    stringResource(R.string.tracker_col_downloaded),
+                style = MaterialTheme.typography.labelSmall,
+                color = palette.mutedForeground,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.End,
+            )
+            Spacer(Modifier.width(10.dp))
+            Text(
+                text = stringResource(R.string.tracker_col_ratio),
+                style = MaterialTheme.typography.labelSmall,
+                color = palette.mutedForeground,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+
         Spacer(Modifier.height(6.dp))
         visible.forEach { row ->
             HorizontalDivider(color = palette.border)
