@@ -58,8 +58,7 @@ switch disables verification for that server — only enable it for a server you
 ./gradlew assembleDebug
 ```
 
-The APK lands in `app/build/outputs/apk/debug/`. CI builds it on every push and uploads
-it as an artifact.
+The APK lands in `app/build/outputs/apk/debug/`.
 
 To run the tests:
 
