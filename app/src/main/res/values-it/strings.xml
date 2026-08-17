@@ -164,6 +164,17 @@
     <string name="widget_torrents_description">4×4 — cosa si sta trasferendo ora, con l\'avanzamento. Tocca una riga per aprirla.</string>
     <string name="widget_not_signed_in">Accedi a qui</string>
     <string name="widget_refresh">Aggiorna</string>
+    <string name="widget_refreshing">Aggiornamento…</string>
+    <string name="widget_error_offline">Nessuna connessione di rete</string>
+    <string name="widget_error_unauthorized">Accedi di nuovo — il server ha rifiutato le credenziali salvate</string>
+    <string name="widget_error_timeout">Il server ha impiegato troppo a rispondere</string>
+    <string name="widget_error_no_response">Nessun client ha risposto</string>
+    <string name="widget_error_http">Errore del server (HTTP %1$s)</string>
+    <string name="widget_interval">Aggiornamento in background</string>
+    <string name="widget_interval_off">Disattivato</string>
+    <string name="widget_interval_minutes">%1$d min</string>
+    <string name="widget_interval_hour">1 ora</string>
+    <string name="widget_interval_note">Android non esegue lavoro in background più spesso di una volta ogni 15 minuti. Aprire l\'app e il pulsante di aggiornamento del widget lo aggiornano subito, qualunque sia questa impostazione.</string>
     <string name="widget_no_active">Nessun trasferimento in corso</string>
     <string name="widget_free_space">%1$s liberi</string>
     <string name="widget_stale">Ultimo aggiornamento %1$s</string>
@@ -182,7 +193,7 @@
     <string name="widget_list_active">Prima quelli in trasferimento</string>
     <string name="widget_list_recent">Aggiunti di recente</string>
     <string name="widget_incognito_note">I nomi dei torrent nel widget seguono l\'interruttore incognito dell\'app.</string>
-    <string name="widget_refresh_note">Android aggiorna i widget al massimo ogni 30 minuti, HyperOS/MIUI spesso meno. Aprire l\'app e il pulsante di aggiornamento del widget li aggiornano subito.</string>
+    <string name="widget_refresh_note">HyperOS, MIUI e simili spesso saltano del tutto il lavoro in background. Se il widget si ferma, consenti l\'avvio automatico di qui e imposta la politica batteria su nessuna restrizione.</string>
     <string name="speed_limits_hint">Valori in KiB/s. Lascia vuoto un campo per non modificare quel limite; 0 significa illimitato.</string>
     <string name="speed_limit_download">Limite di download</string>
     <string name="speed_limit_upload">Limite di upload</string>

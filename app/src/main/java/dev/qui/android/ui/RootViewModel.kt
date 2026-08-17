@@ -131,5 +131,10 @@ class RootViewModel @Inject constructor(
         prefsStore.setTrackerSortColumn(column)
     }
 
+    fun setWidgetRefreshMinutes(minutes: Int) = viewModelScope.launch {
+        // QuiApplication watches the preference and re-declares the schedule.
+        prefsStore.setWidgetRefreshMinutes(minutes)
+    }
+
     fun logout() = viewModelScope.launch { repository.logout() }
 }

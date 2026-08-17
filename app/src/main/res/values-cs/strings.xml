@@ -164,6 +164,17 @@
     <string name="widget_torrents_description">4×4 — co se právě přenáší, včetně průběhu. Klepnutím na řádek jej otevřete.</string>
     <string name="widget_not_signed_in">Přihlaste se do qui</string>
     <string name="widget_refresh">Obnovit</string>
+    <string name="widget_refreshing">Obnovuji…</string>
+    <string name="widget_error_offline">Bez připojení k síti</string>
+    <string name="widget_error_unauthorized">Přihlaste se znovu — server odmítl uložené přihlašovací údaje</string>
+    <string name="widget_error_timeout">Server odpovídal příliš dlouho</string>
+    <string name="widget_error_no_response">Neodpověděl žádný klient</string>
+    <string name="widget_error_http">Chyba serveru (HTTP %1$s)</string>
+    <string name="widget_interval">Obnovování na pozadí</string>
+    <string name="widget_interval_off">Vypnuto</string>
+    <string name="widget_interval_minutes">%1$d min</string>
+    <string name="widget_interval_hour">1 hodina</string>
+    <string name="widget_interval_note">Android nespouští práci na pozadí častěji než jednou za 15 minut. Otevření aplikace a tlačítko obnovení na widgetu jej aktualizují okamžitě, ať je nastaveno cokoli.</string>
     <string name="widget_no_active">Nic se nepřenáší</string>
     <string name="widget_free_space">%1$s volných</string>
     <string name="widget_stale">Naposledy aktualizováno %1$s</string>
@@ -182,7 +193,7 @@
     <string name="widget_list_active">Nejprve přenášené</string>
     <string name="widget_list_recent">Naposledy přidané</string>
     <string name="widget_incognito_note">Názvy torrentů ve widgetu se řídí přepínačem anonymního režimu v aplikaci.</string>
-    <string name="widget_refresh_note">Android obnovuje widgety nejvýše jednou za 30 minut, HyperOS/MIUI často méně často. Otevření aplikace a tlačítko obnovení na widgetu je aktualizují okamžitě.</string>
+    <string name="widget_refresh_note">HyperOS, MIUI a podobné často práci na pozadí úplně přeskočí. Pokud widget zastará, povolte pro qui automatické spouštění a nastavte politiku baterie na neomezenou.</string>
     <string name="speed_limits_hint">Hodnoty jsou v KiB/s. Prázdné pole ponechá limit beze změny; 0 znamená bez omezení.</string>
     <string name="speed_limit_download">Stahovací limit</string>
     <string name="speed_limit_upload">Odesílací limit</string>

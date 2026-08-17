@@ -98,6 +98,9 @@ private const val SOURCE_URL = "https://github.com/SAGIRIxr/qui-for-android"
  */
 private const val PIN_CONFIRM_GRACE_MS = 12_000L
 
+/** Zero is off; 15 is the floor Android enforces on periodic background work. */
+private val WIDGET_INTERVALS = listOf(0, 15, 30, 60)
+
 @Composable
 fun SettingsScreen(
     root: RootViewModel = hiltViewModel(),
@@ -416,6 +419,39 @@ fun SettingsScreen(
                         )
                     }
                 }
+
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = stringResource(R.string.widget_interval),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(Modifier.height(6.dp))
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    WIDGET_INTERVALS.forEach { minutes ->
+                        FilterChip(
+                            selected = prefs.widgetRefreshMinutes == minutes,
+                            onClick = { root.setWidgetRefreshMinutes(minutes) },
+                            label = {
+                                Text(
+                                    when (minutes) {
+                                        0 -> stringResource(R.string.widget_interval_off)
+                                        60 -> stringResource(R.string.widget_interval_hour)
+                                        else -> stringResource(
+                                            R.string.widget_interval_minutes,
+                                            minutes,
+                                        )
+                                    }
+                                )
+                            },
+                        )
+                    }
+                }
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.widget_interval_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = palette.mutedForeground,
+                )
 
                 Spacer(Modifier.height(12.dp))
                 Text(

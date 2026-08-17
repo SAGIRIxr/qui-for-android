@@ -216,6 +216,17 @@
     <string name="widget_torrents_description">4×4 — what is transferring right now, with progress. Tap a row to open it.</string>
     <string name="widget_not_signed_in">Sign in to qui</string>
     <string name="widget_refresh">Refresh</string>
+    <string name="widget_refreshing">Refreshing…</string>
+    <string name="widget_error_offline">No network connection</string>
+    <string name="widget_error_unauthorized">Sign in again — the server rejected the saved credentials</string>
+    <string name="widget_error_timeout">The server took too long to answer</string>
+    <string name="widget_error_no_response">No client answered</string>
+    <string name="widget_error_http">Server error (HTTP %1$s)</string>
+    <string name="widget_interval">Background refresh</string>
+    <string name="widget_interval_off">Off</string>
+    <string name="widget_interval_minutes">%1$d min</string>
+    <string name="widget_interval_hour">1 hour</string>
+    <string name="widget_interval_note">Android does not run background work more often than every 15 minutes. Opening the app and the widget\'s own refresh button update it immediately, whatever this is set to.</string>
     <string name="widget_no_active">Nothing is transferring</string>
     <string name="widget_free_space">%1$s free</string>
     <string name="widget_stale">Last updated %1$s</string>
@@ -236,7 +247,7 @@
     <string name="widget_list_active">Transferring first</string>
     <string name="widget_list_recent">Recently added</string>
     <string name="widget_incognito_note">Torrent names on the widget follow the app\'s incognito switch.</string>
-    <string name="widget_refresh_note">Android refreshes widgets at most every 30 minutes, and HyperOS/MIUI often less. Opening the app and the widget\'s own refresh button update them immediately.</string>
+    <string name="widget_refresh_note">HyperOS, MIUI and similar often skip background work entirely. If the widget goes stale, allow autostart and set the battery policy to unrestricted for qui.</string>
 
     <!-- Speed limit dialog -->
     <string name="speed_limits_hint">Values are in KiB/s. Leave a field empty to leave that limit unchanged; use 0 for unlimited.</string>

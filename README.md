@@ -76,16 +76,31 @@ machines have separate disks. The same rule applies to the torrent list's own he
 
 ### Refreshing
 
-Android will not run a widget's own update schedule more often than every 30 minutes,
-and HyperOS, MIUI, EMUI and ColorOS stretch that further or skip it entirely. So the
-periodic update is a backstop, not the mechanism. What actually keeps the widgets current:
+*Settings → Widgets → Background refresh* sets the interval: off, 15, 30 or 60 minutes,
+15 being the floor Android enforces on periodic background work. The platform's own
+widget schedule stops at 30 minutes and cannot go lower, so the widgets do not use it —
+`updatePeriodMillis` is 0 and a WorkManager job drives them instead.
+
+Two things update a widget immediately regardless of that interval:
 
 - opening the app — every dashboard poll pushes fresh numbers to every placed widget;
 - the refresh button in the widget's own header.
 
+The refresh does not run inside the broadcast receiver. A receiver has about ten seconds
+before the system counts it as hung, and the process it wakes may be starting cold —
+Hilt graph, DataStore read, DNS, TLS handshake, then the request. On a phone that has
+not opened the app in a day that budget runs out, which is how a perfectly reachable
+server used to be reported as unreachable with a refresh button that never helped. The
+receiver now paints a *Refreshing…* state and hands the fetch to a worker that has no
+deadline, waits for connectivity rather than failing without it, and retries once before
+showing anything as an error.
+
+When it does fail, the widget names the cause — no network, credentials rejected, server
+timed out, HTTP 502 — rather than blaming the server for all of them.
+
 On a Xiaomi device, *Settings → Apps → qui → Autostart* on and *Battery saver → No
-restrictions* is what lets the periodic update fire at all. Without it the widget shows
-the last numbers it managed to fetch, timestamped, until you tap refresh.
+restrictions* is what lets background work run at all. Without it the widget shows the
+last numbers it managed to fetch, timestamped, until you tap refresh.
 
 There is no *超级小部件* (HyperOS's interactive widget format) build: that needs Xiaomi's
 MiuiWidget SDK and an app registered through their store review. These are standard
@@ -245,8 +260,8 @@ Manage those in qui itself; this app is a torrent client for day-to-day use.
 
 Two limits worth knowing about:
 
-- The **widgets** refresh on Android's own schedule, which will not go below 30
-  minutes — see [Refreshing](#refreshing).
+- **Widget background refresh** cannot go below 15 minutes; that is Android's floor for
+  periodic work, not a choice — see [Refreshing](#refreshing).
 - **Dashboard section visibility** is stored on the device, not synced through qui's
   `/api/dashboard-settings`, so it does not follow you to the web UI.
 

@@ -164,6 +164,17 @@
     <string name="widget_torrents_description">4×4 — 当前正在传输的种子及进度。点击某一行可直接打开。</string>
     <string name="widget_not_signed_in">请先登录 qui</string>
     <string name="widget_refresh">刷新</string>
+    <string name="widget_refreshing">刷新中…</string>
+    <string name="widget_error_offline">没有网络连接</string>
+    <string name="widget_error_unauthorized">请重新登录 —— 服务器拒绝了已保存的凭据</string>
+    <string name="widget_error_timeout">服务器响应超时</string>
+    <string name="widget_error_no_response">没有客户端响应</string>
+    <string name="widget_error_http">服务器错误(HTTP %1$s)</string>
+    <string name="widget_interval">后台刷新</string>
+    <string name="widget_interval_off">关闭</string>
+    <string name="widget_interval_minutes">%1$d 分钟</string>
+    <string name="widget_interval_hour">1 小时</string>
+    <string name="widget_interval_note">安卓最快 15 分钟才会执行一次后台任务。无论这里设成多少,打开应用或点小部件上的刷新按钮都会立即更新。</string>
     <string name="widget_no_active">当前没有传输中的种子</string>
     <string name="widget_free_space">剩余 %1$s</string>
     <string name="widget_stale">最后更新于 %1$s</string>
@@ -182,7 +193,7 @@
     <string name="widget_list_active">传输中优先</string>
     <string name="widget_list_recent">最近添加</string>
     <string name="widget_incognito_note">小部件上的种子名称跟随应用的隐身模式开关。</string>
-    <string name="widget_refresh_note">安卓最快 30 分钟才会自动刷新一次小部件，澎湃/MIUI 往往更久。打开应用或点小部件上的刷新按钮可立即更新。</string>
+    <string name="widget_refresh_note">澎湃 OS、MIUI 之类经常直接跳过后台任务。如果小部件不再更新,请给 qui 打开自启动,并把省电策略设为无限制。</string>
     <string name="speed_limits_hint">单位为 KiB/s。留空表示不改动该项限制，填 0 表示不限速。</string>
     <string name="speed_limit_download">下载限制</string>
     <string name="speed_limit_upload">上传限制</string>

@@ -64,6 +64,7 @@ class AppPreferencesStore @Inject constructor(
         val widgetListMode = stringPreferencesKey("widget_list_mode")
         val autoUpdateCheck = booleanPreferencesKey("auto_update_check")
         val skippedUpdate = stringPreferencesKey("skipped_update")
+        val widgetRefreshMinutes = intPreferencesKey("widget_refresh_minutes")
     }
 
     data class Snapshot(
@@ -93,6 +94,8 @@ class AppPreferencesStore @Inject constructor(
         val autoUpdateCheck: Boolean = true,
         /** A release the user asked not to be reminded about again. */
         val skippedUpdate: String? = null,
+        /** Minutes between background widget refreshes; 0 turns the schedule off. */
+        val widgetRefreshMinutes: Int = 15,
     )
 
     val snapshot: Flow<Snapshot> = context.prefsDataStore.data.map { prefs ->
@@ -125,6 +128,7 @@ class AppPreferencesStore @Inject constructor(
                 ?: WidgetListMode.Active,
             autoUpdateCheck = prefs[Keys.autoUpdateCheck] ?: true,
             skippedUpdate = prefs[Keys.skippedUpdate],
+            widgetRefreshMinutes = prefs[Keys.widgetRefreshMinutes] ?: 15,
         )
     }
 
@@ -134,6 +138,10 @@ class AppPreferencesStore @Inject constructor(
 
     suspend fun setSkippedUpdate(tag: String?) = context.prefsDataStore.edit {
         if (tag == null) it.remove(Keys.skippedUpdate) else it[Keys.skippedUpdate] = tag
+    }
+
+    suspend fun setWidgetRefreshMinutes(minutes: Int) = context.prefsDataStore.edit {
+        it[Keys.widgetRefreshMinutes] = minutes
     }
 
     suspend fun setWidgetInstance(id: Int?) = context.prefsDataStore.edit {

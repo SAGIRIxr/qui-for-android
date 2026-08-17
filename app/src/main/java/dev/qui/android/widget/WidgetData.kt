@@ -13,12 +13,19 @@ import dev.qui.android.data.AppPreferencesStore
 import dev.qui.android.data.QuiRepository
 import dev.qui.android.data.SpeedUnit
 import dev.qui.android.data.model.TorrentFilters
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.qui.android.data.WidgetListMode
 import dev.qui.android.data.remote.SessionStore
 import dev.qui.android.ui.torrents.incognitoName
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import retrofit2.HttpException
+import java.io.IOException
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -58,6 +65,8 @@ data class WidgetSnapshot(
     val speedUnit: SpeedUnit = SpeedUnit.Bytes,
     /** These numbers outlived a failed refresh; updatedAt says how old they are. */
     val stale: Boolean = false,
+    /** A fetch is in flight. Painted immediately so a tap on refresh is acknowledged. */
+    val refreshing: Boolean = false,
     val updatedAt: Long = System.currentTimeMillis(),
 ) {
     val hasData: Boolean get() = signedIn && error == null
@@ -68,6 +77,7 @@ class WidgetDataSource @Inject constructor(
     private val repository: QuiRepository,
     private val session: SessionStore,
     private val prefs: AppPreferencesStore,
+    @ApplicationContext private val context: Context,
 ) {
     private val mutex = Mutex()
 
@@ -81,13 +91,23 @@ class WidgetDataSource @Inject constructor(
         private set
 
     /** Serialised so several widgets updating at once still make one round trip. */
-    suspend fun load(force: Boolean = false): WidgetSnapshot = mutex.withLock {
-        val previous = cached
-        if (!force && previous != null &&
-            System.currentTimeMillis() - previous.updatedAt < REUSE_WINDOW_MS
-        ) {
-            return previous
+    suspend fun load(force: Boolean = false): WidgetSnapshot {
+        // Checked before queueing as well as after: a second widget that spent the whole
+        // fetch waiting on the mutex wants the answer the first one just got, not a
+        // second round trip against a clock that has already run down.
+        fresh()?.takeIf { !force }?.let { return it }
+
+        return mutex.withLock {
+            fresh()?.let { return@withLock it }
+            refresh()
         }
+    }
+
+    private fun fresh(): WidgetSnapshot? = cached
+        ?.takeIf { System.currentTimeMillis() - it.updatedAt < REUSE_WINDOW_MS }
+
+    private suspend fun refresh(): WidgetSnapshot {
+        val previous = cached
 
         val fresh = fetch()
         // A failed refresh should not blank a widget that was showing real numbers a
@@ -108,8 +128,15 @@ class WidgetDataSource @Inject constructor(
 
         val settings = prefs.snapshot.first()
         val speedUnit = settings.speedUnit
-        val active = repository.instances().getOrNull()?.filter { it.isActive }
-            ?: return WidgetSnapshot(error = ERROR_UNREACHABLE, speedUnit = speedUnit)
+
+        // Checked before the request so a widget woken up with no connectivity says so
+        // instead of blaming the server.
+        if (!isOnline()) return WidgetSnapshot(error = ERROR_OFFLINE, speedUnit = speedUnit)
+
+        val active = repository.instances().fold(
+            onSuccess = { it.filter { instance -> instance.isActive } },
+            onFailure = { return WidgetSnapshot(error = describe(it), speedUnit = speedUnit) },
+        )
 
         // Settings can pin the widgets to one client; an id that no longer exists
         // falls back to every active one rather than showing nothing.
@@ -165,7 +192,9 @@ class WidgetDataSource @Inject constructor(
             }
         }
 
-        if (reached == 0) return WidgetSnapshot(error = ERROR_UNREACHABLE, speedUnit = speedUnit)
+        if (reached == 0) {
+            return WidgetSnapshot(error = ERROR_NO_RESPONSE, speedUnit = speedUnit)
+        }
 
         return WidgetSnapshot(
             instanceName = instances.singleOrNull()?.name,
@@ -253,9 +282,33 @@ class WidgetDataSource @Inject constructor(
         }
     }
 
+    /**
+     * Widgets have one line to explain themselves, and "cannot reach the server" sends
+     * people looking at the wrong thing when the real answer is a revoked key or a
+     * phone with no connectivity.
+     */
+    private fun describe(error: Throwable): String = when {
+        error is HttpException && error.code() in 401..403 -> ERROR_UNAUTHORIZED
+        error is HttpException -> "$ERROR_HTTP_PREFIX${error.code()}"
+        error is SocketTimeoutException -> ERROR_TIMEOUT
+        error is IOException -> ERROR_UNREACHABLE
+        else -> ERROR_UNREACHABLE
+    }
+
+    private fun isOnline(): Boolean {
+        val manager = context.getSystemService(ConnectivityManager::class.java) ?: return true
+        val capabilities = manager.getNetworkCapabilities(manager.activeNetwork) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
     companion object {
         const val ERROR_UNREACHABLE = "unreachable"
+        const val ERROR_OFFLINE = "offline"
+        const val ERROR_UNAUTHORIZED = "unauthorized"
+        const val ERROR_NO_RESPONSE = "no_response"
+        const val ERROR_TIMEOUT = "timeout"
         const val ERROR_NO_CLIENTS = "no_clients"
+        const val ERROR_HTTP_PREFIX = "http_"
         private const val ROW_LIMIT = 12
         private const val REUSE_WINDOW_MS = 5_000L
     }

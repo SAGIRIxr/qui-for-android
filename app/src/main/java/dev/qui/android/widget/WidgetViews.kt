@@ -16,6 +16,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.util.SizeF
 import android.widget.RemoteViews
 import dev.qui.android.MainActivity
 import dev.qui.android.R
@@ -129,6 +131,37 @@ internal fun statsViews(
     setTextViewText(R.id.widget_subtitle, subtitle(context, snapshot))
 }
 
+/**
+ * One RemoteViews per size the launcher may hand us, so a widget dragged down to 2x1
+ * shows only the speeds while a 4x2 gets the counts and free space. Launchers before
+ * Android 12 ask for a single layout, which is the size that provider is listed at.
+ */
+internal fun responsiveStatsViews(
+    context: Context,
+    snapshot: WidgetSnapshot,
+    provider: Class<*>,
+): RemoteViews {
+    val fallback = when (provider) {
+        QuiSpeedWidgetProvider::class.java -> R.layout.widget_compact
+        QuiOverviewWidgetProvider::class.java -> R.layout.widget_stats_small
+        else -> R.layout.widget_stats_wide
+    }
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        return statsViews(context, fallback, snapshot, provider)
+    }
+
+    return RemoteViews(
+        mapOf(
+            SizeF(110f, 40f) to
+                statsViews(context, R.layout.widget_compact, snapshot, provider),
+            SizeF(150f, 110f) to
+                statsViews(context, R.layout.widget_stats_small, snapshot, provider),
+            SizeF(250f, 110f) to
+                statsViews(context, R.layout.widget_stats_wide, snapshot, provider),
+        )
+    )
+}
+
 /** Header of the list widget; the rows themselves come from the RemoteViewsFactory. */
 internal fun torrentsViews(
     context: Context,
@@ -208,6 +241,7 @@ private fun subtitle(context: Context, snapshot: WidgetSnapshot): String = build
             snapshot.total,
         )
     )
+    if (snapshot.refreshing) add(context.getString(R.string.widget_refreshing))
     if (snapshot.totalSize > 0) add(formatBytes(snapshot.totalSize))
     snapshot.freeSpace?.let {
         // Across several clients this is the smallest of several separate disks, not a
@@ -221,10 +255,29 @@ private fun subtitle(context: Context, snapshot: WidgetSnapshot): String = build
     }
 }.joinToString(" · ")
 
+/**
+ * One line to explain a widget with no numbers in it. "Cannot reach the server" sent
+ * people looking at their network when the answer was a revoked key or a phone that
+ * had simply not connected yet, so each cause now says its own name.
+ */
 private fun statusMessage(context: Context, snapshot: WidgetSnapshot): String = when {
+    snapshot.refreshing -> context.getString(R.string.widget_refreshing)
     !snapshot.signedIn -> context.getString(R.string.widget_not_signed_in)
     snapshot.error == WidgetDataSource.ERROR_NO_CLIENTS ->
         context.getString(R.string.torrents_no_clients_title)
+    snapshot.error == WidgetDataSource.ERROR_OFFLINE ->
+        context.getString(R.string.widget_error_offline)
+    snapshot.error == WidgetDataSource.ERROR_UNAUTHORIZED ->
+        context.getString(R.string.widget_error_unauthorized)
+    snapshot.error == WidgetDataSource.ERROR_TIMEOUT ->
+        context.getString(R.string.widget_error_timeout)
+    snapshot.error == WidgetDataSource.ERROR_NO_RESPONSE ->
+        context.getString(R.string.widget_error_no_response)
+    snapshot.error?.startsWith(WidgetDataSource.ERROR_HTTP_PREFIX) == true ->
+        context.getString(
+            R.string.widget_error_http,
+            snapshot.error.removePrefix(WidgetDataSource.ERROR_HTTP_PREFIX),
+        )
     else -> context.getString(R.string.login_error_unreachable)
 }
 
@@ -241,21 +294,31 @@ object QuiWidgets {
     )
 
     /**
-     * Nudges every placed widget to redraw. Safe to call when none exist — providers
-     * with no widgets on screen are skipped.
+     * Asks for fresh numbers. Safe to call when no widget exists — the worker draws
+     * nothing and returns. Called by the app whenever it has polled the dashboard.
      */
     fun refresh(context: Context) {
+        if (!WidgetRefreshScheduler.anyWidgetPlaced(context)) return
+        WidgetRefreshScheduler.refreshNow(context)
+    }
+
+    /** Paints every placed widget from a snapshot. No network work of its own. */
+    fun draw(context: Context, snapshot: WidgetSnapshot) {
         val manager = AppWidgetManager.getInstance(context)
+
         PROVIDERS.forEach { provider ->
             val ids = manager.getAppWidgetIds(ComponentName(context, provider))
             if (ids.isEmpty()) return@forEach
 
-            context.sendBroadcast(
-                Intent(context, provider).apply {
-                    action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+            if (provider == QuiTorrentsWidgetProvider::class.java) {
+                ids.forEach { id ->
+                    manager.updateAppWidget(id, torrentsViews(context, id, snapshot, provider))
+                    @Suppress("DEPRECATION")
+                    manager.notifyAppWidgetViewDataChanged(id, R.id.widget_list)
                 }
-            )
+            } else {
+                manager.updateAppWidget(ids, responsiveStatsViews(context, snapshot, provider))
+            }
         }
     }
 }

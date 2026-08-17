@@ -164,6 +164,17 @@
     <string name="widget_torrents_description">4×4 — o que está sendo transferido agora, com o progresso. Toque em uma linha para abri-la.</string>
     <string name="widget_not_signed_in">Entre no qui</string>
     <string name="widget_refresh">Atualizar</string>
+    <string name="widget_refreshing">Atualizando…</string>
+    <string name="widget_error_offline">Sem conexão de rede</string>
+    <string name="widget_error_unauthorized">Entre novamente — o servidor rejeitou as credenciais salvas</string>
+    <string name="widget_error_timeout">O servidor demorou demais para responder</string>
+    <string name="widget_error_no_response">Nenhum cliente respondeu</string>
+    <string name="widget_error_http">Erro do servidor (HTTP %1$s)</string>
+    <string name="widget_interval">Atualização em segundo plano</string>
+    <string name="widget_interval_off">Desligada</string>
+    <string name="widget_interval_minutes">%1$d min</string>
+    <string name="widget_interval_hour">1 hora</string>
+    <string name="widget_interval_note">O Android não executa trabalho em segundo plano com mais frequência que a cada 15 minutos. Abrir o app e o botão de atualizar do widget o atualizam na hora, seja qual for este ajuste.</string>
     <string name="widget_no_active">Nada sendo transferido</string>
     <string name="widget_free_space">%1$s livres</string>
     <string name="widget_stale">Atualizado às %1$s</string>
@@ -182,7 +193,7 @@
     <string name="widget_list_active">Em transferência primeiro</string>
     <string name="widget_list_recent">Adicionados recentemente</string>
     <string name="widget_incognito_note">Os nomes de torrents no widget seguem o botão de modo anônimo do app.</string>
-    <string name="widget_refresh_note">O Android atualiza widgets no máximo a cada 30 minutos, e o HyperOS/MIUI muitas vezes menos. Abrir o app e o botão de atualizar do widget os atualizam na hora.</string>
+    <string name="widget_refresh_note">HyperOS, MIUI e semelhantes costumam ignorar trabalho em segundo plano por completo. Se o widget ficar desatualizado, permita a inicialização automática do qui e defina a política de bateria como sem restrições.</string>
     <string name="speed_limits_hint">Valores em KiB/s. Deixe um campo vazio para manter o limite; use 0 para ilimitado.</string>
     <string name="speed_limit_download">Limite de Download</string>
     <string name="speed_limit_upload">Limite de Upload</string>

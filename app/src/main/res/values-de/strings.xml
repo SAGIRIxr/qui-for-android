@@ -164,6 +164,17 @@
     <string name="widget_torrents_description">4×4 — was gerade übertragen wird, mit Fortschritt. Auf eine Zeile tippen, um sie zu öffnen.</string>
     <string name="widget_not_signed_in">Bei qui anmelden</string>
     <string name="widget_refresh">Aktualisieren</string>
+    <string name="widget_refreshing">Wird aktualisiert…</string>
+    <string name="widget_error_offline">Keine Netzwerkverbindung</string>
+    <string name="widget_error_unauthorized">Erneut anmelden — der Server hat die gespeicherten Zugangsdaten abgelehnt</string>
+    <string name="widget_error_timeout">Der Server hat zu lange gebraucht</string>
+    <string name="widget_error_no_response">Kein Client hat geantwortet</string>
+    <string name="widget_error_http">Serverfehler (HTTP %1$s)</string>
+    <string name="widget_interval">Aktualisierung im Hintergrund</string>
+    <string name="widget_interval_off">Aus</string>
+    <string name="widget_interval_minutes">%1$d Min</string>
+    <string name="widget_interval_hour">1 Stunde</string>
+    <string name="widget_interval_note">Android führt Hintergrundarbeit höchstens alle 15 Minuten aus. Die App zu öffnen und die Aktualisieren-Schaltfläche des Widgets aktualisieren es sofort, unabhängig von dieser Einstellung.</string>
     <string name="widget_no_active">Es wird nichts übertragen</string>
     <string name="widget_free_space">%1$s frei</string>
     <string name="widget_stale">Zuletzt aktualisiert %1$s</string>
@@ -182,7 +193,7 @@
     <string name="widget_list_active">Übertragende zuerst</string>
     <string name="widget_list_recent">Zuletzt hinzugefügt</string>
     <string name="widget_incognito_note">Torrent-Namen im Widget folgen dem Inkognito-Schalter der App.</string>
-    <string name="widget_refresh_note">Android aktualisiert Widgets höchstens alle 30 Minuten, HyperOS/MIUI oft seltener. Die App zu öffnen und die Aktualisieren-Schaltfläche des Widgets aktualisieren sie sofort.</string>
+    <string name="widget_refresh_note">HyperOS, MIUI und Ähnliche überspringen Hintergrundarbeit oft ganz. Wenn das Widget veraltet, erlaube qui den Autostart und setze die Akku-Richtlinie auf uneingeschränkt.</string>
     <string name="speed_limits_hint">Werte in KiB/s. Ein leeres Feld lässt das Limit unverändert; 0 bedeutet unbegrenzt.</string>
     <string name="speed_limit_download">Download-Limit</string>
     <string name="speed_limit_upload">Upload-Limit</string>

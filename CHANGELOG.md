@@ -6,6 +6,30 @@ The section for a tag becomes that release's notes on GitHub, and the app shows 
 same text in its update dialog. Add the new version at the top before tagging, in this
 file and in [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md).
 
+## 0.4.5
+
+### Added
+- *Settings → Widgets → Background refresh*: off, 15, 30 or 60 minutes. The platform's
+  own widget schedule stops at 30 minutes and cannot go lower, so the widgets no longer
+  use it — `updatePeriodMillis` is 0 and a WorkManager job drives them, with 15 minutes
+  the floor Android enforces on periodic background work.
+- The widgets say why a refresh failed — no network, credentials rejected, server timed
+  out, HTTP 502 — instead of reporting everything as an unreachable server.
+- Tapping refresh paints a *Refreshing…* state straight away, so the button visibly does
+  something.
+
+### Fixed
+- After a long spell with the app closed, the widgets reported the server as unreachable
+  and the refresh button never helped. The fetch ran inside the broadcast receiver,
+  which has about ten seconds before the system counts it as hung — not enough for a
+  cold process to build its dependency graph, read DataStore, resolve DNS, complete a
+  TLS handshake and then make the request. It now runs in a worker with no deadline,
+  which waits for connectivity rather than failing without it and retries once before
+  showing an error.
+- Two widgets refreshing at once could time each other out: the second one's budget was
+  spent waiting for the first one's fetch. It now reuses the result instead.
+- The background schedule stops when the last widget is removed from the home screen.
+
 ## 0.4.4
 
 ### Added

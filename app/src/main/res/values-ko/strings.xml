@@ -164,6 +164,17 @@
     <string name="widget_torrents_description">4×4 — 지금 전송 중인 항목과 진행률입니다. 항목을 누르면 열립니다.</string>
     <string name="widget_not_signed_in">qui에 로그인하세요</string>
     <string name="widget_refresh">새로 고침</string>
+    <string name="widget_refreshing">새로 고치는 중…</string>
+    <string name="widget_error_offline">네트워크에 연결되어 있지 않습니다</string>
+    <string name="widget_error_unauthorized">다시 로그인하세요 — 서버가 저장된 인증 정보를 거부했습니다</string>
+    <string name="widget_error_timeout">서버 응답이 너무 오래 걸렸습니다</string>
+    <string name="widget_error_no_response">응답한 클라이언트가 없습니다</string>
+    <string name="widget_error_http">서버 오류 (HTTP %1$s)</string>
+    <string name="widget_interval">백그라운드 새로 고침</string>
+    <string name="widget_interval_off">사용 안 함</string>
+    <string name="widget_interval_minutes">%1$d분</string>
+    <string name="widget_interval_hour">1시간</string>
+    <string name="widget_interval_note">안드로이드는 백그라운드 작업을 15분에 한 번보다 자주 실행하지 않습니다. 이 설정과 무관하게, 앱을 열거나 위젯의 새로 고침 버튼을 누르면 즉시 갱신됩니다.</string>
     <string name="widget_no_active">전송 중인 항목이 없습니다</string>
     <string name="widget_free_space">%1$s 남음</string>
     <string name="widget_stale">마지막 업데이트 %1$s</string>
@@ -182,7 +193,7 @@
     <string name="widget_list_active">전송 중 우선</string>
     <string name="widget_list_recent">최근 추가됨</string>
     <string name="widget_incognito_note">위젯의 토렌트 이름은 앱의 시크릿 모드 설정을 따릅니다.</string>
-    <string name="widget_refresh_note">안드로이드는 위젯을 최대 30분에 한 번 새로 고치며, HyperOS/MIUI에서는 더 드뭅니다. 앱을 열거나 위젯의 새로 고침 버튼을 누르면 즉시 갱신됩니다.</string>
+    <string name="widget_refresh_note">HyperOS, MIUI 등은 백그라운드 작업을 아예 건너뛰는 경우가 많습니다. 위젯이 갱신되지 않으면 qui의 자동 시작을 허용하고 배터리 정책을 제한 없음으로 설정하세요.</string>
     <string name="speed_limits_hint">단위는 KiB/s입니다. 비워 두면 해당 제한을 그대로 두고, 0은 무제한입니다.</string>
     <string name="speed_limit_download">다운로드 제한</string>
     <string name="speed_limit_upload">업로드 제한</string>

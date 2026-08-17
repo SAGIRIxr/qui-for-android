@@ -164,6 +164,17 @@
     <string name="widget_torrents_description">4×4 — що передається просто зараз, із поступом. Торкніться рядка, щоб відкрити.</string>
     <string name="widget_not_signed_in">Увійдіть у qui</string>
     <string name="widget_refresh">Оновити</string>
+    <string name="widget_refreshing">Оновлення…</string>
+    <string name="widget_error_offline">Немає з’єднання з мережею</string>
+    <string name="widget_error_unauthorized">Увійдіть знову — сервер відхилив збережені облікові дані</string>
+    <string name="widget_error_timeout">Сервер відповідав надто довго</string>
+    <string name="widget_error_no_response">Жоден клієнт не відповів</string>
+    <string name="widget_error_http">Помилка сервера (HTTP %1$s)</string>
+    <string name="widget_interval">Оновлення у фоні</string>
+    <string name="widget_interval_off">Вимкнено</string>
+    <string name="widget_interval_minutes">%1$d хв</string>
+    <string name="widget_interval_hour">1 година</string>
+    <string name="widget_interval_note">Android не виконує фонову роботу частіше ніж раз на 15 хвилин. Відкриття застосунку та кнопка оновлення на віджеті оновлюють його одразу, незалежно від цього налаштування.</string>
     <string name="widget_no_active">Немає активних передавань</string>
     <string name="widget_free_space">%1$s вільно</string>
     <string name="widget_stale">Останнє оновлення %1$s</string>
@@ -182,7 +193,7 @@
     <string name="widget_list_active">Спершу активні</string>
     <string name="widget_list_recent">Нещодавно додані</string>
     <string name="widget_incognito_note">Назви торентів у віджеті залежать від перемикача анонімного режиму в застосунку.</string>
-    <string name="widget_refresh_note">Android оновлює віджети щонайбільше раз на 30 хвилин, а HyperOS/MIUI часто рідше. Відкриття застосунку та кнопка оновлення на віджеті оновлюють їх одразу.</string>
+    <string name="widget_refresh_note">HyperOS, MIUI та подібні часто взагалі пропускають фонову роботу. Якщо віджет застаріває, дозвольте автозапуск qui та встановіть політику батареї «без обмежень».</string>
     <string name="speed_limits_hint">Значення в KiB/s. Порожнє поле залишає обмеження без змін; 0 — без обмежень.</string>
     <string name="speed_limit_download">Обмеження завантаження</string>
     <string name="speed_limit_upload">Обмеження вивантаження</string>

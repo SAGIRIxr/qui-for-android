@@ -164,6 +164,17 @@
     <string name="widget_torrents_description">4×4 — ce qui est en cours de transfert, avec la progression. Touchez une ligne pour l\'ouvrir.</string>
     <string name="widget_not_signed_in">Connectez-vous à qui</string>
     <string name="widget_refresh">Actualiser</string>
+    <string name="widget_refreshing">Actualisation…</string>
+    <string name="widget_error_offline">Aucune connexion réseau</string>
+    <string name="widget_error_unauthorized">Reconnectez-vous — le serveur a rejeté les identifiants enregistrés</string>
+    <string name="widget_error_timeout">Le serveur a mis trop de temps à répondre</string>
+    <string name="widget_error_no_response">Aucun client n\'a répondu</string>
+    <string name="widget_error_http">Erreur du serveur (HTTP %1$s)</string>
+    <string name="widget_interval">Actualisation en arrière-plan</string>
+    <string name="widget_interval_off">Désactivée</string>
+    <string name="widget_interval_minutes">%1$d min</string>
+    <string name="widget_interval_hour">1 heure</string>
+    <string name="widget_interval_note">Android n\'exécute pas de tâche en arrière-plan plus souvent que toutes les 15 minutes. Ouvrir l\'application et le bouton d\'actualisation du widget le mettent à jour immédiatement, quel que soit ce réglage.</string>
     <string name="widget_no_active">Aucun transfert en cours</string>
     <string name="widget_free_space">%1$s libres</string>
     <string name="widget_stale">Dernière mise à jour %1$s</string>
@@ -182,7 +193,7 @@
     <string name="widget_list_active">Transferts en cours d\'abord</string>
     <string name="widget_list_recent">Ajoutés récemment</string>
     <string name="widget_incognito_note">Les noms de torrents du widget suivent l\'interrupteur navigation privée de l\'application.</string>
-    <string name="widget_refresh_note">Android actualise les widgets au maximum toutes les 30 minutes, HyperOS/MIUI souvent moins. Ouvrir l\'application et le bouton d\'actualisation du widget les mettent à jour immédiatement.</string>
+    <string name="widget_refresh_note">HyperOS, MIUI et consorts ignorent souvent complètement les tâches en arrière-plan. Si le widget se fige, autorisez le démarrage automatique de qui et réglez sa politique de batterie sur « sans restriction ».</string>
     <string name="speed_limits_hint">Valeurs en Kio/s. Laissez un champ vide pour ne pas modifier la limite ; 0 signifie illimité.</string>
     <string name="speed_limit_download">Limite de téléchargement</string>
     <string name="speed_limit_upload">Limite d\'envoi</string>

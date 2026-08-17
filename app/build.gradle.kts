@@ -15,8 +15,8 @@ android {
         applicationId = "dev.qui.android"
         minSdk = 26
         targetSdk = 35
-        versionCode = 9
-        versionName = "0.4.4"
+        versionCode = 10
+        versionName = "0.4.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -94,6 +94,7 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.documentfile)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)

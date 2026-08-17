@@ -337,6 +337,127 @@
     "zh-CN": "最后更新于 %1$s"
   },
 
+  "widget_refreshing": {
+    "cs": "Obnovuji…",
+    "de": "Wird aktualisiert…",
+    "fr": "Actualisation…",
+    "it": "Aggiornamento…",
+    "ko": "새로 고치는 중…",
+    "pt-BR": "Atualizando…",
+    "uk": "Оновлення…",
+    "zh-CN": "刷新中…"
+  },
+
+  "widget_error_offline": {
+    "cs": "Bez připojení k síti",
+    "de": "Keine Netzwerkverbindung",
+    "fr": "Aucune connexion réseau",
+    "it": "Nessuna connessione di rete",
+    "ko": "네트워크에 연결되어 있지 않습니다",
+    "pt-BR": "Sem conexão de rede",
+    "uk": "Немає з’єднання з мережею",
+    "zh-CN": "没有网络连接"
+  },
+
+  "widget_error_unauthorized": {
+    "cs": "Přihlaste se znovu — server odmítl uložené přihlašovací údaje",
+    "de": "Erneut anmelden — der Server hat die gespeicherten Zugangsdaten abgelehnt",
+    "fr": "Reconnectez-vous — le serveur a rejeté les identifiants enregistrés",
+    "it": "Accedi di nuovo — il server ha rifiutato le credenziali salvate",
+    "ko": "다시 로그인하세요 — 서버가 저장된 인증 정보를 거부했습니다",
+    "pt-BR": "Entre novamente — o servidor rejeitou as credenciais salvas",
+    "uk": "Увійдіть знову — сервер відхилив збережені облікові дані",
+    "zh-CN": "请重新登录 —— 服务器拒绝了已保存的凭据"
+  },
+
+  "widget_error_timeout": {
+    "cs": "Server odpovídal příliš dlouho",
+    "de": "Der Server hat zu lange gebraucht",
+    "fr": "Le serveur a mis trop de temps à répondre",
+    "it": "Il server ha impiegato troppo a rispondere",
+    "ko": "서버 응답이 너무 오래 걸렸습니다",
+    "pt-BR": "O servidor demorou demais para responder",
+    "uk": "Сервер відповідав надто довго",
+    "zh-CN": "服务器响应超时"
+  },
+
+  "widget_error_no_response": {
+    "cs": "Neodpověděl žádný klient",
+    "de": "Kein Client hat geantwortet",
+    "fr": "Aucun client n'a répondu",
+    "it": "Nessun client ha risposto",
+    "ko": "응답한 클라이언트가 없습니다",
+    "pt-BR": "Nenhum cliente respondeu",
+    "uk": "Жоден клієнт не відповів",
+    "zh-CN": "没有客户端响应"
+  },
+
+  "widget_error_http": {
+    "cs": "Chyba serveru (HTTP %1$s)",
+    "de": "Serverfehler (HTTP %1$s)",
+    "fr": "Erreur du serveur (HTTP %1$s)",
+    "it": "Errore del server (HTTP %1$s)",
+    "ko": "서버 오류 (HTTP %1$s)",
+    "pt-BR": "Erro do servidor (HTTP %1$s)",
+    "uk": "Помилка сервера (HTTP %1$s)",
+    "zh-CN": "服务器错误(HTTP %1$s)"
+  },
+
+  "widget_interval": {
+    "cs": "Obnovování na pozadí",
+    "de": "Aktualisierung im Hintergrund",
+    "fr": "Actualisation en arrière-plan",
+    "it": "Aggiornamento in background",
+    "ko": "백그라운드 새로 고침",
+    "pt-BR": "Atualização em segundo plano",
+    "uk": "Оновлення у фоні",
+    "zh-CN": "后台刷新"
+  },
+
+  "widget_interval_off": {
+    "cs": "Vypnuto",
+    "de": "Aus",
+    "fr": "Désactivée",
+    "it": "Disattivato",
+    "ko": "사용 안 함",
+    "pt-BR": "Desligada",
+    "uk": "Вимкнено",
+    "zh-CN": "关闭"
+  },
+
+  "widget_interval_minutes": {
+    "cs": "%1$d min",
+    "de": "%1$d Min",
+    "fr": "%1$d min",
+    "it": "%1$d min",
+    "ko": "%1$d분",
+    "pt-BR": "%1$d min",
+    "uk": "%1$d хв",
+    "zh-CN": "%1$d 分钟"
+  },
+
+  "widget_interval_hour": {
+    "cs": "1 hodina",
+    "de": "1 Stunde",
+    "fr": "1 heure",
+    "it": "1 ora",
+    "ko": "1시간",
+    "pt-BR": "1 hora",
+    "uk": "1 година",
+    "zh-CN": "1 小时"
+  },
+
+  "widget_interval_note": {
+    "cs": "Android nespouští práci na pozadí častěji než jednou za 15 minut. Otevření aplikace a tlačítko obnovení na widgetu jej aktualizují okamžitě, ať je nastaveno cokoli.",
+    "de": "Android führt Hintergrundarbeit höchstens alle 15 Minuten aus. Die App zu öffnen und die Aktualisieren-Schaltfläche des Widgets aktualisieren es sofort, unabhängig von dieser Einstellung.",
+    "fr": "Android n'exécute pas de tâche en arrière-plan plus souvent que toutes les 15 minutes. Ouvrir l'application et le bouton d'actualisation du widget le mettent à jour immédiatement, quel que soit ce réglage.",
+    "it": "Android non esegue lavoro in background più spesso di una volta ogni 15 minuti. Aprire l'app e il pulsante di aggiornamento del widget lo aggiornano subito, qualunque sia questa impostazione.",
+    "ko": "안드로이드는 백그라운드 작업을 15분에 한 번보다 자주 실행하지 않습니다. 이 설정과 무관하게, 앱을 열거나 위젯의 새로 고침 버튼을 누르면 즉시 갱신됩니다.",
+    "pt-BR": "O Android não executa trabalho em segundo plano com mais frequência que a cada 15 minutos. Abrir o app e o botão de atualizar do widget o atualizam na hora, seja qual for este ajuste.",
+    "uk": "Android не виконує фонову роботу частіше ніж раз на 15 хвилин. Відкриття застосунку та кнопка оновлення на віджеті оновлюють його одразу, незалежно від цього налаштування.",
+    "zh-CN": "安卓最快 15 分钟才会执行一次后台任务。无论这里设成多少,打开应用或点小部件上的刷新按钮都会立即更新。"
+  },
+
   "torrents_partial_results": {
     "cs": "Jeden klient neodpověděl — seznam je neúplný",
     "de": "Ein Client hat nicht geantwortet — diese Liste ist unvollständig",
@@ -657,14 +778,14 @@
   },
 
   "widget_refresh_note": {
-    "cs": "Android obnovuje widgety nejvýše jednou za 30 minut, HyperOS/MIUI často méně často. Otevření aplikace a tlačítko obnovení na widgetu je aktualizují okamžitě.",
-    "de": "Android aktualisiert Widgets höchstens alle 30 Minuten, HyperOS/MIUI oft seltener. Die App zu öffnen und die Aktualisieren-Schaltfläche des Widgets aktualisieren sie sofort.",
-    "fr": "Android actualise les widgets au maximum toutes les 30 minutes, HyperOS/MIUI souvent moins. Ouvrir l'application et le bouton d'actualisation du widget les mettent à jour immédiatement.",
-    "it": "Android aggiorna i widget al massimo ogni 30 minuti, HyperOS/MIUI spesso meno. Aprire l'app e il pulsante di aggiornamento del widget li aggiornano subito.",
-    "ko": "안드로이드는 위젯을 최대 30분에 한 번 새로 고치며, HyperOS/MIUI에서는 더 드뭅니다. 앱을 열거나 위젯의 새로 고침 버튼을 누르면 즉시 갱신됩니다.",
-    "pt-BR": "O Android atualiza widgets no máximo a cada 30 minutos, e o HyperOS/MIUI muitas vezes menos. Abrir o app e o botão de atualizar do widget os atualizam na hora.",
-    "uk": "Android оновлює віджети щонайбільше раз на 30 хвилин, а HyperOS/MIUI часто рідше. Відкриття застосунку та кнопка оновлення на віджеті оновлюють їх одразу.",
-    "zh-CN": "安卓最快 30 分钟才会自动刷新一次小部件，澎湃/MIUI 往往更久。打开应用或点小部件上的刷新按钮可立即更新。"
+    "cs": "HyperOS, MIUI a podobné často práci na pozadí úplně přeskočí. Pokud widget zastará, povolte pro qui automatické spouštění a nastavte politiku baterie na neomezenou.",
+    "de": "HyperOS, MIUI und Ähnliche überspringen Hintergrundarbeit oft ganz. Wenn das Widget veraltet, erlaube qui den Autostart und setze die Akku-Richtlinie auf uneingeschränkt.",
+    "fr": "HyperOS, MIUI et consorts ignorent souvent complètement les tâches en arrière-plan. Si le widget se fige, autorisez le démarrage automatique de qui et réglez sa politique de batterie sur « sans restriction ».",
+    "it": "HyperOS, MIUI e simili spesso saltano del tutto il lavoro in background. Se il widget si ferma, consenti l'avvio automatico di qui e imposta la politica batteria su nessuna restrizione.",
+    "ko": "HyperOS, MIUI 등은 백그라운드 작업을 아예 건너뛰는 경우가 많습니다. 위젯이 갱신되지 않으면 qui의 자동 시작을 허용하고 배터리 정책을 제한 없음으로 설정하세요.",
+    "pt-BR": "HyperOS, MIUI e semelhantes costumam ignorar trabalho em segundo plano por completo. Se o widget ficar desatualizado, permita a inicialização automática do qui e defina a política de bateria como sem restrições.",
+    "uk": "HyperOS, MIUI та подібні часто взагалі пропускають фонову роботу. Якщо віджет застаріває, дозвольте автозапуск qui та встановіть політику батареї «без обмежень».",
+    "zh-CN": "澎湃 OS、MIUI 之类经常直接跳过后台任务。如果小部件不再更新,请给 qui 打开自启动,并把省电策略设为无限制。"
   },
 
   "dashboard_active_count": {

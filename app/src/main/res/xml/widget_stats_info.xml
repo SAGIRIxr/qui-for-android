@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  30 minutes is the floor the platform enforces for widget self-updates — HyperOS and
-  other aggressive launchers stretch it further — so the widget is a glance rather than
-  a live readout. The refresh button and the app's own polling are what keep it current.
+  updatePeriodMillis is 0 on purpose: the platform clamps it to 30 minutes, so the
+  refresh schedule is WidgetRefreshWorker's instead, which honours the interval chosen
+  in Settings and waits for connectivity rather than failing without it.
 
   minWidth/minHeight cover the 2x1 footprint so HyperOS offers every stock size chip
-  from 2x1 up to 4x3; the responsive layouts in QuiWidgetProvider decide what fits.
+  from 2x1 up to 4x3; the responsive layouts in WidgetViews decide what fits.
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/widget_description"
@@ -20,5 +20,5 @@
     android:resizeMode="horizontal|vertical"
     android:targetCellHeight="2"
     android:targetCellWidth="4"
-    android:updatePeriodMillis="1800000"
+    android:updatePeriodMillis="0"
     android:widgetCategory="home_screen" />
