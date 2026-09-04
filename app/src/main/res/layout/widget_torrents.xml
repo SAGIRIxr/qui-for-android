@@ -78,11 +78,12 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <View
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
-        android:background="@color/widget_border" />
+        android:background="@color/widget_border"
+        android:importantForAccessibility="no" />
 
     <ListView
         android:id="@+id/widget_list"
