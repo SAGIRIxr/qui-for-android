@@ -55,6 +55,7 @@ class AppPreferencesStore @Inject constructor(
         val dynamicColor = booleanPreferencesKey("dynamic_color")
         val confirmDelete = booleanPreferencesKey("confirm_delete")
         val refreshSeconds = intPreferencesKey("refresh_seconds")
+        val showServerStats = booleanPreferencesKey("dash_server_stats")
         val showGlobalStats = booleanPreferencesKey("dash_global_stats")
         val showTrackerBreakdown = booleanPreferencesKey("dash_tracker_breakdown")
         val showInstanceCards = booleanPreferencesKey("dash_instance_cards")
@@ -81,6 +82,7 @@ class AppPreferencesStore @Inject constructor(
         val confirmDelete: Boolean = true,
         val refreshSeconds: Int = 3,
         // Which dashboard sections are shown, mirroring qui's dashboard settings.
+        val showServerStats: Boolean = true,
         val showGlobalStats: Boolean = true,
         val showTrackerBreakdown: Boolean = true,
         val showInstanceCards: Boolean = true,
@@ -115,6 +117,7 @@ class AppPreferencesStore @Inject constructor(
             dynamicColor = prefs[Keys.dynamicColor] ?: false,
             confirmDelete = prefs[Keys.confirmDelete] ?: true,
             refreshSeconds = prefs[Keys.refreshSeconds] ?: 3,
+            showServerStats = prefs[Keys.showServerStats] ?: true,
             showGlobalStats = prefs[Keys.showGlobalStats] ?: true,
             showTrackerBreakdown = prefs[Keys.showTrackerBreakdown] ?: true,
             showInstanceCards = prefs[Keys.showInstanceCards] ?: true,
@@ -192,6 +195,10 @@ class AppPreferencesStore @Inject constructor(
 
     suspend fun setRefreshSeconds(seconds: Int) = context.prefsDataStore.edit {
         it[Keys.refreshSeconds] = seconds.coerceIn(1, 60)
+    }
+
+    suspend fun setShowServerStats(enabled: Boolean) = context.prefsDataStore.edit {
+        it[Keys.showServerStats] = enabled
     }
 
     suspend fun setShowGlobalStats(enabled: Boolean) = context.prefsDataStore.edit {

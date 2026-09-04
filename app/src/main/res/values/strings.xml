@@ -348,6 +348,13 @@
     <string name="dashboard_show_address">Show address</string>
 
     <!-- Dashboard sections (qui's dashboard settings dialog) -->
+    <string name="dashboard_section_server_stats">Server Statistics</string>
+    <string name="dashboard_server_downloaded">Downloaded</string>
+    <string name="dashboard_server_downloaded_session">Downloaded (Session)</string>
+    <string name="dashboard_server_uploaded">Uploaded</string>
+    <string name="dashboard_server_uploaded_session">Uploaded (Session)</string>
+    <string name="dashboard_server_ratio">Ratio</string>
+    <string name="dashboard_server_peers">Peers</string>
     <string name="dashboard_section_global_stats">Global Stats Cards</string>
     <string name="dashboard_section_tracker_breakdown">Tracker Breakdown</string>
     <string name="dashboard_section_instances">Instance Cards</string>

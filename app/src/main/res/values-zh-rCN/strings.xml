@@ -279,6 +279,13 @@
     <string name="dashboard_active_count">%1$d 个活动</string>
     <string name="dashboard_hide_address">隐藏地址</string>
     <string name="dashboard_show_address">显示地址</string>
+    <string name="dashboard_section_server_stats">服务器统计</string>
+    <string name="dashboard_server_downloaded">已下载</string>
+    <string name="dashboard_server_downloaded_session">已下载（本次）</string>
+    <string name="dashboard_server_uploaded">已上传</string>
+    <string name="dashboard_server_uploaded_session">已上传（本次）</string>
+    <string name="dashboard_server_ratio">分享率</string>
+    <string name="dashboard_server_peers">节点</string>
     <string name="dashboard_section_global_stats">全局统计卡片</string>
     <string name="dashboard_section_tracker_breakdown">Tracker 明细</string>
     <string name="dashboard_section_instances">实例卡片</string>

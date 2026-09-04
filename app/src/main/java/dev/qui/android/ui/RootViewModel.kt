@@ -115,6 +115,10 @@ class RootViewModel @Inject constructor(
         prefsStore.setRefreshSeconds(seconds)
     }
 
+    fun setShowServerStats(enabled: Boolean) = viewModelScope.launch {
+        prefsStore.setShowServerStats(enabled)
+    }
+
     fun setShowGlobalStats(enabled: Boolean) = viewModelScope.launch {
         prefsStore.setShowGlobalStats(enabled)
     }

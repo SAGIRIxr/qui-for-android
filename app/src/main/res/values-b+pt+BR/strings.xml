@@ -279,6 +279,13 @@
     <string name="dashboard_active_count">%1$d ativos</string>
     <string name="dashboard_hide_address">Ocultar endereço</string>
     <string name="dashboard_show_address">Mostrar endereço</string>
+    <string name="dashboard_section_server_stats">Estatísticas do Servidor</string>
+    <string name="dashboard_server_downloaded">Baixado</string>
+    <string name="dashboard_server_downloaded_session">Baixado (Sessão)</string>
+    <string name="dashboard_server_uploaded">Enviado</string>
+    <string name="dashboard_server_uploaded_session">Enviado (Sessão)</string>
+    <string name="dashboard_server_ratio">Ratio</string>
+    <string name="dashboard_server_peers">Peers</string>
     <string name="dashboard_section_global_stats">Cartões de Estatísticas Globais</string>
     <string name="dashboard_section_tracker_breakdown">Detalhamento de Trackers</string>
     <string name="dashboard_section_instances">Cartões de Instâncias</string>

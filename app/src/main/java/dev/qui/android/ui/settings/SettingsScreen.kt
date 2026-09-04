@@ -295,6 +295,11 @@ fun SettingsScreen(
                 )
                 Spacer(Modifier.height(4.dp))
                 CheckRow(
+                    label = stringResource(R.string.dashboard_section_server_stats),
+                    checked = prefs.showServerStats,
+                    onChange = root::setShowServerStats,
+                )
+                CheckRow(
                     label = stringResource(R.string.dashboard_section_global_stats),
                     checked = prefs.showGlobalStats,
                     onChange = root::setShowGlobalStats,

@@ -279,6 +279,13 @@
     <string name="dashboard_active_count">%1$d активних</string>
     <string name="dashboard_hide_address">Приховати адресу</string>
     <string name="dashboard_show_address">Показати адресу</string>
+    <string name="dashboard_section_server_stats">Статистика сервера</string>
+    <string name="dashboard_server_downloaded">Завантажено</string>
+    <string name="dashboard_server_downloaded_session">Завантажено (сесія)</string>
+    <string name="dashboard_server_uploaded">Вивантажено</string>
+    <string name="dashboard_server_uploaded_session">Вивантажено (сесія)</string>
+    <string name="dashboard_server_ratio">Співвідношення</string>
+    <string name="dashboard_server_peers">Піри</string>
     <string name="dashboard_section_global_stats">Загальна статистика</string>
     <string name="dashboard_section_tracker_breakdown">Розбивка за трекерами</string>
     <string name="dashboard_section_instances">Картки екземплярів</string>

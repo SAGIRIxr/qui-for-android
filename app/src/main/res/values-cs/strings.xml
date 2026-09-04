@@ -279,6 +279,13 @@
     <string name="dashboard_active_count">%1$d aktivních</string>
     <string name="dashboard_hide_address">Skrýt adresu</string>
     <string name="dashboard_show_address">Zobrazit adresu</string>
+    <string name="dashboard_section_server_stats">Statistiky serveru</string>
+    <string name="dashboard_server_downloaded">Stáhnuto</string>
+    <string name="dashboard_server_downloaded_session">Stáhnuto (relace)</string>
+    <string name="dashboard_server_uploaded">Nahráno</string>
+    <string name="dashboard_server_uploaded_session">Nahráno (relace)</string>
+    <string name="dashboard_server_ratio">Poměr</string>
+    <string name="dashboard_server_peers">Peer připojení</string>
     <string name="dashboard_section_global_stats">Globální statistiky</string>
     <string name="dashboard_section_tracker_breakdown">Rozložení podle jednotlivých trackerů</string>
     <string name="dashboard_section_instances">Karty instancí</string>

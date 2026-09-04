@@ -7,6 +7,8 @@
  * speeds, session and all-time transfer, disk usage, and the alternative-speed switch.
  */
 
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
 package dev.qui.android.ui.dashboard
 
 import androidx.compose.animation.AnimatedVisibility
@@ -42,6 +44,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -84,6 +87,21 @@ fun DashboardScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val prefs by viewModel.preferences.collectAsStateWithLifecycle()
     val palette = QuiTheme.palette
+    val serverStatistics = state.serverStatistics
+    var serverStatsExpanded by remember { mutableStateOf(true) }
+    var selectedServerStatsId by remember { mutableStateOf<Int?>(null) }
+
+    LaunchedEffect(serverStatistics, prefs.showServerStats) {
+        val selectedId = selectedServerStatsId
+        if (
+            selectedId != null &&
+            (!prefs.showServerStats || serverStatistics?.rows?.none {
+                it.instanceId == selectedId
+            } != false)
+        ) {
+            selectedServerStatsId = null
+        }
+    }
 
     LaunchedEffect(Unit) { viewModel.start() }
 
@@ -126,6 +144,17 @@ fun DashboardScreen(
         contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
+        if (prefs.showServerStats && serverStatistics != null) {
+            item(key = "server-statistics") {
+                ServerStatisticsCard(
+                    statistics = serverStatistics,
+                    expanded = serverStatsExpanded,
+                    onToggleExpanded = { serverStatsExpanded = !serverStatsExpanded },
+                    onOpenInstance = { selectedServerStatsId = it },
+                )
+            }
+        }
+
         if (prefs.showGlobalStats) {
             item {
                 GlobalStatsCard(state = state, speedUnit = prefs.speedUnit)
@@ -154,6 +183,189 @@ fun DashboardScreen(
                     onToggleIncognito = viewModel::toggleIncognito,
                 )
             }
+        }
+    }
+
+    val selectedServerStats = if (prefs.showServerStats) {
+        serverStatistics?.rows?.firstOrNull { it.instanceId == selectedServerStatsId }
+    } else {
+        null
+    }
+    selectedServerStats?.let { row ->
+        ServerStatisticsBottomSheet(
+            row = row,
+            onDismiss = { selectedServerStatsId = null },
+        )
+    }
+}
+
+@Composable
+private fun ServerStatisticsCard(
+    statistics: ServerStatistics,
+    expanded: Boolean,
+    onToggleExpanded: () -> Unit,
+    onOpenInstance: (Int) -> Unit,
+) {
+    val palette = QuiTheme.palette
+
+    QuiCard {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onToggleExpanded)
+                .padding(vertical = 2.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = stringResource(R.string.dashboard_section_server_stats).uppercase(),
+                style = MaterialTheme.typography.labelSmall,
+                color = palette.mutedForeground,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.weight(1f),
+            )
+            Icon(
+                imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                contentDescription = stringResource(
+                    if (expanded) R.string.dashboard_show_less else R.string.dashboard_show_more
+                ),
+                tint = palette.mutedForeground,
+            )
+        }
+
+        Spacer(Modifier.height(12.dp))
+        ServerStatsMetricPair(
+            firstLabel = stringResource(R.string.dashboard_server_downloaded),
+            firstValue = formatBytes(statistics.totalDownloaded),
+            firstColor = QuiTheme.downloadColor,
+            secondLabel = stringResource(R.string.dashboard_server_uploaded),
+            secondValue = formatBytes(statistics.totalUploaded),
+            secondColor = QuiTheme.uploadColor,
+        )
+        Spacer(Modifier.height(10.dp))
+        Row(Modifier.fillMaxWidth()) {
+            Metric(
+                label = stringResource(R.string.dashboard_server_ratio),
+                value = formatRatio(statistics.shareRatio),
+                modifier = Modifier.weight(1f),
+                color = QuiTheme.ratioColor(statistics.shareRatio),
+            )
+            if (statistics.totalPeerConnections > 0L) {
+                Metric(
+                    label = stringResource(R.string.dashboard_server_peers),
+                    value = statistics.totalPeerConnections.toString(),
+                    modifier = Modifier.weight(1f),
+                )
+            }
+        }
+
+        AnimatedVisibility(visible = expanded) {
+            Column {
+                Spacer(Modifier.height(10.dp))
+                statistics.rows.forEach { row ->
+                    HorizontalDivider(color = palette.border)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onOpenInstance(row.instanceId) }
+                            .padding(vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(Modifier.weight(1f)) {
+                            Text(
+                                text = row.instanceName,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.Medium,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                            Text(
+                                text = "↓${formatBytes(row.downloaded)} · ↑${formatBytes(row.uploaded)}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = palette.mutedForeground,
+                            )
+                        }
+                        Text(
+                            text = formatRatio(row.shareRatio),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Medium,
+                            color = QuiTheme.ratioColor(row.shareRatio),
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ServerStatsMetricPair(
+    firstLabel: String,
+    firstValue: String,
+    firstColor: androidx.compose.ui.graphics.Color? = null,
+    secondLabel: String,
+    secondValue: String,
+    secondColor: androidx.compose.ui.graphics.Color? = null,
+) {
+    Row(Modifier.fillMaxWidth()) {
+        Metric(
+            label = firstLabel,
+            value = firstValue,
+            modifier = Modifier.weight(1f),
+            color = firstColor,
+        )
+        Metric(
+            label = secondLabel,
+            value = secondValue,
+            modifier = Modifier.weight(1f),
+            color = secondColor,
+        )
+    }
+}
+
+@Composable
+private fun ServerStatisticsBottomSheet(
+    row: ServerStatisticsRow,
+    onDismiss: () -> Unit,
+) {
+    ModalBottomSheet(onDismissRequest = onDismiss) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
+        ) {
+            Text(
+                text = row.instanceName,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(Modifier.height(18.dp))
+            ServerStatsMetricPair(
+                firstLabel = stringResource(R.string.dashboard_server_downloaded),
+                firstValue = formatBytes(row.downloaded),
+                firstColor = QuiTheme.downloadColor,
+                secondLabel = stringResource(R.string.dashboard_server_downloaded_session),
+                secondValue = formatBytes(row.downloadedSession),
+                secondColor = QuiTheme.downloadColor,
+            )
+            Spacer(Modifier.height(16.dp))
+            ServerStatsMetricPair(
+                firstLabel = stringResource(R.string.dashboard_server_uploaded),
+                firstValue = formatBytes(row.uploaded),
+                firstColor = QuiTheme.uploadColor,
+                secondLabel = stringResource(R.string.dashboard_server_uploaded_session),
+                secondValue = formatBytes(row.uploadedSession),
+                secondColor = QuiTheme.uploadColor,
+            )
+            Spacer(Modifier.height(16.dp))
+            ServerStatsMetricPair(
+                firstLabel = stringResource(R.string.dashboard_server_ratio),
+                firstValue = formatRatio(row.shareRatio),
+                firstColor = QuiTheme.ratioColor(row.shareRatio),
+                secondLabel = stringResource(R.string.dashboard_server_peers),
+                secondValue = row.peerConnections?.toString() ?: "-",
+            )
         }
     }
 }
