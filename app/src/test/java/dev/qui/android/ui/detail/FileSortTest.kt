@@ -74,6 +74,32 @@ class FileSortTest {
     }
 
     @Test
+    fun `equal sizes use case-insensitive then original name tie breaks`() {
+        val files = listOf(
+            file(4, "beta", size = 20),
+            file(2, "alpha", size = 20),
+            file(5, "Tail", size = 30),
+            file(3, "Alpha", size = 20),
+            file(1, "Zed", size = 10),
+        )
+
+        assertEquals(
+            listOf(1, 3, 2, 4, 5),
+            sortTorrentFiles(
+                files,
+                FileSort(FileSortColumn.Size, SortDirection.Ascending),
+            ).map { it.index },
+        )
+        assertEquals(
+            listOf(5, 3, 2, 4, 1),
+            sortTorrentFiles(
+                files,
+                FileSort(FileSortColumn.Size, SortDirection.Descending),
+            ).map { it.index },
+        )
+    }
+
+    @Test
     fun `index is the final tie break when primary and names match`() {
         val files = listOf(
             file(3, "Same", size = 20),
