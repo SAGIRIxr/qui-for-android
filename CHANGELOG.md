@@ -6,7 +6,7 @@ The section for a tag becomes that release's notes on GitHub, and the app shows 
 same text in its update dialog. Add the new version at the top before tagging, in this
 file and in [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md).
 
-## Unreleased
+## 0.5.0
 
 ### Added
 - A collapsible Server Statistics card on the Dashboard, with per-instance session and
