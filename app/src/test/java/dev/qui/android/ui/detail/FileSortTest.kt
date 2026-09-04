@@ -18,15 +18,71 @@ class FileSortTest {
     }
 
     @Test
-    fun `size supports both directions and name tie breaking`() {
+    fun `all columns sort in both directions`() {
         val files = listOf(
-            file(2, "Beta", size = 20),
-            file(1, "Alpha", size = 20),
-            file(3, "Zed", size = 10),
+            file(4, "Delta", size = 40, progress = 0.4, priority = 6),
+            file(2, "bravo", size = 10, progress = 0.8, priority = 1),
+            file(1, "Alpha", size = 30, progress = 0.2, priority = 7),
+            file(3, "charlie", size = 20, progress = 0.6, priority = 0),
+        )
+        val cases = listOf(
+            Triple(
+                "name ascending",
+                FileSort(FileSortColumn.Name, SortDirection.Ascending),
+                listOf(1, 2, 3, 4),
+            ),
+            Triple(
+                "name descending",
+                FileSort(FileSortColumn.Name, SortDirection.Descending),
+                listOf(4, 3, 2, 1),
+            ),
+            Triple(
+                "size ascending",
+                FileSort(FileSortColumn.Size, SortDirection.Ascending),
+                listOf(2, 3, 1, 4),
+            ),
+            Triple(
+                "size descending",
+                FileSort(FileSortColumn.Size, SortDirection.Descending),
+                listOf(4, 1, 3, 2),
+            ),
+            Triple(
+                "progress ascending",
+                FileSort(FileSortColumn.Progress, SortDirection.Ascending),
+                listOf(1, 4, 3, 2),
+            ),
+            Triple(
+                "progress descending",
+                FileSort(FileSortColumn.Progress, SortDirection.Descending),
+                listOf(2, 3, 4, 1),
+            ),
+            Triple(
+                "priority ascending",
+                FileSort(FileSortColumn.Priority, SortDirection.Ascending),
+                listOf(3, 2, 4, 1),
+            ),
+            Triple(
+                "priority descending",
+                FileSort(FileSortColumn.Priority, SortDirection.Descending),
+                listOf(1, 4, 2, 3),
+            ),
+        )
+
+        cases.forEach { (label, sort, expectedIndexes) ->
+            assertEquals(label, expectedIndexes, sortTorrentFiles(files, sort).map { it.index })
+        }
+    }
+
+    @Test
+    fun `index is the final tie break when primary and names match`() {
+        val files = listOf(
+            file(3, "Same", size = 20),
+            file(1, "Same", size = 20),
+            file(2, "Same", size = 20),
         )
 
         assertEquals(
-            listOf(3, 1, 2),
+            listOf(1, 2, 3),
             sortTorrentFiles(
                 files,
                 FileSort(FileSortColumn.Size, SortDirection.Ascending),
@@ -42,52 +98,39 @@ class FileSortTest {
     }
 
     @Test
-    fun `progress and priority use numeric values`() {
-        val files = listOf(
-            file(1, "One", progress = 0.5, priority = 1),
-            file(2, "Two", progress = 0.9, priority = 0),
-            file(3, "Three", progress = 0.1, priority = 7),
+    fun `same column toggles in both directions`() {
+        val descending = toggleFileSort(FileSort(), FileSortColumn.Name)
+        assertEquals(
+            FileSort(FileSortColumn.Name, SortDirection.Descending),
+            descending,
         )
 
+        val ascending = toggleFileSort(descending, FileSortColumn.Name)
         assertEquals(
-            listOf(2, 1, 3),
-            sortTorrentFiles(
-                files,
-                FileSort(FileSortColumn.Progress, SortDirection.Descending),
-            ).map { it.index },
-        )
-        assertEquals(
-            listOf(3, 1, 2),
-            sortTorrentFiles(
-                files,
-                FileSort(FileSortColumn.Priority, SortDirection.Descending),
-            ).map { it.index },
+            FileSort(FileSortColumn.Name, SortDirection.Ascending),
+            ascending,
         )
     }
 
     @Test
-    fun `same column toggles and a new column gets its conventional default`() {
+    fun `switching away and back resets the returned column to ascending`() {
+        val sizeDescending = FileSort(FileSortColumn.Size, SortDirection.Descending)
+        val progressAscending = toggleFileSort(sizeDescending, FileSortColumn.Progress)
         assertEquals(
-            FileSort(FileSortColumn.Name, SortDirection.Descending),
-            toggleFileSort(FileSort(), FileSortColumn.Name),
+            FileSort(FileSortColumn.Progress, SortDirection.Ascending),
+            progressAscending,
         )
+
+        val progressDescending = toggleFileSort(progressAscending, FileSortColumn.Progress)
+        assertEquals(
+            FileSort(FileSortColumn.Progress, SortDirection.Descending),
+            progressDescending,
+        )
+
+        val sizeAscending = toggleFileSort(progressDescending, FileSortColumn.Size)
         assertEquals(
             FileSort(FileSortColumn.Size, SortDirection.Ascending),
-            toggleFileSort(FileSort(), FileSortColumn.Size),
-        )
-        assertEquals(
-            FileSort(FileSortColumn.Size, SortDirection.Ascending),
-            toggleFileSort(
-                FileSort(FileSortColumn.Size, SortDirection.Descending),
-                FileSortColumn.Size,
-            ),
-        )
-        assertEquals(
-            FileSort(FileSortColumn.Name, SortDirection.Ascending),
-            toggleFileSort(
-                FileSort(FileSortColumn.Priority, SortDirection.Descending),
-                FileSortColumn.Name,
-            ),
+            sizeAscending,
         )
     }
 
