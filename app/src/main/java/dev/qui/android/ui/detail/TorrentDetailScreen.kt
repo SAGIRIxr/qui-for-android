@@ -30,6 +30,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DriveFileRenameOutline
@@ -37,6 +39,7 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -84,6 +87,13 @@ import dev.qui.android.ui.theme.QuiTheme
 import dev.qui.android.ui.torrents.TextInputDialog
 import dev.qui.android.ui.torrents.statusBadgeFor
 import dev.qui.android.ui.torrents.trackerHost
+
+private val FILE_SORT_OPTIONS = listOf(
+    FileSortColumn.Name to R.string.sort_name,
+    FileSortColumn.Size to R.string.sort_size,
+    FileSortColumn.Progress to R.string.sort_progress,
+    FileSortColumn.Priority to R.string.sort_priority,
+)
 
 @Composable
 fun TorrentDetailScreen(
@@ -209,7 +219,12 @@ fun TorrentDetailScreen(
                 DetailTab.General -> GeneralTab(state)
                 DetailTab.Trackers -> TrackersTab(state.trackers)
                 DetailTab.Peers -> PeersTab(state.peers, prefs.speedUnit)
-                DetailTab.Content -> ContentTab(state.files, viewModel::setFilePriority)
+                DetailTab.Content -> ContentTab(
+                    files = state.sortedFiles,
+                    sort = state.fileSort,
+                    onSortChange = viewModel::toggleFileSort,
+                    onSetPriority = viewModel::setFilePriority,
+                )
                 DetailTab.WebSeeds -> WebSeedsTab(state.webSeeds.map { it.url })
             }
         }
@@ -567,6 +582,8 @@ private fun PeersTab(peers: List<TorrentPeer>, speedUnit: dev.qui.android.data.S
 @Composable
 private fun ContentTab(
     files: List<TorrentFile>,
+    sort: FileSort,
+    onSortChange: (FileSortColumn) -> Unit,
     onSetPriority: (List<Int>, Int) -> Unit,
 ) {
     val palette = QuiTheme.palette
@@ -576,56 +593,100 @@ private fun ContentTab(
         return
     }
 
-    LazyColumn(contentPadding = PaddingValues(16.dp)) {
-        items(files) { file ->
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        // qBittorrent priorities: 0 skip, 1 normal, 6 high, 7 maximum.
-                        // Tapping cycles skip → normal → high → maximum.
-                        val next = when (file.priority) {
-                            0 -> 1
-                            1 -> 6
-                            6 -> 7
-                            else -> 0
-                        }
-                        onSetPriority(listOf(file.index), next)
+    Column(Modifier.fillMaxSize()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            FILE_SORT_OPTIONS.forEach { (column, labelRes) ->
+                val selected = sort.column == column
+                val directionLabel = stringResource(
+                    if (sort.direction == SortDirection.Ascending) {
+                        R.string.sort_ascending
+                    } else {
+                        R.string.sort_descending
                     }
-                    .padding(vertical = 6.dp),
-            ) {
-                Text(
-                    text = file.name,
-                    style = MaterialTheme.typography.bodySmall,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
                 )
-                Spacer(Modifier.height(3.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                FilterChip(
+                    selected = selected,
+                    onClick = { onSortChange(column) },
+                    label = { Text(stringResource(labelRes)) },
+                    leadingIcon = if (selected) {
+                        {
+                            Icon(
+                                imageVector = if (sort.direction == SortDirection.Ascending) {
+                                    Icons.Default.ArrowUpward
+                                } else {
+                                    Icons.Default.ArrowDownward
+                                },
+                                contentDescription = directionLabel,
+                                modifier = Modifier.size(16.dp),
+                            )
+                        }
+                    } else {
+                        null
+                    },
+                )
+            }
+        }
+
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            contentPadding = PaddingValues(16.dp),
+        ) {
+            items(files, key = TorrentFile::index) { file ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            // qBittorrent priorities: 0 skip, 1 normal, 6 high, 7 maximum.
+                            // Tapping cycles skip → normal → high → maximum.
+                            val next = when (file.priority) {
+                                0 -> 1
+                                1 -> 6
+                                6 -> 7
+                                else -> 0
+                            }
+                            onSetPriority(listOf(file.index), next)
+                        }
+                        .padding(vertical = 6.dp),
+                ) {
                     Text(
-                        text = formatBytes(file.size),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = palette.mutedForeground,
+                        text = file.name,
+                        style = MaterialTheme.typography.bodySmall,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
                     )
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        text = "${formatProgress(file.progress)}%",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = palette.mutedForeground,
-                    )
-                    Spacer(Modifier.weight(1f))
-                    QuiBadge(
-                        text = filePriorityLabel(file.priority),
-                        variant = if (file.priority == 0) {
-                            dev.qui.android.ui.components.BadgeVariant.Outline
-                        } else {
-                            dev.qui.android.ui.components.BadgeVariant.Secondary
-                        },
-                        compact = true,
-                    )
+                    Spacer(Modifier.height(3.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = formatBytes(file.size),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = palette.mutedForeground,
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = "${formatProgress(file.progress)}%",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = palette.mutedForeground,
+                        )
+                        Spacer(Modifier.weight(1f))
+                        QuiBadge(
+                            text = filePriorityLabel(file.priority),
+                            variant = if (file.priority == 0) {
+                                dev.qui.android.ui.components.BadgeVariant.Outline
+                            } else {
+                                dev.qui.android.ui.components.BadgeVariant.Secondary
+                            },
+                            compact = true,
+                        )
+                    }
+                    Spacer(Modifier.height(4.dp))
+                    QuiProgress(progress = file.progress.toFloat(), height = 4.dp)
                 }
-                Spacer(Modifier.height(4.dp))
-                QuiProgress(progress = file.progress.toFloat(), height = 4.dp)
             }
         }
     }

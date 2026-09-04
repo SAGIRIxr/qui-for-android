@@ -16,7 +16,7 @@
 - 本次范围只包含服务器统计、I2P Peer 地址、内容排序和 `zh-TW`；不引入 torrent 导出、`client_settings` 同步、Spreadsheet 主题或服务器管理功能。
 - 服务器统计仅纳入请求成功且累计下载或累计上传至少一个大于 0 的实例；总分享率为总上传除以总下载，总下载为 0 时取 `0.0`。
 - Peer 缺失显示 `-`，明确为 0 显示 `0`；总上传和总下载均为 0 时不渲染服务器统计板块。
-- 文件排序默认名称升序；点击同一列切换方向，切换到名称默认升序，切换到数值列默认降序。
+- 文件排序默认名称升序；点击同一列切换方向，切换到任意其他列时默认升序。
 - 生成资源采用规格中明确的 TDD 例外，但必须通过 100% 翻译报告、资源合并和 Debug 构建。
 - 不新增第三方依赖，不引入 Compose UI 测试框架，不改变 minSdk 26、targetSdk 35 或现有 API 合同。
 
@@ -883,7 +883,7 @@ class FileSortTest {
             toggleFileSort(FileSort(), FileSortColumn.Name),
         )
         assertEquals(
-            FileSort(FileSortColumn.Size, SortDirection.Descending),
+            FileSort(FileSortColumn.Size, SortDirection.Ascending),
             toggleFileSort(FileSort(), FileSortColumn.Size),
         )
         assertEquals(
@@ -978,14 +978,7 @@ fun toggleFileSort(current: FileSort, column: FileSortColumn): FileSort {
         return current.copy(direction = direction)
     }
 
-    return FileSort(
-        column = column,
-        direction = if (column == FileSortColumn.Name) {
-            SortDirection.Ascending
-        } else {
-            SortDirection.Descending
-        },
-    )
+    return FileSort(column = column, direction = SortDirection.Ascending)
 }
 
 fun sortTorrentFiles(files: List<TorrentFile>, sort: FileSort): List<TorrentFile> {

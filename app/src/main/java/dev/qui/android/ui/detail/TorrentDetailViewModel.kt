@@ -41,11 +41,14 @@ data class DetailUiState(
     val trackers: List<TorrentTracker> = emptyList(),
     val peers: List<TorrentPeer> = emptyList(),
     val files: List<TorrentFile> = emptyList(),
+    val fileSort: FileSort = FileSort(),
     val webSeeds: List<WebSeed> = emptyList(),
     val tab: DetailTab = DetailTab.General,
     val isLoading: Boolean = true,
     val error: String? = null,
-)
+) {
+    val sortedFiles: List<TorrentFile> get() = sortTorrentFiles(files, fileSort)
+}
 
 @HiltViewModel
 class TorrentDetailViewModel @Inject constructor(
@@ -135,6 +138,12 @@ class TorrentDetailViewModel @Inject constructor(
     fun selectTab(tab: DetailTab) {
         _state.update { it.copy(tab = tab) }
         viewModelScope.launch { loadForTab(tab) }
+    }
+
+    fun toggleFileSort(column: FileSortColumn) {
+        _state.update { state ->
+            state.copy(fileSort = toggleFileSort(state.fileSort, column))
+        }
     }
 
     fun action(action: String, configure: BulkActionRequest.() -> BulkActionRequest = { this }) {

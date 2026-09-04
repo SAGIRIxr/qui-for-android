@@ -68,7 +68,7 @@ Peer 列表改用该函数，不再直接拼接 `${ip}:${port}`。本次不新�
 - 列：`Name`、`Size`、`Progress`、`Priority`。
 - 方向：`Ascending`、`Descending`。
 - 默认值：名称升序。
-- 点击当前列切换方向；切换到名称时默认升序，切换到数值列时默认降序。
+- 点击当前列切换方向；切换到任意其他列时默认升序。
 - 名称比较忽略大小写，结果相同时按原始名称和文件 index 保证确定顺序。
 - 大小按 `size`，进度按 `progress`，优先级按 qBittorrent 数值 `priority` 比较；数值相同时以名称和 index 作为稳定次序。
 
