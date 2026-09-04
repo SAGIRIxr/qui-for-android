@@ -160,8 +160,8 @@ data class TorrentFile(
 
 @Serializable
 data class TorrentPeer(
-    val ip: String = "",
-    val port: Int = 0,
+    val ip: String? = null,
+    val port: Int? = null,
     val connection: String? = null,
     val flags: String? = null,
     @SerialName("flags_desc") val flagsDesc: String? = null,

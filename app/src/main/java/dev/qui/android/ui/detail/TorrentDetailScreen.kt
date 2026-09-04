@@ -523,7 +523,7 @@ private fun PeersTab(peers: List<TorrentPeer>, speedUnit: dev.qui.android.data.S
             ) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        text = "${peer.ip}:${peer.port}",
+                        text = formatPeerAddress(peer),
                         style = MaterialTheme.typography.bodySmall,
                         fontFamily = FontFamily.Monospace,
                         maxLines = 1,
