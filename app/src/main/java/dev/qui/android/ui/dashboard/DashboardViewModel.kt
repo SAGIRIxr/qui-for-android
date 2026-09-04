@@ -82,6 +82,7 @@ data class DashboardUiState(
     val totalSeeding: Int get() = cards.sumOf { it.seeding }
     val activeTorrents: Int get() = totalDownloading + totalSeeding
     val connectedCount: Int get() = cards.count { it.instance.connected }
+    val serverStatistics: ServerStatistics? get() = buildServerStatistics(cards)
 
     /**
      * The per-tracker totals qui charts, merged across instances: a tracker seeded from
