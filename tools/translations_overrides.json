@@ -3,7 +3,7 @@
     "Strings that have no counterpart in autobrr/qui's own locale files, so they",
     "are translated here instead. Everything else is pulled from qui at build time",
     "by generate_translations.py so the wording matches the web UI.",
-    "Languages: cs, de, fr, it, ko, pt-BR, uk, zh-CN (the set qui supports)."
+    "Languages: cs, de, fr, it, ko, pt-BR, uk, zh-CN, zh-TW (nine non-English locales)."
   ],
 
   "add_to_qui": {
@@ -14,7 +14,8 @@
     "ko": "qui에 추가",
     "pt-BR": "Adicionar ao qui",
     "uk": "Додати до qui",
-    "zh-CN": "添加到 qui"
+    "zh-CN": "添加到 qui",
+    "zh-TW": "新增至 qui"
   },
 
   "action_top_of_queue": {
@@ -25,7 +26,8 @@
     "ko": "대기열 맨 위로",
     "pt-BR": "Início da fila",
     "uk": "На початок черги",
-    "zh-CN": "移到队列首位"
+    "zh-CN": "移到队列首位",
+    "zh-TW": "移到佇列首位"
   },
   "action_bottom_of_queue": {
     "cs": "Na konec fronty",
@@ -35,7 +37,8 @@
     "ko": "대기열 맨 아래로",
     "pt-BR": "Fim da fila",
     "uk": "У кінець черги",
-    "zh-CN": "移到队列末尾"
+    "zh-CN": "移到队列末尾",
+    "zh-TW": "移到佇列末尾"
   },
   "action_more": {
     "cs": "Další akce",
@@ -45,7 +48,8 @@
     "ko": "추가 작업",
     "pt-BR": "Mais ações",
     "uk": "Інші дії",
-    "zh-CN": "更多操作"
+    "zh-CN": "更多操作",
+    "zh-TW": "更多操作"
   },
 
   "add_magnet_or_url": {
@@ -56,7 +60,8 @@
     "ko": "Magnet 또는 URL",
     "pt-BR": "Magnet ou URL",
     "uk": "Magnet або URL",
-    "zh-CN": "Magnet 链接或 URL"
+    "zh-CN": "Magnet 链接或 URL",
+    "zh-TW": "Magnet 連結或 URL"
   },
   "add_choose_files": {
     "cs": "Vybrat soubory .torrent",
@@ -66,7 +71,8 @@
     "ko": ".torrent 파일 선택",
     "pt-BR": "Escolher arquivos .torrent",
     "uk": "Вибрати файли .torrent",
-    "zh-CN": "选择 .torrent 文件"
+    "zh-CN": "选择 .torrent 文件",
+    "zh-TW": "選擇 .torrent 檔案"
   },
   "add_first_last_piece": {
     "cs": "Nejprve první a poslední část",
@@ -76,7 +82,8 @@
     "ko": "첫 조각과 마지막 조각 우선",
     "pt-BR": "Primeiro e último pedaço primeiro",
     "uk": "Спочатку перша й остання частини",
-    "zh-CN": "优先下载首尾块"
+    "zh-CN": "优先下载首尾块",
+    "zh-TW": "優先下載首尾區塊"
   },
 
   "common_none": {
@@ -87,7 +94,8 @@
     "ko": "(없음)",
     "pt-BR": "(nenhuma)",
     "uk": "(немає)",
-    "zh-CN": "（无）"
+    "zh-CN": "（无）",
+    "zh-TW": "（無）"
   },
   "common_or_type_new": {
     "cs": "Nebo zadejte novou",
@@ -97,7 +105,8 @@
     "ko": "또는 새로 입력",
     "pt-BR": "Ou digite uma nova",
     "uk": "Або введіть нову",
-    "zh-CN": "或输入新的"
+    "zh-CN": "或输入新的",
+    "zh-TW": "或輸入新的"
   },
 
   "dashboard_all_clients": {
@@ -108,7 +117,8 @@
     "ko": "모든 클라이언트",
     "pt-BR": "Todos os clientes",
     "uk": "Усі клієнти",
-    "zh-CN": "全部客户端"
+    "zh-CN": "全部客户端",
+    "zh-TW": "所有用戶端"
   },
   "dashboard_session": {
     "cs": "Relace",
@@ -118,7 +128,8 @@
     "ko": "세션",
     "pt-BR": "Sessão",
     "uk": "Сеанс",
-    "zh-CN": "本次会话"
+    "zh-CN": "本次会话",
+    "zh-TW": "本次"
   },
   "dashboard_all_time": {
     "cs": "Celkem",
@@ -128,7 +139,8 @@
     "ko": "전체 기간",
     "pt-BR": "Desde sempre",
     "uk": "За весь час",
-    "zh-CN": "累计"
+    "zh-CN": "累计",
+    "zh-TW": "累計"
   },
   "dashboard_alt_speed_limits": {
     "cs": "Alternativní rychlostní limity",
@@ -138,7 +150,8 @@
     "ko": "대체 속도 제한",
     "pt-BR": "Limites de velocidade alternativos",
     "uk": "Альтернативні обмеження швидкості",
-    "zh-CN": "备用速度限制"
+    "zh-CN": "备用速度限制",
+    "zh-TW": "備用速度限制"
   },
   "search_recent": {
     "cs": "Nedávné",
@@ -148,7 +161,8 @@
     "ko": "최근",
     "pt-BR": "Recentes",
     "uk": "Нещодавні",
-    "zh-CN": "最近"
+    "zh-CN": "最近",
+    "zh-TW": "最近"
   },
   "search_clear_history": {
     "cs": "Vymazat historii hledání",
@@ -158,7 +172,8 @@
     "ko": "검색 기록 지우기",
     "pt-BR": "Limpar histórico de busca",
     "uk": "Очистити історію пошуку",
-    "zh-CN": "清除搜索历史"
+    "zh-CN": "清除搜索历史",
+    "zh-TW": "清除搜尋記錄"
   },
   "search_fuzzy_example": {
     "cs": "„breaking bad“ najde „Breaking.Bad“",
@@ -168,7 +183,8 @@
     "ko": "'breaking bad'로 'Breaking.Bad'를 찾습니다",
     "pt-BR": "“breaking bad” encontra “Breaking.Bad”",
     "uk": "«breaking bad» знаходить «Breaking.Bad»",
-    "zh-CN": "输入「breaking bad」可匹配「Breaking.Bad」"
+    "zh-CN": "输入「breaking bad」可匹配「Breaking.Bad」",
+    "zh-TW": "輸入「breaking bad」可符合「Breaking.Bad」"
   },
   "scope_back_to_top": {
     "cs": "Zpět nahoru",
@@ -178,7 +194,8 @@
     "ko": "맨 위로",
     "pt-BR": "Voltar ao topo",
     "uk": "Догори",
-    "zh-CN": "回到顶部"
+    "zh-CN": "回到顶部",
+    "zh-TW": "回到頂端"
   },
   "update_version": {
     "cs": "Verze %1$s",
@@ -188,7 +205,8 @@
     "ko": "버전 %1$s",
     "pt-BR": "Versão %1$s",
     "uk": "Версія %1$s",
-    "zh-CN": "版本 %1$s"
+    "zh-CN": "版本 %1$s",
+    "zh-TW": "版本 %1$s"
   },
   "update_qui_server": {
     "cs": "Je dostupný novější server qui",
@@ -198,7 +216,8 @@
     "ko": "최신 qui 서버가 있습니다",
     "pt-BR": "Há uma versão mais recente do servidor qui",
     "uk": "Доступна новіша версія сервера qui",
-    "zh-CN": "qui 服务端有新版本"
+    "zh-CN": "qui 服务端有新版本",
+    "zh-TW": "qui 伺服器有新版本"
   },
   "update_check": {
     "cs": "Zkontrolovat aktualizace",
@@ -208,7 +227,8 @@
     "ko": "업데이트 확인",
     "pt-BR": "Verificar atualizações",
     "uk": "Перевірити оновлення",
-    "zh-CN": "检查更新"
+    "zh-CN": "检查更新",
+    "zh-TW": "檢查更新"
   },
   "storage_tracker_icons": {
     "cs": "Ikony trackerů",
@@ -218,7 +238,8 @@
     "ko": "트래커 아이콘",
     "pt-BR": "Ícones de trackers",
     "uk": "Піктограми трекерів",
-    "zh-CN": "Tracker 图标"
+    "zh-CN": "Tracker 图标",
+    "zh-TW": "Tracker 圖示"
   },
   "storage_entries": {
     "cs": "Položek: %1$d",
@@ -228,7 +249,8 @@
     "ko": "%1$d개 항목",
     "pt-BR": "%1$d entradas",
     "uk": "Записів: %1$d",
-    "zh-CN": "%1$d 条"
+    "zh-CN": "%1$d 条",
+    "zh-TW": "%1$d 項"
   },
   "storage_cleared": {
     "cs": "Vymazáno",
@@ -238,7 +260,8 @@
     "ko": "지워짐",
     "pt-BR": "Limpo",
     "uk": "Очищено",
-    "zh-CN": "已清除"
+    "zh-CN": "已清除",
+    "zh-TW": "已清除"
   },
   "widget_name": {
     "cs": "Statistiky qui",
@@ -248,7 +271,8 @@
     "ko": "qui 통계",
     "pt-BR": "Estatísticas do qui",
     "uk": "Статистика qui",
-    "zh-CN": "qui 统计"
+    "zh-CN": "qui 统计",
+    "zh-TW": "qui 統計"
   },
   "widget_description": {
     "cs": "4×2 — rychlosti, všechny čtyři počty stavů, celková velikost a volné místo.",
@@ -258,7 +282,8 @@
     "ko": "4×2 — 속도, 네 가지 상태 개수, 총 크기와 남은 공간.",
     "pt-BR": "4×2 — velocidades, as quatro contagens de estado, tamanho total e espaço livre.",
     "uk": "4×2 — швидкості, усі чотири лічильники станів, загальний розмір і вільне місце.",
-    "zh-CN": "4×2 — 速度、四种状态计数、总大小和剩余空间。"
+    "zh-CN": "4×2 — 速度、四种状态计数、总大小和剩余空间。",
+    "zh-TW": "4×2 — 速度、四種狀態計數、總大小和可用空間。"
   },
   "widget_not_signed_in": {
     "cs": "Přihlaste se do qui",
@@ -268,7 +293,8 @@
     "ko": "qui에 로그인하세요",
     "pt-BR": "Entre no qui",
     "uk": "Увійдіть у qui",
-    "zh-CN": "请先登录 qui"
+    "zh-CN": "请先登录 qui",
+    "zh-TW": "請先登入 qui"
   },
 
   "widget_refresh": {
@@ -279,7 +305,8 @@
     "ko": "새로 고침",
     "pt-BR": "Atualizar",
     "uk": "Оновити",
-    "zh-CN": "刷新"
+    "zh-CN": "刷新",
+    "zh-TW": "重新整理"
   },
 
   "widget_torrents_name": {
@@ -290,7 +317,8 @@
     "ko": "qui 전송 중",
     "pt-BR": "Transferências do qui",
     "uk": "Передавання qui",
-    "zh-CN": "qui 传输中"
+    "zh-CN": "qui 传输中",
+    "zh-TW": "qui 傳輸中"
   },
 
   "widget_torrents_description": {
@@ -301,7 +329,8 @@
     "ko": "4×4 — 지금 전송 중인 항목과 진행률입니다. 항목을 누르면 열립니다.",
     "pt-BR": "4×4 — o que está sendo transferido agora, com o progresso. Toque em uma linha para abri-la.",
     "uk": "4×4 — що передається просто зараз, із поступом. Торкніться рядка, щоб відкрити.",
-    "zh-CN": "4×4 — 当前正在传输的种子及进度。点击某一行可直接打开。"
+    "zh-CN": "4×4 — 当前正在传输的种子及进度。点击某一行可直接打开。",
+    "zh-TW": "4×4 — 目前正在傳輸的種子及進度。輕觸任一列可直接開啟。"
   },
 
   "widget_no_active": {
@@ -312,7 +341,8 @@
     "ko": "전송 중인 항목이 없습니다",
     "pt-BR": "Nada sendo transferido",
     "uk": "Немає активних передавань",
-    "zh-CN": "当前没有传输中的种子"
+    "zh-CN": "当前没有传输中的种子",
+    "zh-TW": "目前沒有傳輸中的種子"
   },
 
   "widget_free_space": {
@@ -323,7 +353,8 @@
     "ko": "%1$s 남음",
     "pt-BR": "%1$s livres",
     "uk": "%1$s вільно",
-    "zh-CN": "剩余 %1$s"
+    "zh-CN": "剩余 %1$s",
+    "zh-TW": "剩餘 %1$s"
   },
 
   "widget_stale": {
@@ -334,7 +365,8 @@
     "ko": "마지막 업데이트 %1$s",
     "pt-BR": "Atualizado às %1$s",
     "uk": "Останнє оновлення %1$s",
-    "zh-CN": "最后更新于 %1$s"
+    "zh-CN": "最后更新于 %1$s",
+    "zh-TW": "最後更新於 %1$s"
   },
 
   "widget_refreshing": {
@@ -345,7 +377,8 @@
     "ko": "새로 고치는 중…",
     "pt-BR": "Atualizando…",
     "uk": "Оновлення…",
-    "zh-CN": "刷新中…"
+    "zh-CN": "刷新中…",
+    "zh-TW": "重新整理中……"
   },
 
   "widget_error_offline": {
@@ -356,7 +389,8 @@
     "ko": "네트워크에 연결되어 있지 않습니다",
     "pt-BR": "Sem conexão de rede",
     "uk": "Немає з’єднання з мережею",
-    "zh-CN": "没有网络连接"
+    "zh-CN": "没有网络连接",
+    "zh-TW": "沒有網路連線"
   },
 
   "widget_error_unauthorized": {
@@ -367,7 +401,8 @@
     "ko": "다시 로그인하세요 — 서버가 저장된 인증 정보를 거부했습니다",
     "pt-BR": "Entre novamente — o servidor rejeitou as credenciais salvas",
     "uk": "Увійдіть знову — сервер відхилив збережені облікові дані",
-    "zh-CN": "请重新登录 —— 服务器拒绝了已保存的凭据"
+    "zh-CN": "请重新登录 —— 服务器拒绝了已保存的凭据",
+    "zh-TW": "請重新登入 —— 伺服器拒絕了已儲存的認證資訊"
   },
 
   "widget_error_timeout": {
@@ -378,7 +413,8 @@
     "ko": "서버 응답이 너무 오래 걸렸습니다",
     "pt-BR": "O servidor demorou demais para responder",
     "uk": "Сервер відповідав надто довго",
-    "zh-CN": "服务器响应超时"
+    "zh-CN": "服务器响应超时",
+    "zh-TW": "伺服器回應逾時"
   },
 
   "widget_error_no_response": {
@@ -389,7 +425,8 @@
     "ko": "응답한 클라이언트가 없습니다",
     "pt-BR": "Nenhum cliente respondeu",
     "uk": "Жоден клієнт не відповів",
-    "zh-CN": "没有客户端响应"
+    "zh-CN": "没有客户端响应",
+    "zh-TW": "沒有用戶端回應"
   },
 
   "widget_error_http": {
@@ -400,7 +437,8 @@
     "ko": "서버 오류 (HTTP %1$s)",
     "pt-BR": "Erro do servidor (HTTP %1$s)",
     "uk": "Помилка сервера (HTTP %1$s)",
-    "zh-CN": "服务器错误(HTTP %1$s)"
+    "zh-CN": "服务器错误(HTTP %1$s)",
+    "zh-TW": "伺服器錯誤（HTTP %1$s）"
   },
 
   "widget_interval": {
@@ -411,7 +449,8 @@
     "ko": "백그라운드 새로 고침",
     "pt-BR": "Atualização em segundo plano",
     "uk": "Оновлення у фоні",
-    "zh-CN": "后台刷新"
+    "zh-CN": "后台刷新",
+    "zh-TW": "背景重新整理"
   },
 
   "widget_interval_off": {
@@ -422,7 +461,8 @@
     "ko": "사용 안 함",
     "pt-BR": "Desligada",
     "uk": "Вимкнено",
-    "zh-CN": "关闭"
+    "zh-CN": "关闭",
+    "zh-TW": "關閉"
   },
 
   "widget_interval_minutes": {
@@ -433,7 +473,8 @@
     "ko": "%1$d분",
     "pt-BR": "%1$d min",
     "uk": "%1$d хв",
-    "zh-CN": "%1$d 分钟"
+    "zh-CN": "%1$d 分钟",
+    "zh-TW": "%1$d 分鐘"
   },
 
   "widget_interval_hour": {
@@ -444,7 +485,8 @@
     "ko": "1시간",
     "pt-BR": "1 hora",
     "uk": "1 година",
-    "zh-CN": "1 小时"
+    "zh-CN": "1 小时",
+    "zh-TW": "1 小時"
   },
 
   "widget_interval_note": {
@@ -455,7 +497,8 @@
     "ko": "안드로이드는 백그라운드 작업을 15분에 한 번보다 자주 실행하지 않습니다. 이 설정과 무관하게, 앱을 열거나 위젯의 새로 고침 버튼을 누르면 즉시 갱신됩니다.",
     "pt-BR": "O Android não executa trabalho em segundo plano com mais frequência que a cada 15 minutos. Abrir o app e o botão de atualizar do widget o atualizam na hora, seja qual for este ajuste.",
     "uk": "Android не виконує фонову роботу частіше ніж раз на 15 хвилин. Відкриття застосунку та кнопка оновлення на віджеті оновлюють його одразу, незалежно від цього налаштування.",
-    "zh-CN": "安卓最快 15 分钟才会执行一次后台任务。无论这里设成多少,打开应用或点小部件上的刷新按钮都会立即更新。"
+    "zh-CN": "安卓最快 15 分钟才会执行一次后台任务。无论这里设成多少,打开应用或点小部件上的刷新按钮都会立即更新。",
+    "zh-TW": "Android 最快每 15 分鐘才會執行一次背景工作。無論此處設定多少，開啟應用程式或輕觸小工具上的重新整理按鈕都會立即更新。"
   },
 
   "torrents_partial_results": {
@@ -466,7 +509,8 @@
     "ko": "응답하지 않은 클라이언트가 있어 목록이 불완전합니다",
     "pt-BR": "Um cliente não respondeu — esta lista está incompleta",
     "uk": "Клієнт не відповів — цей список неповний",
-    "zh-CN": "有客户端未响应，列表不完整"
+    "zh-CN": "有客户端未响应，列表不完整",
+    "zh-TW": "有用戶端未回應，清單不完整"
   },
 
   "update_from_to": {
@@ -477,7 +521,8 @@
     "ko": "%1$s → %2$s",
     "pt-BR": "%1$s → %2$s",
     "uk": "%1$s → %2$s",
-    "zh-CN": "%1$s → %2$s"
+    "zh-CN": "%1$s → %2$s",
+    "zh-TW": "%1$s → %2$s"
   },
 
   "update_notes": {
@@ -488,7 +533,8 @@
     "ko": "변경 사항",
     "pt-BR": "Novidades",
     "uk": "Що нового",
-    "zh-CN": "更新内容"
+    "zh-CN": "更新内容",
+    "zh-TW": "更新內容"
   },
 
   "release_notes_heading": {
@@ -499,7 +545,8 @@
     "ko": "English",
     "pt-BR": "English",
     "uk": "English",
-    "zh-CN": "简体中文"
+    "zh-CN": "简体中文",
+    "zh-TW": "简体中文"
   },
 
   "update_no_notes": {
@@ -510,7 +557,8 @@
     "ko": "이 버전에 대한 릴리스 노트가 없습니다.",
     "pt-BR": "Sem notas para esta versão.",
     "uk": "Для цієї версії немає приміток.",
-    "zh-CN": "该版本没有更新说明。"
+    "zh-CN": "该版本没有更新说明。",
+    "zh-TW": "此版本沒有更新說明。"
   },
 
   "update_open": {
@@ -521,7 +569,8 @@
     "ko": "릴리스 열기",
     "pt-BR": "Abrir a versão",
     "uk": "Відкрити випуск",
-    "zh-CN": "前往下载"
+    "zh-CN": "前往下载",
+    "zh-TW": "前往下載"
   },
 
   "update_later": {
@@ -532,7 +581,8 @@
     "ko": "나중에",
     "pt-BR": "Depois",
     "uk": "Пізніше",
-    "zh-CN": "稍后"
+    "zh-CN": "稍后",
+    "zh-TW": "稍後"
   },
 
   "update_skip": {
@@ -543,7 +593,8 @@
     "ko": "이 버전 건너뛰기",
     "pt-BR": "Pular esta versão",
     "uk": "Пропустити цю версію",
-    "zh-CN": "跳过此版本"
+    "zh-CN": "跳过此版本",
+    "zh-TW": "略過此版本"
   },
 
   "update_auto_check": {
@@ -554,7 +605,8 @@
     "ko": "시작할 때 확인",
     "pt-BR": "Verificar ao abrir",
     "uk": "Перевіряти під час запуску",
-    "zh-CN": "启动时检查更新"
+    "zh-CN": "启动时检查更新",
+    "zh-TW": "啟動時檢查更新"
   },
 
   "update_auto_check_note": {
@@ -565,7 +617,8 @@
     "ko": "앱을 시작할 때 새 릴리스를 확인합니다. 자동으로 내려받지는 않습니다.",
     "pt-BR": "Procura uma versão mais recente ao abrir. Nada é baixado automaticamente.",
     "uk": "Шукає новіший випуск під час запуску. Нічого не завантажується автоматично.",
-    "zh-CN": "启动应用时查找是否有新版本。不会自动下载任何内容。"
+    "zh-CN": "启动应用时查找是否有新版本。不会自动下载任何内容。",
+    "zh-TW": "啟動應用程式時檢查是否有新版本。不會自動下載任何內容。"
   },
 
   "widget_pin_requested": {
@@ -576,7 +629,8 @@
     "ko": "홈 화면에서 확인하면 배치됩니다.",
     "pt-BR": "Confirme na tela inicial para posicioná-lo.",
     "uk": "Підтвердьте на головному екрані, щоб розмістити.",
-    "zh-CN": "请在桌面上确认以完成添加。"
+    "zh-CN": "请在桌面上确认以完成添加。",
+    "zh-TW": "請在主畫面上確認以完成新增。"
   },
 
   "widget_pin_added": {
@@ -587,7 +641,8 @@
     "ko": "홈 화면에 추가됨",
     "pt-BR": "Adicionado à tela inicial",
     "uk": "Додано на головний екран",
-    "zh-CN": "已添加到桌面"
+    "zh-CN": "已添加到桌面",
+    "zh-TW": "已新增至主畫面"
   },
 
   "widget_pin_no_response_title": {
@@ -598,7 +653,8 @@
     "ko": "아무 일도 없었나요?",
     "pt-BR": "Nada apareceu?",
     "uk": "Нічого не з’явилося?",
-    "zh-CN": "没有任何反应？"
+    "zh-CN": "没有任何反应？",
+    "zh-TW": "沒有任何反應？"
   },
 
   "widget_pin_no_response": {
@@ -609,7 +665,8 @@
     "ko": "런처가 확인을 요청하지 않았다면 홈 화면 바로가기 생성 권한이 없는 것입니다. 샤오미에서는 설정 → 앱 → qui → 권한 → 홈 화면 바로가기 만들기입니다.\\n\\n홈 화면을 길게 눌러 위젯 목록에서 qui를 추가해도 됩니다.",
     "pt-BR": "Se o launcher nunca pediu confirmação, provavelmente falta a permissão para criar atalhos na tela inicial. Na Xiaomi: Configurações → Apps → qui → Permissões → Criar atalho na tela inicial.\\n\\nVocê sempre pode manter a tela inicial pressionada e adicionar o qui pela lista de widgets.",
     "uk": "Якщо лаунчер не попросив підтвердження, застосунку, найімовірніше, бракує дозволу створювати ярлики на головному екрані. На Xiaomi це Налаштування → Застосунки → qui → Дозволи → Створення ярлика на головному екрані.\\n\\nВи завжди можете утримати головний екран і додати qui з його списку віджетів.",
-    "zh-CN": "如果桌面没有弹出确认框，通常是缺少「创建桌面快捷方式」权限。小米上的路径是：设置 → 应用设置 → qui → 权限管理 → 桌面快捷方式。\\n\\n你也可以长按桌面，从小部件列表里添加 qui。"
+    "zh-CN": "如果桌面没有弹出确认框，通常是缺少「创建桌面快捷方式」权限。小米上的路径是：设置 → 应用设置 → qui → 权限管理 → 桌面快捷方式。\\n\\n你也可以长按桌面，从小部件列表里添加 qui。",
+    "zh-TW": "如果主畫面沒有彈出確認視窗，通常是缺少「建立桌面捷徑」權限。小米上的路徑是：設定 → 應用程式設定 → qui → 權限管理 → 桌面捷徑。\\n\\n您也可以長按主畫面，從小工具清單中新增 qui。"
   },
 
   "widget_pin_open_settings": {
@@ -620,7 +677,8 @@
     "ko": "앱 설정",
     "pt-BR": "Configurações do app",
     "uk": "Налаштування застосунку",
-    "zh-CN": "应用设置"
+    "zh-CN": "应用设置",
+    "zh-TW": "應用程式設定"
   },
 
   "widget_pin_dismiss": {
@@ -631,7 +689,8 @@
     "ko": "확인",
     "pt-BR": "Entendi",
     "uk": "Зрозуміло",
-    "zh-CN": "知道了"
+    "zh-CN": "知道了",
+    "zh-TW": "知道了"
   },
 
   "widget_speed_name": {
@@ -642,7 +701,8 @@
     "ko": "qui 속도",
     "pt-BR": "Velocidade do qui",
     "uk": "Швидкість qui",
-    "zh-CN": "qui 速度"
+    "zh-CN": "qui 速度",
+    "zh-TW": "qui 速度"
   },
 
   "widget_speed_description": {
@@ -653,7 +713,8 @@
     "ko": "2×1 — 총 다운로드·업로드 속도.",
     "pt-BR": "2×1 — velocidade total de download e envio.",
     "uk": "2×1 — загальна швидкість завантаження та вивантаження.",
-    "zh-CN": "2×1 — 总下载和上传速度。"
+    "zh-CN": "2×1 — 总下载和上传速度。",
+    "zh-TW": "2×1 — 總下載和上傳速度。"
   },
 
   "widget_overview_name": {
@@ -664,7 +725,8 @@
     "ko": "qui 개요",
     "pt-BR": "Visão geral do qui",
     "uk": "Огляд qui",
-    "zh-CN": "qui 概览"
+    "zh-CN": "qui 概览",
+    "zh-TW": "qui 概覽"
   },
 
   "widget_overview_description": {
@@ -675,7 +737,8 @@
     "ko": "2×2 — 속도와 다운로드 중·시딩 중 개수.",
     "pt-BR": "2×2 — velocidades e as contagens de download e seed.",
     "uk": "2×2 — швидкості та кількість завантажень і роздач.",
-    "zh-CN": "2×2 — 速度加下载中和做种数量。"
+    "zh-CN": "2×2 — 速度加下载中和做种数量。",
+    "zh-TW": "2×2 — 速度加上下載中和做種數量。"
   },
 
   "settings_widgets": {
@@ -686,7 +749,8 @@
     "ko": "위젯",
     "pt-BR": "Widgets",
     "uk": "Віджети",
-    "zh-CN": "小部件"
+    "zh-CN": "小部件",
+    "zh-TW": "小工具"
   },
 
   "widget_add": {
@@ -697,7 +761,8 @@
     "ko": "추가",
     "pt-BR": "Adicionar",
     "uk": "Додати",
-    "zh-CN": "添加"
+    "zh-CN": "添加",
+    "zh-TW": "新增"
   },
 
   "widget_pin_unsupported": {
@@ -708,7 +773,8 @@
     "ko": "이 런처는 앱에서 위젯을 추가할 수 없습니다. 홈 화면을 길게 눌러 위젯 목록에서 qui를 선택하세요.",
     "pt-BR": "Este launcher não consegue adicionar widgets pelo app. Mantenha a tela inicial pressionada e escolha o qui na lista de widgets.",
     "uk": "Цей лаунчер не може додати віджет із застосунку. Утримуйте головний екран і виберіть qui у його списку віджетів.",
-    "zh-CN": "当前桌面不支持从应用内添加小部件。请长按桌面，在小部件列表中选择 qui。"
+    "zh-CN": "当前桌面不支持从应用内添加小部件。请长按桌面，在小部件列表中选择 qui。",
+    "zh-TW": "目前的主畫面不支援從應用程式內新增小工具。請長按主畫面，從小工具清單中選擇 qui。"
   },
 
   "widget_scope": {
@@ -719,7 +785,8 @@
     "ko": "클라이언트",
     "pt-BR": "Cliente",
     "uk": "Клієнт",
-    "zh-CN": "客户端"
+    "zh-CN": "客户端",
+    "zh-TW": "用戶端"
   },
 
   "widget_scope_all": {
@@ -730,7 +797,8 @@
     "ko": "활성 클라이언트 전체",
     "pt-BR": "Todos os clientes ativos",
     "uk": "Усі активні клієнти",
-    "zh-CN": "全部活动客户端"
+    "zh-CN": "全部活动客户端",
+    "zh-TW": "所有活躍用戶端"
   },
 
   "widget_list_content": {
@@ -741,7 +809,8 @@
     "ko": "전송 목록",
     "pt-BR": "Lista de transferências",
     "uk": "Список передавань",
-    "zh-CN": "传输列表"
+    "zh-CN": "传输列表",
+    "zh-TW": "傳輸清單"
   },
 
   "widget_list_active": {
@@ -752,7 +821,8 @@
     "ko": "전송 중 우선",
     "pt-BR": "Em transferência primeiro",
     "uk": "Спершу активні",
-    "zh-CN": "传输中优先"
+    "zh-CN": "传输中优先",
+    "zh-TW": "傳輸中優先"
   },
 
   "widget_list_recent": {
@@ -763,7 +833,8 @@
     "ko": "최근 추가됨",
     "pt-BR": "Adicionados recentemente",
     "uk": "Нещодавно додані",
-    "zh-CN": "最近添加"
+    "zh-CN": "最近添加",
+    "zh-TW": "最近新增"
   },
 
   "widget_incognito_note": {
@@ -774,7 +845,8 @@
     "ko": "위젯의 토렌트 이름은 앱의 시크릿 모드 설정을 따릅니다.",
     "pt-BR": "Os nomes de torrents no widget seguem o botão de modo anônimo do app.",
     "uk": "Назви торентів у віджеті залежать від перемикача анонімного режиму в застосунку.",
-    "zh-CN": "小部件上的种子名称跟随应用的隐身模式开关。"
+    "zh-CN": "小部件上的种子名称跟随应用的隐身模式开关。",
+    "zh-TW": "小工具上的種子名稱會跟隨應用程式的隱身模式開關。"
   },
 
   "widget_refresh_note": {
@@ -785,7 +857,8 @@
     "ko": "HyperOS, MIUI 등은 백그라운드 작업을 아예 건너뛰는 경우가 많습니다. 위젯이 갱신되지 않으면 qui의 자동 시작을 허용하고 배터리 정책을 제한 없음으로 설정하세요.",
     "pt-BR": "HyperOS, MIUI e semelhantes costumam ignorar trabalho em segundo plano por completo. Se o widget ficar desatualizado, permita a inicialização automática do qui e defina a política de bateria como sem restrições.",
     "uk": "HyperOS, MIUI та подібні часто взагалі пропускають фонову роботу. Якщо віджет застаріває, дозвольте автозапуск qui та встановіть політику батареї «без обмежень».",
-    "zh-CN": "澎湃 OS、MIUI 之类经常直接跳过后台任务。如果小部件不再更新,请给 qui 打开自启动,并把省电策略设为无限制。"
+    "zh-CN": "澎湃 OS、MIUI 之类经常直接跳过后台任务。如果小部件不再更新,请给 qui 打开自启动,并把省电策略设为无限制。",
+    "zh-TW": "澎湃 OS、MIUI 等系統經常直接略過背景工作。如果小工具不再更新，請為 qui 開啟自動啟動，並將省電策略設為不限制。"
   },
 
   "dashboard_active_count": {
@@ -796,7 +869,8 @@
     "ko": "%1$d개 활성",
     "pt-BR": "%1$d ativos",
     "uk": "%1$d активних",
-    "zh-CN": "%1$d 个活动"
+    "zh-CN": "%1$d 个活动",
+    "zh-TW": "%1$d 個活躍"
   },
   "dashboard_hide_address": {
     "cs": "Skrýt adresu",
@@ -806,7 +880,8 @@
     "ko": "주소 숨기기",
     "pt-BR": "Ocultar endereço",
     "uk": "Приховати адресу",
-    "zh-CN": "隐藏地址"
+    "zh-CN": "隐藏地址",
+    "zh-TW": "隱藏位址"
   },
   "dashboard_show_address": {
     "cs": "Zobrazit adresu",
@@ -816,7 +891,8 @@
     "ko": "주소 표시",
     "pt-BR": "Mostrar endereço",
     "uk": "Показати адресу",
-    "zh-CN": "显示地址"
+    "zh-CN": "显示地址",
+    "zh-TW": "顯示位址"
   },
   "dashboard_no_tracker_data": {
     "cs": "Zatím žádná data o trackerech.",
@@ -826,7 +902,8 @@
     "ko": "아직 트래커 데이터가 없습니다.",
     "pt-BR": "Ainda não há dados de trackers.",
     "uk": "Даних про трекери ще немає.",
-    "zh-CN": "暂无 Tracker 数据。"
+    "zh-CN": "暂无 Tracker 数据。",
+    "zh-TW": "尚無 Tracker 資料。"
   },
 
   "dashboard_no_instances_title": {
@@ -837,7 +914,8 @@
     "ko": "클라이언트 없음",
     "pt-BR": "Nenhum cliente ainda",
     "uk": "Клієнтів ще немає",
-    "zh-CN": "暂无客户端"
+    "zh-CN": "暂无客户端",
+    "zh-TW": "尚無用戶端"
   },
   "dashboard_no_instances_message": {
     "cs": "Přidejte instanci qBittorrentu v qui a objeví se zde.",
@@ -847,7 +925,8 @@
     "ko": "qui에서 qBittorrent 인스턴스를 추가하면 여기에 표시됩니다.",
     "pt-BR": "Adicione uma instância do qBittorrent no qui e ela aparecerá aqui.",
     "uk": "Додайте екземпляр qBittorrent у qui — і він з'явиться тут.",
-    "zh-CN": "在 qui 中添加 qBittorrent 实例后会显示在这里。"
+    "zh-CN": "在 qui 中添加 qBittorrent 实例后会显示在这里。",
+    "zh-TW": "在 qui 中新增 qBittorrent 實例後，它會顯示在這裡。"
   },
 
   "delete_title_one": {
@@ -858,7 +937,8 @@
     "ko": "토렌트를 삭제할까요?",
     "pt-BR": "Excluir torrent?",
     "uk": "Видалити торент?",
-    "zh-CN": "删除该种子？"
+    "zh-CN": "删除该种子？",
+    "zh-TW": "刪除此種子？"
   },
   "delete_title_many": {
     "cs": "Smazat %1$d torrentů?",
@@ -868,7 +948,8 @@
     "ko": "토렌트 %1$d개를 삭제할까요?",
     "pt-BR": "Excluir %1$d torrents?",
     "uk": "Видалити %1$d торентів?",
-    "zh-CN": "删除 %1$d 个种子？"
+    "zh-CN": "删除 %1$d 个种子？",
+    "zh-TW": "刪除 %1$d 個種子？"
   },
   "delete_body_keep_files": {
     "cs": "Torrenty budou odebrány z qBittorrentu. Stažené soubory zůstanou na disku.",
@@ -878,7 +959,8 @@
     "ko": "토렌트가 qBittorrent에서 제거됩니다. 내려받은 파일은 디스크에 남습니다.",
     "pt-BR": "Os torrents serão removidos do qBittorrent. Os arquivos baixados permanecem no disco.",
     "uk": "Торенти буде вилучено з qBittorrent. Завантажені файли залишаться на диску.",
-    "zh-CN": "种子将从 qBittorrent 中移除，已下载的文件仍保留在磁盘上。"
+    "zh-CN": "种子将从 qBittorrent 中移除，已下载的文件仍保留在磁盘上。",
+    "zh-TW": "種子將從 qBittorrent 中移除，已下載的檔案仍保留在磁碟上。"
   },
   "delete_body_with_files": {
     "cs": "Stažené soubory budou trvale smazány z disku. Tuto akci nelze vrátit zpět.",
@@ -888,7 +970,8 @@
     "ko": "내려받은 파일이 디스크에서 영구히 삭제됩니다. 되돌릴 수 없습니다.",
     "pt-BR": "Os arquivos baixados serão excluídos permanentemente do disco. Isso não pode ser desfeito.",
     "uk": "Завантажені файли буде остаточно видалено з диска. Цю дію не можна скасувати.",
-    "zh-CN": "已下载的文件将从磁盘上永久删除，此操作无法撤销。"
+    "zh-CN": "已下载的文件将从磁盘上永久删除，此操作无法撤销。",
+    "zh-TW": "已下載的檔案將從磁碟永久刪除，此操作無法復原。"
   },
 
   "detail_no_trackers": {
@@ -899,7 +982,8 @@
     "ko": "트래커 없음",
     "pt-BR": "Nenhum tracker",
     "uk": "Немає трекерів",
-    "zh-CN": "没有 Tracker"
+    "zh-CN": "没有 Tracker",
+    "zh-TW": "沒有 Tracker"
   },
   "detail_no_peers": {
     "cs": "Žádní připojení peeři",
@@ -909,7 +993,8 @@
     "ko": "연결된 피어 없음",
     "pt-BR": "Nenhum peer conectado",
     "uk": "Немає підключених пірів",
-    "zh-CN": "没有已连接的用户"
+    "zh-CN": "没有已连接的用户",
+    "zh-TW": "沒有已連線的節點"
   },
   "detail_reannounce_in": {
     "cs": "Znovu ohlásit za",
@@ -919,7 +1004,8 @@
     "ko": "재알림까지",
     "pt-BR": "Reanunciar em",
     "uk": "Повторне оголошення через",
-    "zh-CN": "距下次汇报"
+    "zh-CN": "距下次汇报",
+    "zh-TW": "距下次通報"
   },
   "detail_x_of_y": {
     "cs": "%1$d z %2$d",
@@ -929,7 +1015,8 @@
     "ko": "%2$d개 중 %1$d개",
     "pt-BR": "%1$d de %2$d",
     "uk": "%1$d з %2$d",
-    "zh-CN": "%1$d / %2$d"
+    "zh-CN": "%1$d / %2$d",
+    "zh-TW": "%1$d / %2$d"
   },
 
   "filters_hint": {
@@ -940,7 +1027,8 @@
     "ko": "행을 탭하면 포함, 빼기를 탭하면 제외됩니다.",
     "pt-BR": "Toque em uma linha para incluí-la; toque no menos para excluí-la.",
     "uk": "Торкніться рядка, щоб увімкнути його, або мінуса, щоб виключити.",
-    "zh-CN": "点按条目为包含，点按减号为排除。"
+    "zh-CN": "点按条目为包含，点按减号为排除。",
+    "zh-TW": "輕觸項目以包含，輕觸減號以排除。"
   },
 
   "instances_selected": {
@@ -951,7 +1039,8 @@
     "ko": "선택됨",
     "pt-BR": "Selecionado",
     "uk": "Вибрано",
-    "zh-CN": "已选择"
+    "zh-CN": "已选择",
+    "zh-TW": "已選取"
   },
   "instances_not_reachable": {
     "cs": "Nedostupné",
@@ -961,7 +1050,8 @@
     "ko": "연결할 수 없음",
     "pt-BR": "Inacessível",
     "uk": "Недоступний",
-    "zh-CN": "无法连接"
+    "zh-CN": "无法连接",
+    "zh-TW": "無法連線"
   },
 
   "login_subtitle": {
@@ -972,7 +1062,8 @@
     "ko": "qui 서버에 연결",
     "pt-BR": "Conecte-se ao seu servidor qui",
     "uk": "Під'єднайтеся до свого сервера qui",
-    "zh-CN": "连接到你的 qui 服务器"
+    "zh-CN": "连接到你的 qui 服务器",
+    "zh-TW": "連線到您的 qui 伺服器"
   },
   "login_server_address": {
     "cs": "Adresa serveru",
@@ -982,7 +1073,8 @@
     "ko": "서버 주소",
     "pt-BR": "Endereço do servidor",
     "uk": "Адреса сервера",
-    "zh-CN": "服务器地址"
+    "zh-CN": "服务器地址",
+    "zh-TW": "伺服器位址"
   },
   "login_api_key_hint": {
     "cs": "Vytvořte klíč v qui v Nastavení → API klíče. Klíče nevyprší, takže aplikace zůstane přihlášená.",
@@ -992,7 +1084,8 @@
     "ko": "qui의 설정 → API 키에서 키를 만드세요. 키는 만료되지 않으므로 앱이 로그인 상태를 유지합니다.",
     "pt-BR": "Crie uma chave no qui em Configurações → Chaves de API. As chaves não expiram, então o app continua conectado.",
     "uk": "Створіть ключ у qui в розділі Налаштування → Ключі API. Ключі не мають терміну дії, тож застосунок залишатиметься в системі.",
-    "zh-CN": "在 qui 的「设置 → API 密钥」中创建密钥。密钥不会过期，应用会保持登录状态。"
+    "zh-CN": "在 qui 的「设置 → API 密钥」中创建密钥。密钥不会过期，应用会保持登录状态。",
+    "zh-TW": "在 qui 的「設定 → API 金鑰」中建立金鑰。金鑰不會過期，應用程式會保持登入狀態。"
   },
   "login_show_password": {
     "cs": "Zobrazit heslo",
@@ -1002,7 +1095,8 @@
     "ko": "비밀번호 표시",
     "pt-BR": "Mostrar senha",
     "uk": "Показати пароль",
-    "zh-CN": "显示密码"
+    "zh-CN": "显示密码",
+    "zh-TW": "顯示密碼"
   },
   "login_hide_password": {
     "cs": "Skrýt heslo",
@@ -1012,7 +1106,8 @@
     "ko": "비밀번호 숨기기",
     "pt-BR": "Ocultar senha",
     "uk": "Приховати пароль",
-    "zh-CN": "隐藏密码"
+    "zh-CN": "隐藏密码",
+    "zh-TW": "隱藏密碼"
   },
   "login_toggle_key_visibility": {
     "cs": "Přepnout viditelnost klíče",
@@ -1022,7 +1117,8 @@
     "ko": "키 표시 전환",
     "pt-BR": "Alternar visibilidade da chave",
     "uk": "Показати або приховати ключ",
-    "zh-CN": "切换密钥显示"
+    "zh-CN": "切换密钥显示",
+    "zh-TW": "切換金鑰顯示"
   },
   "login_trust_certs": {
     "cs": "Důvěřovat certifikátům podepsaným sebou samým",
@@ -1032,7 +1128,8 @@
     "ko": "자체 서명 인증서 신뢰",
     "pt-BR": "Confiar em certificados autoassinados",
     "uk": "Довіряти самопідписаним сертифікатам",
-    "zh-CN": "信任自签名证书"
+    "zh-CN": "信任自签名证书",
+    "zh-TW": "信任自簽憑證"
   },
   "login_trust_certs_hint": {
     "cs": "Zapínejte pouze u serveru, který spravujete.",
@@ -1042,7 +1139,8 @@
     "ko": "본인이 관리하는 서버에서만 켜세요.",
     "pt-BR": "Ative apenas para um servidor que você controla.",
     "uk": "Вмикайте лише для сервера, яким ви керуєте.",
-    "zh-CN": "仅在你自己掌控的服务器上启用。"
+    "zh-CN": "仅在你自己掌控的服务器上启用。",
+    "zh-TW": "僅在您完全掌控的伺服器上啟用。"
   },
   "login_error_no_address": {
     "cs": "Zadejte adresu svého serveru qui",
@@ -1052,7 +1150,8 @@
     "ko": "qui 서버 주소를 입력하세요",
     "pt-BR": "Informe o endereço do seu servidor qui",
     "uk": "Введіть адресу свого сервера qui",
-    "zh-CN": "请输入 qui 服务器地址"
+    "zh-CN": "请输入 qui 服务器地址",
+    "zh-TW": "請輸入 qui 伺服器位址"
   },
   "login_probe_setup_required": {
     "cs": "Tento server qui zatím nemá účet – vytvořte jej níže.",
@@ -1062,7 +1161,8 @@
     "ko": "이 qui 서버에는 아직 계정이 없습니다 — 아래에서 만드세요.",
     "pt-BR": "Este servidor qui ainda não tem conta – crie uma abaixo.",
     "uk": "На цьому сервері qui ще немає облікового запису — створіть його нижче.",
-    "zh-CN": "该 qui 服务器还没有账户——请在下方创建。"
+    "zh-CN": "该 qui 服务器还没有账户——请在下方创建。",
+    "zh-TW": "該 qui 伺服器尚未建立帳戶——請在下方建立。"
   },
   "login_probe_ok": {
     "cs": "Připojeno. Přihlaste se níže.",
@@ -1072,7 +1172,8 @@
     "ko": "연결되었습니다. 아래에서 로그인하세요.",
     "pt-BR": "Conectado. Entre abaixo.",
     "uk": "З'єднано. Увійдіть нижче.",
-    "zh-CN": "已连接，请在下方登录。"
+    "zh-CN": "已连接，请在下方登录。",
+    "zh-TW": "已連線，請在下方登入。"
   },
   "login_error_generic": {
     "cs": "Něco se pokazilo",
@@ -1082,7 +1183,8 @@
     "ko": "문제가 발생했습니다",
     "pt-BR": "Algo deu errado",
     "uk": "Щось пішло не так",
-    "zh-CN": "出错了"
+    "zh-CN": "出错了",
+    "zh-TW": "發生錯誤"
   },
   "login_error_credentials": {
     "cs": "Nesprávné přihlašovací údaje",
@@ -1092,7 +1194,8 @@
     "ko": "잘못된 자격 증명",
     "pt-BR": "Credenciais incorretas",
     "uk": "Неправильні облікові дані",
-    "zh-CN": "凭据不正确"
+    "zh-CN": "凭据不正确",
+    "zh-TW": "認證資訊不正確"
   },
   "login_error_forbidden": {
     "cs": "Server přístup odmítl",
@@ -1102,7 +1205,8 @@
     "ko": "서버가 접근을 거부했습니다",
     "pt-BR": "Acesso negado pelo servidor",
     "uk": "Сервер відмовив у доступі",
-    "zh-CN": "服务器拒绝访问"
+    "zh-CN": "服务器拒绝访问",
+    "zh-TW": "伺服器拒絕存取"
   },
   "login_error_not_qui": {
     "cs": "Tato adresa nevypadá jako server qui",
@@ -1112,7 +1216,8 @@
     "ko": "이 주소는 qui 서버가 아닌 것 같습니다",
     "pt-BR": "Esse endereço não parece ser um servidor qui",
     "uk": "Ця адреса не схожа на сервер qui",
-    "zh-CN": "该地址似乎不是 qui 服务器"
+    "zh-CN": "该地址似乎不是 qui 服务器",
+    "zh-TW": "該位址似乎不是 qui 伺服器"
   },
   "login_error_host": {
     "cs": "Tento hostitel není dostupný",
@@ -1122,7 +1227,8 @@
     "ko": "해당 호스트에 연결할 수 없습니다",
     "pt-BR": "Não foi possível acessar esse host",
     "uk": "Не вдається зв'язатися з цим хостом",
-    "zh-CN": "无法连接到该主机"
+    "zh-CN": "无法连接到该主机",
+    "zh-TW": "無法連線到該主機"
   },
   "login_error_tls": {
     "cs": "Certifikát TLS byl odmítnut – pokud jde o váš vlastní server, zapněte „Důvěřovat certifikátům podepsaným sebou samým“",
@@ -1132,7 +1238,8 @@
     "ko": "TLS 인증서가 거부되었습니다 — 본인 서버라면 '자체 서명 인증서 신뢰'를 켜세요",
     "pt-BR": "O certificado TLS foi rejeitado – ative “Confiar em certificados autoassinados” se este for seu próprio servidor",
     "uk": "Сертифікат TLS відхилено — увімкніть «Довіряти самопідписаним сертифікатам», якщо це ваш власний сервер",
-    "zh-CN": "TLS 证书被拒绝——如果这是你自己的服务器，请打开「信任自签名证书」"
+    "zh-CN": "TLS 证书被拒绝——如果这是你自己的服务器，请打开「信任自签名证书」",
+    "zh-TW": "TLS 憑證遭拒——如果這是您自己的伺服器，請開啟「信任自簽憑證」"
   },
   "login_error_unreachable": {
     "cs": "Server není dostupný – zkontrolujte adresu a to, zda běží",
@@ -1142,7 +1249,8 @@
     "ko": "서버에 연결할 수 없습니다 — 주소와 실행 여부를 확인하세요",
     "pt-BR": "Não foi possível acessar o servidor – verifique o endereço e se ele está em execução",
     "uk": "Не вдається зв'язатися із сервером — перевірте адресу та чи він запущений",
-    "zh-CN": "无法连接服务器——请检查地址以及服务是否正在运行"
+    "zh-CN": "无法连接服务器——请检查地址以及服务是否正在运行",
+    "zh-TW": "無法連線到伺服器——請檢查位址以及服務是否正在執行"
   },
 
   "settings_account": {
@@ -1153,7 +1261,8 @@
     "ko": "계정",
     "pt-BR": "Conta",
     "uk": "Обліковий запис",
-    "zh-CN": "账户"
+    "zh-CN": "账户",
+    "zh-TW": "帳戶"
   },
   "settings_signed_in": {
     "cs": "Přihlášeno",
@@ -1163,7 +1272,8 @@
     "ko": "로그인됨",
     "pt-BR": "Conectado",
     "uk": "Ви увійшли",
-    "zh-CN": "已登录"
+    "zh-CN": "已登录",
+    "zh-TW": "已登入"
   },
   "settings_sign_out_title": {
     "cs": "Odhlásit se?",
@@ -1173,7 +1283,8 @@
     "ko": "로그아웃할까요?",
     "pt-BR": "Sair?",
     "uk": "Вийти?",
-    "zh-CN": "退出登录？"
+    "zh-CN": "退出登录？",
+    "zh-TW": "登出？"
   },
   "settings_sign_out_body": {
     "cs": "Uložené přihlašovací údaje pro tento server budou odstraněny.",
@@ -1183,7 +1294,8 @@
     "ko": "이 서버에 저장된 자격 증명이 삭제됩니다.",
     "pt-BR": "As credenciais salvas para este servidor serão removidas.",
     "uk": "Збережені облікові дані для цього сервера буде вилучено.",
-    "zh-CN": "将删除此服务器已保存的凭据。"
+    "zh-CN": "将删除此服务器已保存的凭据。",
+    "zh-TW": "將刪除此伺服器儲存的認證資訊。"
   },
   "settings_speed_units": {
     "cs": "Jednotky rychlosti",
@@ -1193,7 +1305,8 @@
     "ko": "속도 단위",
     "pt-BR": "Unidades de velocidade",
     "uk": "Одиниці швидкості",
-    "zh-CN": "速度单位"
+    "zh-CN": "速度单位",
+    "zh-TW": "速度單位"
   },
   "settings_behaviour": {
     "cs": "Chování",
@@ -1203,7 +1316,8 @@
     "ko": "동작",
     "pt-BR": "Comportamento",
     "uk": "Поведінка",
-    "zh-CN": "行为"
+    "zh-CN": "行为",
+    "zh-TW": "行為"
   },
   "settings_language_system": {
     "cs": "Výchozí jazyk systému",
@@ -1213,7 +1327,8 @@
     "ko": "시스템 기본값",
     "pt-BR": "Padrão do sistema",
     "uk": "За налаштуванням системи",
-    "zh-CN": "跟随系统"
+    "zh-CN": "跟随系统",
+    "zh-TW": "跟隨系統"
   },
   "settings_incognito": {
     "cs": "Anonymní režim",
@@ -1223,7 +1338,8 @@
     "ko": "시크릿 모드",
     "pt-BR": "Modo anônimo",
     "uk": "Режим анонімності",
-    "zh-CN": "隐身模式"
+    "zh-CN": "隐身模式",
+    "zh-TW": "隱身模式"
   },
   "settings_incognito_hint": {
     "cs": "Nahradit názvy, kategorie a trackery linuxovými ISO.",
@@ -1233,7 +1349,8 @@
     "ko": "이름, 분류, 트래커를 리눅스 ISO로 바꿉니다.",
     "pt-BR": "Substituir nomes, categorias e trackers por ISOs de Linux.",
     "uk": "Замінювати назви, категорії та трекери на ISO-образи Linux.",
-    "zh-CN": "将名称、分类和 Tracker 替换为 Linux ISO。"
+    "zh-CN": "将名称、分类和 Tracker 替换为 Linux ISO。",
+    "zh-TW": "將名稱、分類和 Tracker 替換為 Linux ISO。"
   },
   "settings_confirm_delete": {
     "cs": "Potvrdit před smazáním",
@@ -1243,7 +1360,8 @@
     "ko": "삭제 전 확인",
     "pt-BR": "Confirmar antes de excluir",
     "uk": "Підтверджувати перед видаленням",
-    "zh-CN": "删除前确认"
+    "zh-CN": "删除前确认",
+    "zh-TW": "刪除前確認"
   },
   "settings_confirm_delete_hint": {
     "cs": "Zeptat se před odebráním torrentů.",
@@ -1253,7 +1371,8 @@
     "ko": "토렌트를 제거하기 전에 묻습니다.",
     "pt-BR": "Perguntar antes de remover torrents.",
     "uk": "Запитувати перед вилученням торентів.",
-    "zh-CN": "移除种子前先询问。"
+    "zh-CN": "移除种子前先询问。",
+    "zh-TW": "移除種子前先詢問。"
   },
   "settings_dynamic_color": {
     "cs": "Použít systémové barvy",
@@ -1263,7 +1382,8 @@
     "ko": "시스템 색상 사용",
     "pt-BR": "Usar cores do sistema",
     "uk": "Використовувати системні кольори",
-    "zh-CN": "使用系统配色"
+    "zh-CN": "使用系统配色",
+    "zh-TW": "使用系統配色"
   },
   "settings_dynamic_color_hint": {
     "cs": "Řídit se paletou tapety Androidu místo motivu qui.",
@@ -1273,7 +1393,8 @@
     "ko": "qui 테마 대신 Android 배경화면 색상을 따릅니다.",
     "pt-BR": "Seguir a paleta do papel de parede do Android em vez de um tema do qui.",
     "uk": "Використовувати палітру шпалер Android замість теми qui.",
-    "zh-CN": "跟随 Android 壁纸取色，而不使用 qui 主题。"
+    "zh-CN": "跟随 Android 壁纸取色，而不使用 qui 主题。",
+    "zh-TW": "跟隨 Android 桌布擷取色彩，而不使用 qui 主題。"
   },
   "settings_selected": {
     "cs": "Vybráno",
@@ -1283,7 +1404,8 @@
     "ko": "선택됨",
     "pt-BR": "Selecionado",
     "uk": "Вибрано",
-    "zh-CN": "已选择"
+    "zh-CN": "已选择",
+    "zh-TW": "已選取"
   },
   "settings_about": {
     "cs": "O aplikaci",
@@ -1293,7 +1415,8 @@
     "ko": "정보",
     "pt-BR": "Sobre",
     "uk": "Про застосунок",
-    "zh-CN": "关于"
+    "zh-CN": "关于",
+    "zh-TW": "關於"
   },
   "settings_source_code": {
     "cs": "Zdrojový kód",
@@ -1303,7 +1426,8 @@
     "ko": "소스 코드",
     "pt-BR": "Código-fonte",
     "uk": "Вихідний код",
-    "zh-CN": "源代码"
+    "zh-CN": "源代码",
+    "zh-TW": "原始碼"
   },
 
   "sort_added_on": {
@@ -1314,7 +1438,8 @@
     "ko": "최근 추가순",
     "pt-BR": "Adicionados recentemente",
     "uk": "Нещодавно додані",
-    "zh-CN": "最近添加"
+    "zh-CN": "最近添加",
+    "zh-TW": "最近新增"
   },
   "sort_downloaded_session": {
     "cs": "Staženo v relaci",
@@ -1324,7 +1449,8 @@
     "ko": "세션 다운로드량",
     "pt-BR": "Baixado na sessão",
     "uk": "Завантажено за сеанс",
-    "zh-CN": "本次会话下载量"
+    "zh-CN": "本次会话下载量",
+    "zh-TW": "本次下載量"
   },
   "sort_uploaded_session": {
     "cs": "Nahráno v relaci",
@@ -1334,7 +1460,8 @@
     "ko": "세션 업로드량",
     "pt-BR": "Enviado na sessão",
     "uk": "Вивантажено за сеанс",
-    "zh-CN": "本次会话上传量"
+    "zh-CN": "本次会话上传量",
+    "zh-TW": "本次上傳量"
   },
   "sort_seen_complete": {
     "cs": "Naposledy viděno kompletní",
@@ -1344,7 +1471,8 @@
     "ko": "마지막 완전 확인",
     "pt-BR": "Visto completo pela última vez",
     "uk": "Востаннє бачено повним",
-    "zh-CN": "上次完整可见"
+    "zh-CN": "上次完整可见",
+    "zh-TW": "上次完整可見"
   },
   "sort_reannounce": {
     "cs": "Znovu ohlásit za",
@@ -1354,7 +1482,8 @@
     "ko": "재알림까지",
     "pt-BR": "Reanunciar em",
     "uk": "Повторне оголошення через",
-    "zh-CN": "距下次汇报"
+    "zh-CN": "距下次汇报",
+    "zh-TW": "距下次通報"
   },
 
   "speed_limits_hint": {
@@ -1365,7 +1494,8 @@
     "ko": "단위는 KiB/s입니다. 비워 두면 해당 제한을 그대로 두고, 0은 무제한입니다.",
     "pt-BR": "Valores em KiB/s. Deixe um campo vazio para manter o limite; use 0 para ilimitado.",
     "uk": "Значення в KiB/s. Порожнє поле залишає обмеження без змін; 0 — без обмежень.",
-    "zh-CN": "单位为 KiB/s。留空表示不改动该项限制，填 0 表示不限速。"
+    "zh-CN": "单位为 KiB/s。留空表示不改动该项限制，填 0 表示不限速。",
+    "zh-TW": "單位為 KiB/s。留白表示不變更該項限制，輸入 0 表示不限制速度。"
   },
 
   "torrents_select_client": {
@@ -1376,7 +1506,8 @@
     "ko": "클라이언트 선택",
     "pt-BR": "Selecionar cliente",
     "uk": "Вибрати клієнта",
-    "zh-CN": "选择客户端"
+    "zh-CN": "选择客户端",
+    "zh-TW": "選擇用戶端"
   },
   "torrents_polling": {
     "cs": "Dotazování",
@@ -1386,7 +1517,8 @@
     "ko": "폴링 중",
     "pt-BR": "Consultando",
     "uk": "Опитування",
-    "zh-CN": "轮询中"
+    "zh-CN": "轮询中",
+    "zh-TW": "輪詢中"
   },
   "torrents_live": {
     "cs": "Živě",
@@ -1396,7 +1528,8 @@
     "ko": "실시간",
     "pt-BR": "Ao vivo",
     "uk": "У реальному часі",
-    "zh-CN": "实时"
+    "zh-CN": "实时",
+    "zh-TW": "即時"
   },
   "torrents_empty_title": {
     "cs": "Žádné torrenty",
@@ -1406,7 +1539,8 @@
     "ko": "토렌트 없음",
     "pt-BR": "Nenhum torrent",
     "uk": "Немає торентів",
-    "zh-CN": "没有种子"
+    "zh-CN": "没有种子",
+    "zh-TW": "沒有種子"
   },
   "torrents_empty_filtered": {
     "cs": "Aktuálnímu hledání a filtrům nic neodpovídá.",
@@ -1416,7 +1550,8 @@
     "ko": "현재 검색어와 필터에 맞는 항목이 없습니다.",
     "pt-BR": "Nada corresponde à busca e aos filtros atuais.",
     "uk": "Нічого не відповідає поточному пошуку та фільтрам.",
-    "zh-CN": "没有符合当前搜索和筛选条件的内容。"
+    "zh-CN": "没有符合当前搜索和筛选条件的内容。",
+    "zh-TW": "沒有符合目前搜尋和篩選條件的內容。"
   },
   "torrents_empty_message": {
     "cs": "Tento klient zatím nemá žádné torrenty.",
@@ -1426,7 +1561,8 @@
     "ko": "이 클라이언트에는 아직 토렌트가 없습니다.",
     "pt-BR": "Este cliente ainda não tem torrents.",
     "uk": "У цього клієнта ще немає торентів.",
-    "zh-CN": "该客户端还没有种子。"
+    "zh-CN": "该客户端还没有种子。",
+    "zh-TW": "此用戶端尚無種子。"
   },
   "torrents_no_clients_message": {
     "cs": "Přidejte instanci qBittorrentu v qui a poté potáhněte pro obnovení.",
@@ -1436,7 +1572,8 @@
     "ko": "qui에서 qBittorrent 인스턴스를 추가한 뒤 당겨서 새로고침하세요.",
     "pt-BR": "Adicione uma instância do qBittorrent no qui e puxe para atualizar.",
     "uk": "Додайте екземпляр qBittorrent у qui, потім потягніть, щоб оновити.",
-    "zh-CN": "请先在 qui 中添加 qBittorrent 实例，然后下拉刷新。"
+    "zh-CN": "请先在 qui 中添加 qBittorrent 实例，然后下拉刷新。",
+    "zh-TW": "請先在 qui 中新增 qBittorrent 實例，然後向下拉動重新整理。"
   },
   "torrents_loaded_of": {
     "cs": "%1$d z %2$d",
@@ -1446,7 +1583,8 @@
     "ko": "%2$d개 중 %1$d개",
     "pt-BR": "%1$d de %2$d",
     "uk": "%1$d з %2$d",
-    "zh-CN": "%1$d / %2$d"
+    "zh-CN": "%1$d / %2$d",
+    "zh-TW": "%1$d / %2$d"
   },
 
   "tracker_status_not_working": {
@@ -1457,7 +1595,8 @@
     "ko": "작동하지 않음",
     "pt-BR": "Não funciona",
     "uk": "Не працює",
-    "zh-CN": "无法工作"
+    "zh-CN": "无法工作",
+    "zh-TW": "無法運作"
   },
 
   "instances_active": {
@@ -1497,6 +1636,9 @@
     },
     "zh-CN": {
       "other": "%1$d 个活动客户端"
+    },
+    "zh-TW": {
+      "other": "%1$d 個活躍用戶端"
     }
   },
 
@@ -1537,6 +1679,9 @@
     },
     "zh-CN": {
       "other": "%1$d 个种子"
+    },
+    "zh-TW": {
+      "other": "%1$d 個種子"
     }
   },
 
@@ -1577,6 +1722,9 @@
     },
     "zh-CN": {
       "other": "已选择 %1$d 项"
+    },
+    "zh-TW": {
+      "other": "已選取 %1$d 項"
     }
   }
 }

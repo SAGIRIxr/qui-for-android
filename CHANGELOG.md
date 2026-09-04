@@ -6,6 +6,19 @@ The section for a tag becomes that release's notes on GitHub, and the app shows 
 same text in its update dialog. Add the new version at the top before tagging, in this
 file and in [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md).
 
+## Unreleased
+
+### Added
+- A collapsible Server Statistics card on the Dashboard, with per-instance session and
+  all-time transfer totals, share ratios and peer counts.
+- Content-file sorting by name, size, progress and priority, matching qui's current
+  defaults and direction toggles.
+- Traditional Chinese (`zh-TW`), bringing the app back in sync with qui's ten locales.
+
+### Fixed
+- I2P peers now show their canonical `.b32.i2p` address instead of `:0`; IPv4 and IPv6
+  fallbacks remain available for older responses.
+
 ## 0.4.5
 
 ### Added

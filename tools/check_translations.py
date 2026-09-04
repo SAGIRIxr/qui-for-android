@@ -3,7 +3,7 @@
 Fail if a locale has drifted from the English source.
 
 Adding a string to values/strings.xml and forgetting to re-run
-generate_translations.py leaves that string English on eight of the nine
+generate_translations.py leaves that string English on nine of the ten
 languages, which nothing else catches. This needs no qui checkout, so CI can run
 it on every push.
 

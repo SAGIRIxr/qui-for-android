@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * Language selection. Mirrors qui's web behaviour: a stored choice wins, otherwise
- * the device's own languages pick the closest of the nine locales qui ships.
+ * the device's own languages pick the closest of the ten locales qui ships.
  *
  * Android already resolves the initial language from res/values-<lang>, so the
  * automatic path needs no code. This exists for the manual override in Settings,
@@ -22,7 +22,7 @@ import java.util.Locale
 
 /** The language tags qui ships, in the order its own picker lists them. */
 val SUPPORTED_LANGUAGES = listOf(
-    "en", "uk", "zh-CN", "fr", "de", "cs", "it", "ko", "pt-BR",
+    "en", "uk", "zh-CN", "zh-TW", "fr", "de", "cs", "it", "ko", "pt-BR",
 )
 
 /** Endonyms, copied from qui's languageNames so both UIs read the same. */
@@ -30,6 +30,7 @@ val LANGUAGE_NAMES = mapOf(
     "en" to "English",
     "uk" to "Українська",
     "zh-CN" to "简体中文",
+    "zh-TW" to "繁體中文",
     "fr" to "Français",
     "de" to "Deutsch",
     "cs" to "Čeština",

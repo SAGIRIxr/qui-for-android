@@ -11,7 +11,7 @@ string we try, in order:
                                           English locale files
 
 Reusing qui's own translations keeps the Android wording identical to the web UI
-for the terms that matter (states, actions, filters), and means the eight
+for the terms that matter (states, actions, filters), and means the nine
 non-English locales are as good as upstream's rather than a fresh guess.
 
 Usage: python tools/generate_translations.py <path-to-qui-checkout> [--report]
@@ -37,6 +37,7 @@ LANGUAGES = [
     ("pt-BR", "values-b+pt+BR"),
     ("uk", "values-uk"),
     ("zh-CN", "values-zh-rCN"),
+    ("zh-TW", "values-zh-rTW"),
 ]
 
 NAMESPACES = [
