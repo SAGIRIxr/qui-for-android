@@ -6,6 +6,12 @@ The section for a tag becomes that release's notes on GitHub, and the app shows 
 same text in its update dialog. Add the new version at the top before tagging, in this
 file and in [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md).
 
+## 0.5.2
+
+### Fixed
+- Keep dashboard instance cards at a stable height during periodic refreshes by
+  showing the refresh status and last-update time in the same single-line slot.
+
 ## 0.5.1
 
 ### Improved

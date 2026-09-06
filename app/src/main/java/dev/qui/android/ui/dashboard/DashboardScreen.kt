@@ -447,18 +447,25 @@ private fun InstanceCardView(
             StatusDot(connected = card.isHealthy && card.instance.connected)
         }
 
-        card.updatedAt?.let { updatedAt ->
-            Text(
-                text = stringResource(R.string.widget_stale,
-                    java.text.DateFormat.getTimeInstance().format(java.util.Date(updatedAt))),
-                style = MaterialTheme.typography.labelSmall,
-                color = palette.mutedForeground,
-            )
-        }
-        if (card.refreshing) {
-            Text(stringResource(R.string.widget_refreshing), style = MaterialTheme.typography.labelSmall)
-            if (card.updatedAt == null) return@QuiCard
-        }
+        // Refreshing replaces the timestamp in the same single-line slot. Adding
+        // a second row on every poll makes all following cards jump up and down.
+        Text(
+            text = when {
+                card.refreshing -> stringResource(R.string.widget_refreshing)
+                card.updatedAt != null -> stringResource(
+                    R.string.widget_stale,
+                    java.text.DateFormat.getTimeInstance().format(java.util.Date(card.updatedAt)),
+                )
+                else -> "—"
+            },
+            modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.labelSmall,
+            color = palette.mutedForeground,
+            minLines = 1,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        if (card.refreshing && card.updatedAt == null) return@QuiCard
         if (card.errorRes != null) {
             Spacer(Modifier.height(10.dp))
             Text(
