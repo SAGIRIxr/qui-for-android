@@ -77,8 +77,14 @@ class RootViewModel @Inject constructor(
         if (enabled) prefsStore.setSkippedUpdate(null)
     }
 
-    val preferences: StateFlow<AppPreferencesStore.Snapshot> = prefsStore.snapshot
-        .stateIn(viewModelScope, SharingStarted.Eagerly, AppPreferencesStore.Snapshot())
+    // No default snapshot: the first frame must use the saved privacy and theme choices.
+    val preferences: StateFlow<AppPreferencesStore.Snapshot?> = prefsStore.snapshot
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
+    fun rememberMainPage(route: String?) {
+        val page = dev.qui.android.data.MainPage.fromRoute(route) ?: return
+        viewModelScope.launch { prefsStore.setLastMainPage(page) }
+    }
 
     /**
      * Provided once for the whole tree so the list, the detail screen and anything else

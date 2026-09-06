@@ -85,10 +85,9 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val prefs by viewModel.preferences.collectAsStateWithLifecycle()
+    val prefs = dev.qui.android.ui.LocalAppPreferences.current
     val palette = QuiTheme.palette
     val serverStatistics = state.serverStatistics
-    var serverStatsExpanded by remember { mutableStateOf(true) }
     var selectedServerStatsId by remember { mutableStateOf<Int?>(null) }
 
     LaunchedEffect(serverStatistics, prefs.showServerStats) {
@@ -164,8 +163,8 @@ fun DashboardScreen(
             item(key = "server-statistics") {
                 ServerStatisticsCard(
                     statistics = serverStatistics,
-                    expanded = serverStatsExpanded,
-                    onToggleExpanded = { serverStatsExpanded = !serverStatsExpanded },
+                    expanded = prefs.serverStatsExpanded,
+                    onToggleExpanded = viewModel::toggleServerStatsExpanded,
                     onOpenInstance = { selectedServerStatsId = it },
                 )
             }
@@ -184,6 +183,8 @@ fun DashboardScreen(
                     sort = prefs.trackerSortColumn,
                     incognito = prefs.incognito,
                     onSortChange = viewModel::setTrackerSort,
+                    expanded = prefs.trackerBreakdownExpanded,
+                    onToggleExpanded = viewModel::toggleTrackerBreakdownExpanded,
                 )
             }
         }
@@ -198,6 +199,8 @@ fun DashboardScreen(
                     onOpen = { onOpenInstance(card.instance.id) },
                     onToggleAltSpeed = { viewModel.toggleAltSpeedLimits(card.instance.id) },
                     onToggleIncognito = viewModel::toggleIncognito,
+                    expanded = card.instance.id in prefs.expandedInstanceIds,
+                    onToggleExpanded = { viewModel.toggleInstanceExpanded(card.instance.id) },
                 )
             }
         }
@@ -396,9 +399,10 @@ private fun InstanceCardView(
     onOpen: () -> Unit,
     onToggleAltSpeed: () -> Unit,
     onToggleIncognito: () -> Unit,
+    expanded: Boolean,
+    onToggleExpanded: () -> Unit,
 ) {
     val palette = QuiTheme.palette
-    var expanded by remember { mutableStateOf(false) }
 
     QuiCard(onClick = if (card.isHealthy) onOpen else null) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -593,7 +597,7 @@ private fun InstanceCardView(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { expanded = !expanded }
+                .clickable(onClick = onToggleExpanded)
                 .padding(vertical = 4.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -710,9 +714,10 @@ private fun TrackerBreakdownCard(
     sort: TrackerSortColumn,
     incognito: Boolean,
     onSortChange: (TrackerSortColumn) -> Unit,
+    expanded: Boolean,
+    onToggleExpanded: () -> Unit,
 ) {
     val palette = QuiTheme.palette
-    var expanded by remember { mutableStateOf(false) }
     val visible = if (expanded) rows else rows.take(COLLAPSED_TRACKER_ROWS)
 
     QuiCard {
@@ -842,7 +847,7 @@ private fun TrackerBreakdownCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { expanded = !expanded }
+                    .clickable(onClick = onToggleExpanded)
                     .padding(vertical = 6.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,

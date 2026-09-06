@@ -33,6 +33,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -49,6 +51,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import dev.qui.android.R
+import dev.qui.android.data.AppPreferencesStore
 import dev.qui.android.ui.addintent.AddIntent
 import dev.qui.android.ui.components.LocalTrackerIcons
 import dev.qui.android.ui.dashboard.DashboardScreen
@@ -68,6 +71,11 @@ object Routes {
     fun detail(instanceId: Int, hash: String) = "detail/$instanceId/$hash"
 }
 
+/** Every screen sees the same loaded preferences; never flash an unmasked default. */
+val LocalAppPreferences = staticCompositionLocalOf<AppPreferencesStore.Snapshot> {
+    error("App preferences must be loaded before composing screens")
+}
+
 private data class NavEntry(
     val route: String,
     @StringRes val label: Int,
@@ -82,6 +90,7 @@ private val NAV_ENTRIES = listOf(
 
 @Composable
 fun QuiApp(
+    preferences: AppPreferencesStore.Snapshot,
     pendingAdd: MutableStateFlow<AddIntent?>,
     pendingTorrent: MutableStateFlow<Pair<Int, String>?>,
 ) {
@@ -109,6 +118,7 @@ fun QuiApp(
     val mobileScroll = remember { MobileScrollState() }
 
     CompositionLocalProvider(
+        LocalAppPreferences provides preferences,
         LocalTrackerIcons provides trackerIcons,
         LocalMobileScroll provides mobileScroll,
     ) {
@@ -118,6 +128,8 @@ fun QuiApp(
             null -> Box(Modifier.fillMaxSize())
             false -> LoginScreen(onAuthenticated = { /* isConfigured flips the tree */ })
             true -> MainScaffold(
+                initialRoute = preferences.lastMainPage.route,
+                onMainPageChanged = root::rememberMainPage,
                 navController = navController,
                 pendingAdd = pendingAdd,
                 pendingTorrent = pendingTorrent,
@@ -128,6 +140,8 @@ fun QuiApp(
 
 @Composable
 private fun MainScaffold(
+    initialRoute: String,
+    onMainPageChanged: (String?) -> Unit,
     navController: NavHostController,
     pendingAdd: MutableStateFlow<AddIntent?>,
     pendingTorrent: MutableStateFlow<Pair<Int, String>?>,
@@ -138,6 +152,12 @@ private fun MainScaffold(
     val unifiedScope by shell.unifiedScope.collectAsStateWithLifecycle()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination
+    // Keep the graph's start stable as the last-page preference changes, and across rotation.
+    val startRoute = rememberSaveable { initialRoute }
+
+    LaunchedEffect(currentRoute?.route) {
+        onMainPageChanged(currentRoute?.route)
+    }
 
     // The detail screen is full-bleed in qui too; the bar would only crowd it.
     val showBottomBar = NAV_ENTRIES.any { entry ->
@@ -148,7 +168,20 @@ private fun MainScaffold(
 
     // A row tapped on the home-screen widget lands straight on that torrent.
     val widgetTorrent by pendingTorrent.collectAsStateWithLifecycle()
-    LaunchedEffect(widgetTorrent) {
+    val incomingAdd by pendingAdd.collectAsStateWithLifecycle()
+    LaunchedEffect(widgetTorrent, incomingAdd, backStackEntry) {
+        // Wait for NavHost to install its graph before handling external launches.
+        if (backStackEntry == null) return@LaunchedEffect
+        if (incomingAdd != null) {
+            if (currentRoute?.route != Routes.TORRENTS) {
+                navController.navigate(Routes.TORRENTS) {
+                    popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+            return@LaunchedEffect
+        }
         val (instanceId, hash) = widgetTorrent ?: return@LaunchedEffect
         pendingTorrent.value = null
         navController.navigate(Routes.detail(instanceId, hash))
@@ -220,7 +253,7 @@ private fun MainScaffold(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Routes.TORRENTS,
+            startDestination = startRoute,
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(Routes.DASHBOARD) {

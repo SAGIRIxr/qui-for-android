@@ -589,8 +589,7 @@ class TorrentsViewModel @Inject constructor(
      * it is something you flip on the spot before handing someone your phone.
      */
     fun toggleIncognito() {
-        val next = !preferences.value.incognito
-        viewModelScope.launch { prefsStore.setIncognito(next) }
+        viewModelScope.launch { prefsStore.toggleIncognito() }
     }
 
     /** Cycles the list density, in the order qui lists the three modes. */

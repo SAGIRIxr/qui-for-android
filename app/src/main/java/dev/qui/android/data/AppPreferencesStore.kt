@@ -9,10 +9,13 @@
 package dev.qui.android.data
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -38,11 +41,26 @@ enum class TrackerSortColumn { Tracker, Uploaded, Downloaded, Ratio, Torrents, S
 /** What the list widget puts at the top. */
 enum class WidgetListMode { Active, Recent }
 
+/** Only durable top-level destinations, never a torrent hash or an open dialog. */
+enum class MainPage(val route: String) {
+    Dashboard("dashboard"), Torrents("torrents"), Settings("settings");
+
+    companion object {
+        fun fromRoute(route: String?): MainPage? = entries.firstOrNull { it.route == route }
+    }
+}
+
 @Singleton
-class AppPreferencesStore @Inject constructor(
-    @ApplicationContext private val context: Context,
+class AppPreferencesStore internal constructor(
+    private val dataStore: DataStore<Preferences>,
 ) {
+    @Inject constructor(@ApplicationContext context: Context) : this(context.prefsDataStore)
+
     private object Keys {
+        val lastMainPage = stringPreferencesKey("last_main_page")
+        val serverStatsExpanded = booleanPreferencesKey("dash_server_stats_expanded")
+        val trackerBreakdownExpanded = booleanPreferencesKey("dash_tracker_breakdown_expanded")
+        val expandedInstanceIds = stringSetPreferencesKey("dash_expanded_instance_ids")
         val themeId = stringPreferencesKey("theme_id")
         val themeVariation = stringPreferencesKey("theme_variation")
         val themeMode = stringPreferencesKey("theme_mode")
@@ -69,6 +87,10 @@ class AppPreferencesStore @Inject constructor(
     }
 
     data class Snapshot(
+        val lastMainPage: MainPage = MainPage.Torrents,
+        val serverStatsExpanded: Boolean = true,
+        val trackerBreakdownExpanded: Boolean = false,
+        val expandedInstanceIds: Set<Int> = emptySet(),
         val themeId: String = "default",
         val themeVariation: String? = null,
         val themeMode: ThemeMode = ThemeMode.Auto,
@@ -100,8 +122,13 @@ class AppPreferencesStore @Inject constructor(
         val widgetRefreshMinutes: Int = 15,
     )
 
-    val snapshot: Flow<Snapshot> = context.prefsDataStore.data.map { prefs ->
+    val snapshot: Flow<Snapshot> = dataStore.data.map { prefs ->
         Snapshot(
+            lastMainPage = MainPage.fromRoute(prefs[Keys.lastMainPage]) ?: MainPage.Torrents,
+            serverStatsExpanded = prefs[Keys.serverStatsExpanded] ?: true,
+            trackerBreakdownExpanded = prefs[Keys.trackerBreakdownExpanded] ?: false,
+            expandedInstanceIds = prefs[Keys.expandedInstanceIds].orEmpty()
+                .mapNotNull { it.toIntOrNull() }.toSet(),
             themeId = prefs[Keys.themeId] ?: "default",
             themeVariation = prefs[Keys.themeVariation],
             themeMode = prefs[Keys.themeMode]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() }
@@ -135,89 +162,112 @@ class AppPreferencesStore @Inject constructor(
         )
     }
 
-    suspend fun setAutoUpdateCheck(enabled: Boolean) = context.prefsDataStore.edit {
+    suspend fun setLastMainPage(page: MainPage) = dataStore.edit {
+        it[Keys.lastMainPage] = page.route
+    }
+
+    suspend fun toggleServerStatsExpanded() = dataStore.edit {
+        it[Keys.serverStatsExpanded] = !(it[Keys.serverStatsExpanded] ?: true)
+    }
+
+    suspend fun toggleTrackerBreakdownExpanded() = dataStore.edit {
+        it[Keys.trackerBreakdownExpanded] = !(it[Keys.trackerBreakdownExpanded] ?: false)
+    }
+
+    suspend fun toggleInstanceExpanded(instanceId: Int) = dataStore.edit {
+        val ids = it[Keys.expandedInstanceIds].orEmpty()
+        val id = instanceId.toString()
+        it[Keys.expandedInstanceIds] = if (id in ids) ids - id else ids + id
+    }
+
+    /** Read-modify-write in one transaction, including rapid taps before flow delivery. */
+    suspend fun toggleIncognito() = dataStore.edit {
+        it[Keys.incognito] = !(it[Keys.incognito] ?: false)
+    }
+
+    suspend fun setAutoUpdateCheck(enabled: Boolean) = dataStore.edit {
         it[Keys.autoUpdateCheck] = enabled
     }
 
-    suspend fun setSkippedUpdate(tag: String?) = context.prefsDataStore.edit {
+    suspend fun setSkippedUpdate(tag: String?) = dataStore.edit {
         if (tag == null) it.remove(Keys.skippedUpdate) else it[Keys.skippedUpdate] = tag
     }
 
-    suspend fun setWidgetRefreshMinutes(minutes: Int) = context.prefsDataStore.edit {
+    suspend fun setWidgetRefreshMinutes(minutes: Int) = dataStore.edit {
         it[Keys.widgetRefreshMinutes] = minutes
     }
 
-    suspend fun setWidgetInstance(id: Int?) = context.prefsDataStore.edit {
+    suspend fun setWidgetInstance(id: Int?) = dataStore.edit {
         if (id == null) it.remove(Keys.widgetInstanceId) else it[Keys.widgetInstanceId] = id
     }
 
-    suspend fun setWidgetListMode(mode: WidgetListMode) = context.prefsDataStore.edit {
+    suspend fun setWidgetListMode(mode: WidgetListMode) = dataStore.edit {
         it[Keys.widgetListMode] = mode.name
     }
 
-    suspend fun setTheme(id: String, variation: String?) = context.prefsDataStore.edit {
+    suspend fun setTheme(id: String, variation: String?) = dataStore.edit {
         it[Keys.themeId] = id
         if (variation == null) it.remove(Keys.themeVariation) else it[Keys.themeVariation] = variation
     }
 
-    suspend fun setThemeMode(mode: ThemeMode) = context.prefsDataStore.edit {
+    suspend fun setThemeMode(mode: ThemeMode) = dataStore.edit {
         it[Keys.themeMode] = mode.name
     }
 
-    suspend fun setViewMode(mode: ViewMode) = context.prefsDataStore.edit {
+    suspend fun setViewMode(mode: ViewMode) = dataStore.edit {
         it[Keys.viewMode] = mode.name
     }
 
-    suspend fun setSpeedUnit(unit: SpeedUnit) = context.prefsDataStore.edit {
+    suspend fun setSpeedUnit(unit: SpeedUnit) = dataStore.edit {
         it[Keys.speedUnit] = unit.name
     }
 
-    suspend fun setIncognito(enabled: Boolean) = context.prefsDataStore.edit {
+    suspend fun setIncognito(enabled: Boolean) = dataStore.edit {
         it[Keys.incognito] = enabled
     }
 
-    suspend fun setSort(field: String, order: String) = context.prefsDataStore.edit {
+    suspend fun setSort(field: String, order: String) = dataStore.edit {
         it[Keys.sortField] = field
         it[Keys.sortOrder] = order
     }
 
-    suspend fun setLastInstance(id: Int?) = context.prefsDataStore.edit {
+    suspend fun setLastInstance(id: Int?) = dataStore.edit {
         if (id == null) it.remove(Keys.lastInstanceId) else it[Keys.lastInstanceId] = id
     }
 
-    suspend fun setDynamicColor(enabled: Boolean) = context.prefsDataStore.edit {
+    suspend fun setDynamicColor(enabled: Boolean) = dataStore.edit {
         it[Keys.dynamicColor] = enabled
     }
 
-    suspend fun setConfirmDelete(enabled: Boolean) = context.prefsDataStore.edit {
+    suspend fun setConfirmDelete(enabled: Boolean) = dataStore.edit {
         it[Keys.confirmDelete] = enabled
     }
 
-    suspend fun setRefreshSeconds(seconds: Int) = context.prefsDataStore.edit {
+    suspend fun setRefreshSeconds(seconds: Int) = dataStore.edit {
         it[Keys.refreshSeconds] = seconds.coerceIn(1, 60)
     }
 
-    suspend fun setShowServerStats(enabled: Boolean) = context.prefsDataStore.edit {
+    suspend fun setShowServerStats(enabled: Boolean) = dataStore.edit {
         it[Keys.showServerStats] = enabled
     }
 
-    suspend fun setShowGlobalStats(enabled: Boolean) = context.prefsDataStore.edit {
+    suspend fun setShowGlobalStats(enabled: Boolean) = dataStore.edit {
         it[Keys.showGlobalStats] = enabled
     }
 
-    suspend fun setShowTrackerBreakdown(enabled: Boolean) = context.prefsDataStore.edit {
+    suspend fun setShowTrackerBreakdown(enabled: Boolean) = dataStore.edit {
         it[Keys.showTrackerBreakdown] = enabled
     }
 
-    suspend fun setShowInstanceCards(enabled: Boolean) = context.prefsDataStore.edit {
+    suspend fun setShowInstanceCards(enabled: Boolean) = dataStore.edit {
         it[Keys.showInstanceCards] = enabled
     }
 
-    suspend fun setTrackerSortColumn(column: TrackerSortColumn) = context.prefsDataStore.edit {
+    suspend fun setTrackerSortColumn(column: TrackerSortColumn) = dataStore.edit {
         it[Keys.trackerSortColumn] = column.name
     }
 
-    suspend fun setUnifiedScope(enabled: Boolean) = context.prefsDataStore.edit {
+    suspend fun setUnifiedScope(enabled: Boolean) = dataStore.edit {
         it[Keys.unifiedScope] = enabled
     }
 }

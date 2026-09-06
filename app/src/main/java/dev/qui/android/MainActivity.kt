@@ -52,7 +52,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val root: RootViewModel = hiltViewModel()
-            val prefs by root.preferences.collectAsStateWithLifecycle()
+            val loadedPrefs by root.preferences.collectAsStateWithLifecycle()
+            val prefs = loadedPrefs ?: return@setContent
 
             QuiAppTheme(
                 themeId = prefs.themeId,
@@ -60,7 +61,7 @@ class MainActivity : ComponentActivity() {
                 themeMode = prefs.themeMode,
                 dynamicColor = prefs.dynamicColor,
             ) {
-                QuiApp(pendingAdd = pendingAdd, pendingTorrent = pendingTorrent)
+                QuiApp(preferences = prefs, pendingAdd = pendingAdd, pendingTorrent = pendingTorrent)
             }
         }
     }

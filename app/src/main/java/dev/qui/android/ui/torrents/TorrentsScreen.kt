@@ -133,7 +133,7 @@ fun TorrentsScreen(
     viewModel: TorrentsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val prefs by viewModel.preferences.collectAsStateWithLifecycle()
+    val prefs = dev.qui.android.ui.LocalAppPreferences.current
 
     var showFilters by remember { mutableStateOf(false) }
     var showSort by remember { mutableStateOf(false) }

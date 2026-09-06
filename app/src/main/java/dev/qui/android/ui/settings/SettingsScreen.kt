@@ -106,7 +106,7 @@ fun SettingsScreen(
     root: RootViewModel = hiltViewModel(),
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
-    val prefs by root.preferences.collectAsStateWithLifecycle()
+    val prefs = dev.qui.android.ui.LocalAppPreferences.current
     val account by viewModel.account.collectAsStateWithLifecycle()
     val palette = QuiTheme.palette
     val context = LocalContext.current

@@ -6,6 +6,19 @@ The section for a tag becomes that release's notes on GitHub, and the app shows 
 same text in its update dialog. Add the new version at the top before tagging, in this
 file and in [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md).
 
+## 0.5.3
+
+### Improved
+- Reopen the last main page (Dashboard, Clients or Settings). Shared torrents and
+  widget actions still open their requested destinations.
+- Remember server-statistics, tracker-breakdown and individual instance-card expansion
+  across navigation and app restarts.
+
+### Fixed
+- Load saved preferences before displaying screens, avoiding a brief unmasked view
+  when privacy mode is enabled. IP hiding and incognito remain one shared setting.
+- Apply privacy and expansion toggles atomically so rapid taps do not lose changes.
+
 ## 0.5.2
 
 ### Fixed

@@ -104,7 +104,7 @@ fun TorrentDetailScreen(
 
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.setResumed(true) }
     LifecycleEventEffect(Lifecycle.Event.ON_PAUSE) { viewModel.setResumed(false) }
-    val prefs by viewModel.preferences.collectAsStateWithLifecycle()
+    val prefs = dev.qui.android.ui.LocalAppPreferences.current
     val palette = QuiTheme.palette
     var showRename by remember { mutableStateOf(false) }
 

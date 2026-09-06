@@ -171,8 +171,14 @@ class DashboardViewModel @Inject constructor(
 
     /** The eye on each card is qui's global incognito, not a per-card state. */
     fun toggleIncognito() {
-        viewModelScope.launch { prefsStore.setIncognito(!preferences.value.incognito) }
+        viewModelScope.launch { prefsStore.toggleIncognito() }
     }
+
+    fun toggleServerStatsExpanded() = viewModelScope.launch { prefsStore.toggleServerStatsExpanded() }
+
+    fun toggleTrackerBreakdownExpanded() = viewModelScope.launch { prefsStore.toggleTrackerBreakdownExpanded() }
+
+    fun toggleInstanceExpanded(id: Int) = viewModelScope.launch { prefsStore.toggleInstanceExpanded(id) }
 
     fun setTrackerSort(column: TrackerSortColumn) {
         viewModelScope.launch { prefsStore.setTrackerSortColumn(column) }
