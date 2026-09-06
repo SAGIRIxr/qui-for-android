@@ -19,6 +19,7 @@ import dev.qui.android.data.model.TorrentProperties
 import dev.qui.android.data.model.TorrentTracker
 import dev.qui.android.data.model.WebSeed
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -46,6 +47,11 @@ data class DetailUiState(
     val tab: DetailTab = DetailTab.General,
     val isLoading: Boolean = true,
     val error: String? = null,
+    val tabLoading: Boolean = false,
+    val tabError: String? = null,
+    val actionBusy: Boolean = false,
+    val actionError: String? = null,
+    val actionSucceeded: Boolean = false,
 ) {
     val sortedFiles: List<TorrentFile> get() = sortTorrentFiles(files, fileSort)
 }
@@ -67,6 +73,7 @@ class TorrentDetailViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Eagerly, AppPreferencesStore.Snapshot())
 
     private var pollJob: Job? = null
+    private var webSeedsAt: Long? = null
 
     private val resumed = MutableStateFlow(true)
 
@@ -94,50 +101,72 @@ class TorrentDetailViewModel @Inject constructor(
         resumed.value = value
     }
 
-    private suspend fun loadForTab(tab: DetailTab) {
-        // The header needs properties regardless of which tab is open.
-        repository.torrentProperties(instanceId, hash)
-            .onSuccess { props ->
-                _state.update { it.copy(properties = props, isLoading = false, error = null) }
-            }
-            .onFailure { error ->
-                _state.update { it.copy(isLoading = false, error = error.message) }
-            }
+    private suspend fun loadForTab(tab: DetailTab) = coroutineScope {
+        _state.update { it.copy(tabLoading = true, tabError = null) }
+        launch {
+            // Header and visible tab publish independently as each request finishes.
+            repository.torrentProperties(instanceId, hash)
+                .onSuccess { props ->
+                    _state.update { it.copy(properties = props, isLoading = false, error = null) }
+                }
+                .onFailure { error ->
+                    _state.update {
+                        it.copy(isLoading = false, error = error.message ?: error.javaClass.simpleName)
+                    }
+                }
+        }
 
-        // The list row carries fields properties lacks (state, category, tags, ratio).
-        repository.torrents(
-            instanceId = instanceId,
-            page = 0,
-            limit = 1,
-            sort = "added_on",
-            order = "desc",
-            search = hash,
-            filters = null,
-        ).onSuccess { response ->
-            response.rows.firstOrNull { it.hash.equals(hash, ignoreCase = true) }?.let { row ->
-                _state.update { it.copy(torrent = row) }
+        launch {
+            // Keep state, category, tags and ratio live at the configured interval.
+            repository.torrents(
+                instanceId = instanceId,
+                page = 0,
+                limit = 1,
+                sort = "added_on",
+                order = "desc",
+                search = hash,
+                filters = null,
+            ).onSuccess { response ->
+                response.rows.firstOrNull { it.hash.equals(hash, ignoreCase = true) }?.let { row ->
+                    _state.update { it.copy(torrent = row) }
+                }
+            }.onFailure { error ->
+                _state.update { it.copy(tabError = error.message ?: error.javaClass.simpleName) }
             }
         }
 
-        when (tab) {
-            DetailTab.General -> Unit
-            DetailTab.Trackers -> repository.torrentTrackers(instanceId, hash)
-                .onSuccess { list -> _state.update { it.copy(trackers = list) } }
-
-            DetailTab.Peers -> repository.torrentPeers(instanceId, hash)
-                .onSuccess { list -> _state.update { it.copy(peers = list) } }
-
-            DetailTab.Content -> repository.torrentFiles(instanceId, hash)
-                .onSuccess { list -> _state.update { it.copy(files = list) } }
-
-            DetailTab.WebSeeds -> repository.torrentWebSeeds(instanceId, hash)
-                .onSuccess { list -> _state.update { it.copy(webSeeds = list) } }
+        launch {
+            val result = when (tab) {
+                DetailTab.General -> Result.success(Unit)
+                DetailTab.Trackers -> repository.torrentTrackers(instanceId, hash)
+                    .onSuccess { list -> _state.update { it.copy(trackers = list) } }
+                DetailTab.Peers -> repository.torrentPeers(instanceId, hash)
+                    .onSuccess { list -> _state.update { it.copy(peers = list) } }
+                DetailTab.Content -> repository.torrentFiles(instanceId, hash)
+                    .onSuccess { list -> _state.update { it.copy(files = list) } }
+                DetailTab.WebSeeds -> {
+                    val cached = webSeedsAt?.let {
+                        System.nanoTime() / 1_000_000L - it < 60_000L
+                    } == true
+                    if (cached) Result.success(Unit)
+                    else repository.torrentWebSeeds(instanceId, hash).onSuccess { list ->
+                        webSeedsAt = System.nanoTime() / 1_000_000L
+                        _state.update { it.copy(webSeeds = list) }
+                    }
+                }
+            }
+            result.onFailure { error ->
+                _state.update { it.copy(tabError = error.message ?: error.javaClass.simpleName) }
+            }
+            _state.update { it.copy(tabLoading = false) }
         }
     }
-
     fun selectTab(tab: DetailTab) {
+        if (tab == _state.value.tab) return
         _state.update { it.copy(tab = tab) }
-        viewModelScope.launch { loadForTab(tab) }
+        // Cancel the previous cycle before starting the new tab immediately.
+        // Properties, row and visible tab load in parallel within that one cycle.
+        start()
     }
 
     fun toggleFileSort(column: FileSortColumn) {
@@ -147,29 +176,47 @@ class TorrentDetailViewModel @Inject constructor(
     }
 
     fun action(action: String, configure: BulkActionRequest.() -> BulkActionRequest = { this }) {
-        viewModelScope.launch {
+        performAction {
             repository.bulkAction(
                 instanceId,
                 BulkActionRequest(hashes = listOf(hash), action = action).configure(),
             )
-            loadForTab(_state.value.tab)
         }
     }
 
-    fun rename(name: String) = viewModelScope.launch {
+    fun rename(name: String) = performAction {
         repository.renameTorrent(instanceId, hash, name)
-            .onSuccess { loadForTab(_state.value.tab) }
-            .onFailure { error -> _state.update { it.copy(error = error.message) } }
     }
 
-    fun setFilePriority(indexes: List<Int>, priority: Int) = viewModelScope.launch {
+    fun setFilePriority(indexes: List<Int>, priority: Int) = performAction {
         repository.setFilePriority(instanceId, hash, indexes, priority)
-            .onSuccess { loadForTab(DetailTab.Content) }
     }
 
-    fun addTrackers(urls: String) = viewModelScope.launch {
+    fun addTrackers(urls: String) = performAction {
         repository.addTrackers(instanceId, hash, urls)
-            .onSuccess { loadForTab(DetailTab.Trackers) }
+    }
+
+    private fun performAction(block: suspend () -> Result<Unit>) {
+        if (_state.value.actionBusy) return
+        _state.update { it.copy(actionBusy = true, actionError = null, actionSucceeded = false) }
+        viewModelScope.launch {
+            try {
+                block().onSuccess {
+                    _state.update { it.copy(actionSucceeded = true) }
+                    webSeedsAt = null
+                    start()
+                }.onFailure { error ->
+                    _state.update { it.copy(actionError = error.message ?: error.javaClass.simpleName) }
+                }
+            } finally {
+                _state.update { it.copy(actionBusy = false) }
+            }
+        }
+    }
+
+    fun refresh() {
+        webSeedsAt = null
+        start()
     }
 
     fun dismissError() = _state.update { it.copy(error = null) }

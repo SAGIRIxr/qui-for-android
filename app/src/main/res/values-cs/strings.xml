@@ -418,4 +418,6 @@
         <item quantity="many">%1$d aktivních klientů</item>
         <item quantity="other">%1$d aktivních klientů</item>
     </plurals>
+    <string name="operation_running">Probíhá…</string>
+    <string name="operation_success">Operace dokončena</string>
 </resources>

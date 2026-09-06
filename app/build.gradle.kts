@@ -15,8 +15,8 @@ android {
         applicationId = "dev.qui.android"
         minSdk = 26
         targetSdk = 35
-        versionCode = 11
-        versionName = "0.5.0"
+        versionCode = 12
+        versionName = "0.5.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -25,6 +25,14 @@ android {
             // Supplied by CI from repository secrets. Absent on a normal local build,
             // in which case the release type falls back to the debug key below.
             val storePath = System.getenv("QUI_KEYSTORE_FILE")
+            if (System.getenv("QUI_REQUIRE_RELEASE_SIGNING") == "true") {
+                require(!storePath.isNullOrBlank() && file(storePath).isFile) {
+                    "A fixed release keystore is required for publishing"
+                }
+                listOf("QUI_KEYSTORE_PASSWORD", "QUI_KEY_ALIAS", "QUI_KEY_PASSWORD").forEach {
+                    require(!System.getenv(it).isNullOrBlank()) { "Missing signing credential: $it" }
+                }
+            }
             if (!storePath.isNullOrBlank() && file(storePath).exists()) {
                 storeFile = file(storePath)
                 storePassword = System.getenv("QUI_KEYSTORE_PASSWORD")
@@ -113,6 +121,8 @@ dependencies {
     implementation(libs.coil.svg)
 
     testImplementation(libs.junit)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+    testImplementation("io.mockk:mockk:1.13.13")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

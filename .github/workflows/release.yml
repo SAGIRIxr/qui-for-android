@@ -12,6 +12,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -19,14 +23,30 @@ jobs:
       # On a tag push github.ref_name is the tag; on a manual run it is the branch,
       # so the explicit input has to win.
       VERSION: ${{ inputs.tag || github.ref_name }}
-      # The secrets context cannot be read from a step-level `if`, so it is folded
-      # into a job-level env var that steps can test.
-      HAS_KEYSTORE: ${{ secrets.QUI_KEYSTORE_BASE64 != '' }}
     steps:
       # Full history so the release-notes fallback can diff against the previous tag.
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          ref: ${{ inputs.tag || github.ref }}
+
+      - name: Validate release version and notes
+        run: python tools/check_release.py --tag "$VERSION"
+
+      - name: Require release signing credentials
+        env:
+          KEYSTORE: ${{ secrets.QUI_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.QUI_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.QUI_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.QUI_KEY_PASSWORD }}
+          CERT_SHA256: ${{ secrets.QUI_SIGNING_CERT_SHA256 }}
+        run: |
+          for name in KEYSTORE STORE_PASSWORD KEY_ALIAS KEY_PASSWORD CERT_SHA256; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing signing credential: $name"
+              exit 1
+            fi
+          done
 
       - uses: actions/setup-java@v5
         with:
@@ -40,26 +60,35 @@ jobs:
       - name: Unit tests
         run: ./gradlew testDebugUnitTest --stacktrace
 
-      # Optional. Without these secrets the release APK is signed with the Android
-      # debug key instead: it still installs, but it is not a key you control, so
-      # switching to a real key later forces users to uninstall first.
-      # See README for how to set them up.
+      - name: Check translations and lint
+        run: |
+          python tools/check_translations.py
+          ./gradlew lintDebug --stacktrace
+
       - name: Decode signing keystore
-        if: env.HAS_KEYSTORE == 'true'
-        run: echo "${{ secrets.QUI_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/release.jks"
+        env:
+          KEYSTORE: ${{ secrets.QUI_KEYSTORE_BASE64 }}
+        run: |
+          umask 077
+          printf '%s' "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/release.jks"
 
       - name: Assemble release APK
         env:
-          QUI_KEYSTORE_FILE: ${{ env.HAS_KEYSTORE == 'true' && format('{0}/release.jks', runner.temp) || '' }}
+          QUI_KEYSTORE_FILE: ${{ format('{0}/release.jks', runner.temp) }}
+          QUI_REQUIRE_RELEASE_SIGNING: 'true'
           QUI_KEYSTORE_PASSWORD: ${{ secrets.QUI_KEYSTORE_PASSWORD }}
           QUI_KEY_ALIAS: ${{ secrets.QUI_KEY_ALIAS }}
           QUI_KEY_PASSWORD: ${{ secrets.QUI_KEY_PASSWORD }}
         run: ./gradlew assembleRelease --stacktrace
 
-      - name: Report which key signed the APK
+      - name: Verify release signing certificate
+        env:
+          EXPECTED_SHA256: ${{ secrets.QUI_SIGNING_CERT_SHA256 }}
         run: |
           apksigner=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort | tail -1)
-          "$apksigner" verify --print-certs app/build/outputs/apk/release/app-release.apk
+          "$apksigner" verify --print-certs app/build/outputs/apk/release/app-release.apk > "$RUNNER_TEMP/certificate.txt"
+          actual=$(sed -n 's/.*certificate SHA-256 digest: //p' "$RUNNER_TEMP/certificate.txt" | head -1)
+          test "$actual" = "$EXPECTED_SHA256" || { echo '::error::Signing certificate mismatch'; exit 1; }
 
       - name: Name the APK after the tag
         run: |
@@ -116,6 +145,7 @@ jobs:
           files: dist/*.apk
           body_path: dist/notes.md
           fail_on_unmatched_files: true
+          overwrite_files: false
 
       - name: Remove the keystore
         if: always()

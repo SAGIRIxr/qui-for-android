@@ -418,4 +418,6 @@
         <item quantity="many">%1$d активних клієнтів</item>
         <item quantity="other">%1$d активних клієнтів</item>
     </plurals>
+    <string name="operation_running">Виконується…</string>
+    <string name="operation_success">Операцію завершено</string>
 </resources>

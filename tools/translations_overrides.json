@@ -1,4 +1,26 @@
 {
+  "operation_running": {
+    "cs": "Probíhá…",
+    "de": "Wird ausgeführt…",
+    "fr": "En cours…",
+    "it": "Operazione in corso…",
+    "ko": "처리 중…",
+    "pt-BR": "Em andamento…",
+    "uk": "Виконується…",
+    "zh-CN": "正在执行…",
+    "zh-TW": "正在執行…"
+  },
+  "operation_success": {
+    "cs": "Operace dokončena",
+    "de": "Vorgang abgeschlossen",
+    "fr": "Opération terminée",
+    "it": "Operazione completata",
+    "ko": "작업 완료",
+    "pt-BR": "Operação concluída",
+    "uk": "Операцію завершено",
+    "zh-CN": "操作成功",
+    "zh-TW": "操作成功"
+  },
   "_comment": [
     "Strings that have no counterpart in autobrr/qui's own locale files, so they",
     "are translated here instead. Everything else is pulled from qui at build time",

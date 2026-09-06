@@ -409,4 +409,6 @@
     <plurals name="instances_active">
         <item quantity="other">활성 클라이언트 %1$d개</item>
     </plurals>
+    <string name="operation_running">처리 중…</string>
+    <string name="operation_success">작업 완료</string>
 </resources>

@@ -6,6 +6,29 @@ The section for a tag becomes that release's notes on GitHub, and the app shows 
 same text in its update dialog. Add the new version at the top before tagging, in this
 file and in [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md).
 
+## 0.5.1
+
+### Improved
+- Load torrent details in parallel and cancel obsolete tab refreshes. Live speeds,
+  progress and peers keep the configured refresh interval; WebSeeds are briefly cached.
+- Update dashboard instances independently, show their last successful refresh time,
+  and flag incomplete statistics when a server fails.
+- Show operation progress, success and failure for detail actions and alternative-speed
+  switches; prevent duplicate submissions.
+
+### Fixed
+- Ignore late list and metadata responses after switching instances or queries, preserve
+  newer stream updates, and issue only one REST request when loading more torrents.
+- Keep disks with zero free space visible in the unified view.
+- Preserve coroutine cancellation instead of converting it to a network failure.
+
+### Release and upgrade
+- Publish with a fixed signing key; validate certificate, versionCode, tag and bilingual
+  release notes in CI. Manual releases build the requested tag.
+- **One-time reinstall required from v0.5.0 or earlier:** those releases used temporary
+  debug keys. Save your server connection settings before uninstalling (uninstalling
+  clears app data). Versions from v0.5.1 use the same fixed key for future updates.
+
 ## 0.5.0
 
 ### Added

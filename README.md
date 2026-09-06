@@ -177,11 +177,13 @@ version's section in both files before tagging.
 
 ### Signing
 
-By default the release APK is signed with the Android **debug** key. It installs fine,
-but that key is not yours and is the same one every SDK install ships, so treat it as a
-convenience rather than a real signature.
+Published releases require a fixed signing key and a matching SHA-256 certificate
+fingerprint. Missing credentials stop the workflow; only local builds may fall back
+to a debug key. Releases through v0.5.0 used temporary debug keys. Moving to v0.5.1
+requires reinstalling once (save your connection settings first); later versions
+use the same fixed key for in-place updates.
 
-To sign with your own key, generate a keystore and add four repository secrets. Only you
+To sign with your own key, generate a keystore and add five repository secrets. Only you
 ever see the passwords:
 
 ```bash
@@ -200,11 +202,21 @@ Then under *Settings → Secrets and variables → Actions*, add:
 | `QUI_KEYSTORE_PASSWORD` | the keystore password |
 | `QUI_KEY_ALIAS` | `qui` |
 | `QUI_KEY_PASSWORD` | the key password |
+| `QUI_SIGNING_CERT_SHA256` | lowercase certificate SHA-256 digest, without colons |
+
+Get the certificate fingerprint with `keytool -list -v -keystore release.jks -alias qui`.
+On Windows, `powershell -File tools/setup-signing.ps1` generates a key once, stores it
+outside the checkout under `%USERPROFILE%\.android\qui-release-signing`, and configures
+these five secrets with `gh`. Its saved password uses Windows DPAPI and can only be
+decrypted by the same Windows account on that machine; this is not a portable recovery
+backup. Retain the keystore and save its password separately in your password manager
+before migrating Windows. Rerunning the script reuses the existing key.
 
 Keep `release.jks` backed up and out of the repository. Android identifies an app by its
 signing key: lose it and you cannot ship an update over an installed copy, and switching
-keys forces users to uninstall first. The release workflow prints the certificate it
-actually signed with, so you can confirm which key was used.
+keys forces users to uninstall first. The release workflow verifies the certificate
+against the configured fingerprint before uploading. It also checks that the tag,
+APK version and both changelogs agree and that versionCode increases.
 
 ## How it maps to qui
 

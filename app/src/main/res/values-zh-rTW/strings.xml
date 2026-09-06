@@ -409,4 +409,6 @@
     <plurals name="instances_active">
         <item quantity="other">%1$d 個活躍用戶端</item>
     </plurals>
+    <string name="operation_running">正在執行…</string>
+    <string name="operation_success">操作成功</string>
 </resources>

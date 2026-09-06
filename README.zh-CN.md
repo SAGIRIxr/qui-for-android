@@ -149,10 +149,11 @@ release 说明取自 [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md) 和 [CHANGELOG.md]
 
 ### 签名
 
-默认情况下 release APK 用安卓的 **debug** 密钥签名。它能正常安装,但那个密钥不是你的,而且
-每一份 SDK 装的都是同一个,所以只能当成图方便,算不上真正的签名。
+正式发布必须使用固定签名密钥，并校验证书 SHA-256 指纹。缺少凭据会中止发布，只有本地构建
+允许回退到 debug 密钥。v0.5.0 及之前版本使用临时 debug 密钥，升级至 v0.5.1 需要先记下
+连接配置并重新安装一次；此后使用同一固定密钥，可正常覆盖升级。
 
-想用自己的密钥签,生成一个 keystore 并添加四个仓库 secret。密码只有你自己看得到:
+想用自己的密钥签，生成一个 keystore 并添加五个仓库 secret。密码只有你自己看得到：
 
 ```bash
 keytool -genkeypair -v -keystore release.jks -alias qui -keyalg RSA -keysize 4096 -validity 10000
@@ -170,9 +171,17 @@ base64 -w0 release.jks > release.jks.base64
 | `QUI_KEYSTORE_PASSWORD` | keystore 密码 |
 | `QUI_KEY_ALIAS` | `qui` |
 | `QUI_KEY_PASSWORD` | 密钥密码 |
+| `QUI_SIGNING_CERT_SHA256` | 证书 SHA-256 指纹，小写且不含冒号 |
+
+可通过 `keytool -list -v -keystore release.jks -alias qui` 查看证书指纹。
+Windows 下可运行 `powershell -File tools/setup-signing.ps1`：首次生成固定密钥，存放到仓库外的
+`%USERPROFILE%\.android\qui-release-signing`，并通过 `gh` 配置这五项 secret；再次运行会复用
+已有密钥。密码备份由 Windows DPAPI 加密，只能由原机器上的原 Windows 账户解密，并非可跨机器
+恢复的备份。重装或迁移系统前，应保留 keystore，并将密码另存到密码管理器。
 
 务必备份好 `release.jks` 并且不要提交进仓库。安卓靠签名密钥来识别一个应用:丢了就没法在已安装
-的版本上发更新,换密钥会强制用户先卸载。发布流程会打印实际使用的证书,方便你确认用的是哪个密钥。
+的版本上发更新，换密钥会强制用户先卸载。发布流程会校验证书指纹、标签与应用版本一致、双语
+更新日志存在，以及 versionCode 确实递增。
 
 ## 与 qui 的对应关系
 

@@ -38,7 +38,6 @@ import androidx.compose.material.icons.filled.DriveFileRenameOutline
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,6 +48,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
@@ -139,22 +139,29 @@ fun TorrentDetailScreen(
             )
         },
     ) { padding ->
-        if (state.isLoading && state.properties == null) {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentAlignment = Alignment.Center,
-            ) { CircularProgressIndicator() }
-            return@Scaffold
-        }
-
         Column(
             Modifier
                 .fillMaxSize()
                 .padding(padding),
         ) {
+            if (state.isLoading) {
+                androidx.compose.material3.LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
             DetailHeader(state = state, speedUnit = prefs.speedUnit)
+
+            val failure = state.actionError ?: state.tabError ?: state.error
+            if (state.actionBusy || state.actionSucceeded || failure != null) {
+                Text(
+                    text = if (state.actionBusy) stringResource(R.string.operation_running)
+                        else failure ?: stringResource(R.string.operation_success),
+                    color = if (failure != null) palette.destructive else palette.mutedForeground,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+            if (state.tabError != null || state.error != null) {
+                TextButton(onClick = viewModel::refresh) { Text(stringResource(R.string.common_retry)) }
+            }
 
             // Icons alone were guesswork, so each action carries its own label.
             Row(
@@ -166,22 +173,27 @@ fun TorrentDetailScreen(
                 DetailAction(
                     icon = Icons.Default.PlayArrow,
                     label = stringResource(R.string.action_resume),
+                    enabled = !state.actionBusy,
                 ) { viewModel.action("resume") }
                 DetailAction(
                     icon = Icons.Default.Pause,
                     label = stringResource(R.string.action_pause),
+                    enabled = !state.actionBusy,
                 ) { viewModel.action("pause") }
                 DetailAction(
                     icon = Icons.Default.Refresh,
                     label = stringResource(R.string.action_recheck),
+                    enabled = !state.actionBusy,
                 ) { viewModel.action("recheck") }
                 DetailAction(
                     icon = Icons.Default.Campaign,
                     label = stringResource(R.string.action_reannounce),
+                    enabled = !state.actionBusy,
                 ) { viewModel.action("reannounce") }
                 DetailAction(
                     icon = Icons.Default.DriveFileRenameOutline,
                     label = stringResource(R.string.action_rename),
+                    enabled = !state.actionBusy,
                 ) { showRename = true }
             }
 
@@ -215,6 +227,9 @@ fun TorrentDetailScreen(
                 }
             }
 
+            if (state.tabLoading) {
+                androidx.compose.material3.LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
             when (state.tab) {
                 DetailTab.General -> GeneralTab(state)
                 DetailTab.Trackers -> TrackersTab(state.trackers)
@@ -247,13 +262,14 @@ fun TorrentDetailScreen(
 private fun DetailAction(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     label: String,
+    enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
     val palette = QuiTheme.palette
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
-            .clickable(onClick = onClick)
+            .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 8.dp, vertical = 6.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

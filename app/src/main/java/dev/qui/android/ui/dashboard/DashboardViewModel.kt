@@ -26,6 +26,10 @@ import dev.qui.android.data.model.TrackerTransferStats
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -54,6 +58,9 @@ data class InstanceCard(
     val altSpeedEnabled: Boolean = false,
     val trackerTransfers: Map<String, TrackerTransferStats> = emptyMap(),
     @StringRes val errorRes: Int? = null,
+    val errorMessage: String? = null,
+    val updatedAt: Long? = null,
+    val refreshing: Boolean = false,
 ) {
     val isHealthy: Boolean get() = errorRes == null
 }
@@ -73,15 +80,20 @@ data class TrackerRow(
 data class DashboardUiState(
     val cards: List<InstanceCard> = emptyList(),
     val isLoading: Boolean = true,
+    val error: String? = null,
+    val pendingActions: Set<Int> = emptySet(),
+    val actionError: String? = null,
+    val actionSucceeded: Boolean = false,
 ) {
-    val totalDownloadSpeed: Long get() = cards.sumOf { it.downloadSpeed }
-    val totalUploadSpeed: Long get() = cards.sumOf { it.uploadSpeed }
-    val totalTorrents: Int get() = cards.sumOf { it.torrentCount }
-    val totalSize: Long get() = cards.sumOf { it.totalSize ?: 0L }
-    val totalDownloading: Int get() = cards.sumOf { it.downloading }
-    val totalSeeding: Int get() = cards.sumOf { it.seeding }
+    private val healthyCards: List<InstanceCard> get() = cards.filter(InstanceCard::isHealthy)
+    val totalDownloadSpeed: Long get() = healthyCards.sumOf { it.downloadSpeed }
+    val totalUploadSpeed: Long get() = healthyCards.sumOf { it.uploadSpeed }
+    val totalTorrents: Int get() = healthyCards.sumOf { it.torrentCount }
+    val totalSize: Long get() = healthyCards.sumOf { it.totalSize ?: 0L }
+    val totalDownloading: Int get() = healthyCards.sumOf { it.downloading }
+    val totalSeeding: Int get() = healthyCards.sumOf { it.seeding }
     val activeTorrents: Int get() = totalDownloading + totalSeeding
-    val connectedCount: Int get() = cards.count { it.instance.connected }
+    val connectedCount: Int get() = healthyCards.count { it.instance.connected }
     val serverStatistics: ServerStatistics? get() = buildServerStatistics(cards)
 
     /**
@@ -90,7 +102,7 @@ data class DashboardUiState(
      */
     fun trackerRows(sort: TrackerSortColumn): List<TrackerRow> {
         val merged = LinkedHashMap<String, TrackerRow>()
-        cards.forEach { card ->
+        healthyCards.forEach { card ->
             card.trackerTransfers.forEach { (host, stats) ->
                 if (host.isBlank()) return@forEach
                 val existing = merged[host]
@@ -129,6 +141,7 @@ class DashboardViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Eagerly, AppPreferencesStore.Snapshot())
 
     private var pollJob: Job? = null
+    private val refreshMutex = Mutex()
 
     /**
      * Whether the screen is in front. The loop lives in viewModelScope, which outlives
@@ -166,68 +179,104 @@ class DashboardViewModel @Inject constructor(
     }
 
     fun toggleAltSpeedLimits(instanceId: Int) {
+        if (instanceId in _state.value.pendingActions) return
+        _state.update { it.copy(pendingActions = it.pendingActions + instanceId, actionError = null, actionSucceeded = false) }
         viewModelScope.launch {
-            repository.toggleAltSpeedLimits(instanceId)
-            refresh()
+            try {
+                repository.toggleAltSpeedLimits(instanceId).onSuccess {
+                    _state.update { it.copy(actionSucceeded = true) }
+                    refresh()
+                }.onFailure { error ->
+                    _state.update { it.copy(actionError = error.message ?: error.javaClass.simpleName) }
+                }
+            } finally {
+                _state.update { it.copy(pendingActions = it.pendingActions - instanceId) }
+            }
         }
     }
 
-    private suspend fun refresh() {
+    private suspend fun refresh() = refreshMutex.withLock {
         val instances = repository.instances().getOrElse {
-            _state.value = _state.value.copy(isLoading = false)
-            return
+            _state.update { state -> state.copy(
+                isLoading = false,
+                error = it.message ?: it.javaClass.simpleName,
+                cards = state.cards.map { card -> card.copy(errorRes = R.string.instances_not_reachable, refreshing = false) },
+            ) }
+            return@withLock
         }
 
-        val cards = instances.map { instance ->
-            viewModelScope.async {
-                if (!instance.isActive) {
-                    return@async InstanceCard(instance, errorRes = R.string.instances_disabled)
+        _state.update { state -> state.copy(
+            error = null,
+            isLoading = false,
+            cards = instances.map { instance ->
+                (state.cards.firstOrNull { it.instance.id == instance.id } ?: InstanceCard(instance))
+                    .copy(instance = instance, refreshing = true)
+            },
+        ) }
+        coroutineScope {
+            instances.map { instance ->
+                async {
+                    val card = loadCard(instance)
+                    _state.update { state ->
+                        state.copy(cards = state.cards.map { old ->
+                            if (old.instance.id != instance.id) old
+                            else if (!card.isHealthy && old.updatedAt != null) old.copy(
+                                instance = instance,
+                                errorRes = card.errorRes,
+                                errorMessage = card.errorMessage,
+                                refreshing = false,
+                            ) else card
+                        })
+                    }
                 }
-
-                // A one-row listing is the cheapest way to read the server-side totals:
-                // the response carries stats, counts and serverState regardless of limit.
-                val response = repository.torrents(
-                    instanceId = instance.id,
-                    page = 0,
-                    limit = 1,
-                    sort = "added_on",
-                    order = "desc",
-                    search = null,
-                    filters = null,
-                ).getOrNull()
-                    ?: return@async InstanceCard(
-                        instance,
-                        errorRes = R.string.instances_not_reachable,
-                    )
-
-                val stats = response.stats
-                val server = response.serverState
-
-                InstanceCard(
-                    instance = instance,
-                    downloadSpeed = server?.dlInfoSpeed ?: stats?.totalDownloadSpeed ?: 0,
-                    uploadSpeed = server?.upInfoSpeed ?: stats?.totalUploadSpeed ?: 0,
-                    sessionDownloaded = server?.dlInfoData ?: stats?.totalDownloadData ?: 0,
-                    sessionUploaded = server?.upInfoData ?: stats?.totalUploadData ?: 0,
-                    allTimeDownloaded = server?.alltimeDl,
-                    allTimeUploaded = server?.alltimeUl,
-                    torrentCount = response.total,
-                    downloading = stats?.downloading ?: 0,
-                    seeding = stats?.seeding ?: 0,
-                    errored = stats?.error ?: 0,
-                    totalSize = stats?.totalSize,
-                    freeSpace = server?.freeSpaceOnDisk,
-                    peerConnections = server?.totalPeerConnections,
-                    altSpeedEnabled = server?.useAltSpeedLimits ?: false,
-                    trackerTransfers = response.counts?.trackerTransfers.orEmpty(),
-                )
-            }
-        }.awaitAll()
-
-        _state.value = DashboardUiState(cards = cards, isLoading = false)
-        // The widget cannot poll this often on its own, so it rides along with the
-        // dashboard's refresh whenever the app happens to be open.
+            }.awaitAll()
+        }
         QuiWidgets.refresh(context)
+    }
+
+    private suspend fun loadCard(instance: Instance): InstanceCard {
+        if (!instance.isActive) {
+            return InstanceCard(instance, errorRes = R.string.instances_disabled)
+        }
+
+        // A one-row listing is the cheapest way to read the server-side totals:
+        // the response carries stats, counts and serverState regardless of limit.
+        val response = repository.torrents(
+            instanceId = instance.id,
+            page = 0,
+            limit = 1,
+            sort = "added_on",
+            order = "desc",
+            search = null,
+            filters = null,
+        ).getOrElse { error -> return InstanceCard(
+                instance,
+                errorRes = R.string.instances_not_reachable,
+                errorMessage = error.message ?: error.javaClass.simpleName,
+            ) }
+
+        val stats = response.stats
+        val server = response.serverState
+
+        return InstanceCard(
+            instance = instance,
+            updatedAt = System.currentTimeMillis(),
+            downloadSpeed = server?.dlInfoSpeed ?: stats?.totalDownloadSpeed ?: 0,
+            uploadSpeed = server?.upInfoSpeed ?: stats?.totalUploadSpeed ?: 0,
+            sessionDownloaded = server?.dlInfoData ?: stats?.totalDownloadData ?: 0,
+            sessionUploaded = server?.upInfoData ?: stats?.totalUploadData ?: 0,
+            allTimeDownloaded = server?.alltimeDl,
+            allTimeUploaded = server?.alltimeUl,
+            torrentCount = response.total,
+            downloading = stats?.downloading ?: 0,
+            seeding = stats?.seeding ?: 0,
+            errored = stats?.error ?: 0,
+            totalSize = stats?.totalSize,
+            freeSpace = server?.freeSpaceOnDisk,
+            peerConnections = server?.totalPeerConnections,
+            altSpeedEnabled = server?.useAltSpeedLimits ?: false,
+            trackerTransfers = response.counts?.trackerTransfers.orEmpty(),
+        )
     }
 
     override fun onCleared() {

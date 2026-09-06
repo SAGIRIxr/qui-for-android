@@ -27,6 +27,7 @@ import dev.qui.android.data.remote.QuiStreamClient
 import dev.qui.android.data.remote.StreamEvent
 import dev.qui.android.data.remote.StreamSubscription
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -131,6 +132,12 @@ class TorrentsViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     private var streamJob: Job? = null
+    private var pageJob: Job? = null
+    private var pageGeneration = 0L
+    private var queryGeneration = 0L
+    private var streamRevision = 0L
+    private var metadataJob: Job? = null
+    private var metadataGeneration = 0L
     private var loadedPages = 1
 
     /**
@@ -161,8 +168,10 @@ class TorrentsViewModel @Inject constructor(
     }
 
     private suspend fun loadInstances() {
+        val generation = queryGeneration
         repository.instances()
             .onSuccess { instances ->
+                if (generation != queryGeneration) return@onSuccess
                 val active = instances.filter { it.isActive }
                 // Prefer whatever is already on screen, then the instance the user last
                 // opened, then simply the first active one.
@@ -184,6 +193,7 @@ class TorrentsViewModel @Inject constructor(
                 }
             }
             .onFailure { error ->
+                if (generation != queryGeneration) return@onFailure
                 _state.update { it.copy(error = error.message, isLoading = false) }
             }
     }
@@ -196,10 +206,15 @@ class TorrentsViewModel @Inject constructor(
         ) {
             return
         }
+        freeSpaceJob?.cancel()
+        freeSpaceAt = 0L
         _state.update {
             it.copy(
                 selectedInstanceId = instanceId,
                 unifiedScope = false,
+                categories = emptyMap(),
+                tags = emptyList(),
+                supportsTrackerHealth = false,
                 torrents = emptyList(),
                 selection = emptySet(),
                 selectionMode = false,
@@ -228,6 +243,9 @@ class TorrentsViewModel @Inject constructor(
         _state.update {
             it.copy(
                 unifiedScope = true,
+                categories = emptyMap(),
+                tags = emptyList(),
+                supportsTrackerHealth = false,
                 torrents = emptyList(),
                 selection = emptySet(),
                 selectionMode = false,
@@ -275,7 +293,7 @@ class TorrentsViewModel @Inject constructor(
                     filters = null,
                 ).getOrNull()?.serverState?.freeSpaceOnDisk ?: return@mapNotNull null
 
-                free.takeIf { it > 0 }?.let { InstanceFreeSpace(instance.name, it) }
+                free.takeIf { it >= 0 }?.let { InstanceFreeSpace(instance.name, it) }
             }
             if (spaces.isNotEmpty()) freeSpaceAt = System.currentTimeMillis()
             _state.update { it.copy(unifiedFreeSpace = spaces) }
@@ -283,19 +301,26 @@ class TorrentsViewModel @Inject constructor(
     }
 
     private fun loadMetadata(instanceId: Int) {
-        viewModelScope.launch {
-            repository.capabilities(instanceId).onSuccess { caps ->
-                _state.update { it.copy(supportsTrackerHealth = caps.supportsTrackerHealth) }
+        metadataJob?.cancel()
+        val generation = ++metadataGeneration
+        metadataJob = viewModelScope.launch {
+            launch {
+                repository.capabilities(instanceId).onSuccess { caps ->
+                    if (generation != metadataGeneration) return@onSuccess
+                    _state.update { it.copy(supportsTrackerHealth = caps.supportsTrackerHealth) }
+                }
             }
-        }
-        viewModelScope.launch {
-            repository.categories(instanceId).onSuccess { cats ->
-                _state.update { it.copy(categories = cats) }
+            launch {
+                repository.categories(instanceId).onSuccess { cats ->
+                    if (generation != metadataGeneration) return@onSuccess
+                    _state.update { it.copy(categories = cats) }
+                }
             }
-        }
-        viewModelScope.launch {
-            repository.tags(instanceId).onSuccess { tags ->
-                _state.update { it.copy(tags = tags) }
+            launch {
+                repository.tags(instanceId).onSuccess { tags ->
+                    if (generation != metadataGeneration) return@onSuccess
+                    _state.update { it.copy(tags = tags) }
+                }
             }
         }
     }
@@ -306,13 +331,16 @@ class TorrentsViewModel @Inject constructor(
      */
     private fun restart() {
         streamJob?.cancel()
+        pageJob?.cancel()
+        val generation = ++queryGeneration
+        streamRevision = 0L
         val unified = _state.value.unifiedScope
         val instanceId = if (unified) 0 else _state.value.selectedInstanceId ?: return
 
         // A REST fetch fills the list immediately; the stream then keeps it live. This
         // is the same ordering the web UI uses so the screen is never blank while the
         // SSE connection is negotiating.
-        viewModelScope.launch { fetchPage(reset = true) }
+        requestPage()
 
         streamJob = viewModelScope.launch {
             var backoffSeconds = 1L
@@ -333,10 +361,13 @@ class TorrentsViewModel @Inject constructor(
 
                 try {
                     streamClient.stream(listOf(subscription)).collect { event ->
+                        if (generation != queryGeneration) return@collect
                         backoffSeconds = 1
                         lastEventAt = System.currentTimeMillis()
                         handleStreamEvent(event)
                     }
+                } catch (cancelled: CancellationException) {
+                    throw cancelled
                 } catch (_: Exception) {
                     // Falls through to the backoff below.
                 }
@@ -352,6 +383,8 @@ class TorrentsViewModel @Inject constructor(
         when (event) {
             is StreamEvent.Snapshot -> {
                 val data = event.payload.data ?: return
+                streamRevision++
+                pageJob?.cancel()
                 _state.update { current ->
                     current.copy(
                         torrents = data.rows,
@@ -379,6 +412,7 @@ class TorrentsViewModel @Inject constructor(
 
             is StreamEvent.Delta -> {
                 val data = event.payload.data ?: return
+                streamRevision++
                 _state.update { current -> current.applyDelta(data.rows, event.payload.delta?.order) }
             }
 
@@ -421,8 +455,16 @@ class TorrentsViewModel @Inject constructor(
         )
     }
 
-    private suspend fun fetchPage(reset: Boolean) {
+    private fun requestPage() {
+        pageJob?.cancel()
+        val requestId = ++pageGeneration
+        pageJob = viewModelScope.launch { fetchPage(requestId) }
+    }
+
+    private suspend fun fetchPage(requestId: Long) {
         val current = _state.value
+        val generation = queryGeneration
+        val revision = streamRevision
 
         val request = if (current.unifiedScope) {
             repository.crossInstanceTorrents(
@@ -448,6 +490,10 @@ class TorrentsViewModel @Inject constructor(
 
         request
             .onSuccess { response ->
+                // A new query or a newer stream frame owns the screen now.
+                if (generation != queryGeneration || requestId != pageGeneration || revision != streamRevision) {
+                    return@onSuccess
+                }
                 _state.update {
                     it.copy(
                         torrents = response.rows,
@@ -469,6 +515,9 @@ class TorrentsViewModel @Inject constructor(
                 }
             }
             .onFailure { error ->
+                if (generation != queryGeneration || requestId != pageGeneration || revision != streamRevision) {
+                    return@onFailure
+                }
                 _state.update {
                     it.copy(isLoading = false, isRefreshing = false, error = error.message)
                 }
@@ -477,9 +526,9 @@ class TorrentsViewModel @Inject constructor(
 
     fun loadMore() {
         val current = _state.value
-        if (!current.hasMore || current.isLoading) return
+        if (!current.hasMore || current.isLoading || pageJob?.isActive == true) return
         loadedPages += 1
-        viewModelScope.launch { fetchPage(reset = false) }
+        _state.update { it.copy(isLoading = true) }
         restart()
     }
 
@@ -502,8 +551,9 @@ class TorrentsViewModel @Inject constructor(
         _state.update { it.copy(isRefreshing = true) }
         if (_state.value.unifiedScope) loadUnifiedFreeSpace(force = true)
         viewModelScope.launch {
+            val generation = queryGeneration
             loadInstances()
-            fetchPage(reset = true)
+            if (generation == queryGeneration) requestPage()
         }
     }
 
@@ -655,7 +705,7 @@ class TorrentsViewModel @Inject constructor(
             result.onSuccess { clearSelection() }
             onResult(result)
             // A REST re-read closes the gap when the stream is down.
-            if (!_state.value.streamConnected) fetchPage(reset = true)
+            if (!_state.value.streamConnected) requestPage()
         }
     }
 

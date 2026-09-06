@@ -34,6 +34,7 @@ import dev.qui.android.data.model.WebSeed
 import dev.qui.android.data.remote.QuiApiProvider
 import dev.qui.android.data.remote.SessionStore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -382,5 +383,7 @@ class QuiRepository @Inject constructor(
         crossinline block: suspend (dev.qui.android.data.remote.QuiApi) -> T,
     ): Result<T> = runCatching {
         withContext(Dispatchers.IO) { block(apiProvider.api()) }
+    }.onFailure {
+        if (it is CancellationException) throw it
     }
 }

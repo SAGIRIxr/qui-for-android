@@ -25,7 +25,9 @@ jobs:
         run: python tools/check_translations.py
 
       - name: Unit tests
-        run: ./gradlew testDebugUnitTest --stacktrace
+        run: |
+          python -m unittest discover -s tools -p 'test_*.py'
+          ./gradlew testDebugUnitTest lintDebug --stacktrace
 
       - name: Assemble debug APK
         run: ./gradlew assembleDebug --stacktrace

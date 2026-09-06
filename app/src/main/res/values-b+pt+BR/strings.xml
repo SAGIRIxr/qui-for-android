@@ -415,4 +415,6 @@
         <item quantity="many">%1$d clientes ativos</item>
         <item quantity="other">%1$d clientes ativos</item>
     </plurals>
+    <string name="operation_running">Em andamento…</string>
+    <string name="operation_success">Operação concluída</string>
 </resources>

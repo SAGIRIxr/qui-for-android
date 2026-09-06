@@ -129,7 +129,7 @@ fun DashboardScreen(
                 )
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    text = stringResource(R.string.dashboard_no_instances_message),
+                    text = state.error ?: stringResource(R.string.dashboard_no_instances_message),
                     style = MaterialTheme.typography.bodySmall,
                     color = palette.mutedForeground,
                     textAlign = TextAlign.Center,
@@ -144,6 +144,22 @@ fun DashboardScreen(
         contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
+        val status = state.actionError ?: state.error
+        if (status != null || state.pendingActions.isNotEmpty() || state.actionSucceeded) {
+            item(key = "operation-status") {
+                Text(
+                    text = status ?: stringResource(if (state.pendingActions.isNotEmpty())
+                        R.string.operation_running else R.string.operation_success),
+                    color = if (status != null) palette.destructive else palette.mutedForeground,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        }
+        if (state.cards.any { it.instance.isActive && !it.isHealthy }) {
+            item(key = "partial-statistics") {
+                Text(stringResource(R.string.torrents_partial_results), color = palette.destructive)
+            }
+        }
         if (prefs.showServerStats && serverStatistics != null) {
             item(key = "server-statistics") {
                 ServerStatisticsCard(
@@ -176,6 +192,7 @@ fun DashboardScreen(
             items(state.cards, key = { it.instance.id }) { card ->
                 InstanceCardView(
                     card = card,
+                    actionBusy = card.instance.id in state.pendingActions,
                     speedUnit = prefs.speedUnit,
                     incognito = prefs.incognito,
                     onOpen = { onOpenInstance(card.instance.id) },
@@ -373,6 +390,7 @@ private fun ServerStatisticsBottomSheet(
 @Composable
 private fun InstanceCardView(
     card: InstanceCard,
+    actionBusy: Boolean,
     speedUnit: SpeedUnit,
     incognito: Boolean,
     onOpen: () -> Unit,
@@ -426,13 +444,25 @@ private fun InstanceCardView(
                     )
                 }
             }
-            StatusDot(connected = card.instance.connected)
+            StatusDot(connected = card.isHealthy && card.instance.connected)
         }
 
+        card.updatedAt?.let { updatedAt ->
+            Text(
+                text = stringResource(R.string.widget_stale,
+                    java.text.DateFormat.getTimeInstance().format(java.util.Date(updatedAt))),
+                style = MaterialTheme.typography.labelSmall,
+                color = palette.mutedForeground,
+            )
+        }
+        if (card.refreshing) {
+            Text(stringResource(R.string.widget_refreshing), style = MaterialTheme.typography.labelSmall)
+            if (card.updatedAt == null) return@QuiCard
+        }
         if (card.errorRes != null) {
             Spacer(Modifier.height(10.dp))
             Text(
-                text = stringResource(card.errorRes),
+                text = card.errorMessage ?: stringResource(card.errorRes),
                 style = MaterialTheme.typography.bodySmall,
                 color = palette.destructive,
             )
@@ -544,6 +574,7 @@ private fun InstanceCardView(
                     )
                     Switch(
                         checked = card.altSpeedEnabled,
+                        enabled = !actionBusy,
                         onCheckedChange = { onToggleAltSpeed() },
                         colors = SwitchDefaults.colors(),
                     )

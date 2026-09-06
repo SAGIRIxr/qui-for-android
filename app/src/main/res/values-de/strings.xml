@@ -412,4 +412,6 @@
         <item quantity="one">%1$d aktiver Client</item>
         <item quantity="other">%1$d aktive Clients</item>
     </plurals>
+    <string name="operation_running">Wird ausgeführt…</string>
+    <string name="operation_success">Vorgang abgeschlossen</string>
 </resources>
