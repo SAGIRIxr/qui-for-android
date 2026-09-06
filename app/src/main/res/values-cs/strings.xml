@@ -400,6 +400,26 @@
     <string name="sort_availability">Dostupnost</string>
     <string name="sort_reannounce">Znovu ohlásit za</string>
     <string name="sort_private">Soukromý</string>
+    <string name="operation_running">Probíhá…</string>
+    <string name="operation_success">Operace dokončena</string>
+    <string name="theme_default_name">Výchozí</string>
+    <string name="theme_default_description">Původní vzhled qui</string>
+    <string name="theme_autobrr_name">autobrr</string>
+    <string name="theme_autobrr_description">Čistý motiv inspirovaný projektem autobrr</string>
+    <string name="theme_dragon_name">Kanagawa Dragon</string>
+    <string name="theme_dragon_description">Tmavý motiv s paletou Kanagawa Dragon, doplněný paletou Kanagawa Lotus pro světlý režim</string>
+    <string name="theme_kyle_name">The Kyle</string>
+    <string name="theme_kyle_description">Kyleův purpurový ráj — odvážný a výrazný</string>
+    <string name="theme_minimal_name">Minimalistický</string>
+    <string name="theme_minimal_description">Čistý minimalistický motiv s neutrálními barvami</string>
+    <string name="theme_napster_name">Napster</string>
+    <string name="theme_napster_description">Retro motiv inspirovaný Napsterem v2.0 BETA 7 z doby kolem roku 2000</string>
+    <string name="theme_nightwalker_name">Noční poutník</string>
+    <string name="theme_nightwalker_description">Tmavý motiv s jemnými modrými odstíny</string>
+    <string name="theme_swizzin_name">Swizzin</string>
+    <string name="theme_swizzin_description">Motiv Swizzin · swizzin.ltd</string>
+    <string name="theme_wave_name">Kanagawa Wave</string>
+    <string name="theme_wave_description">Tmavý motiv s paletou Kanagawa Wave, doplněný paletou Kanagawa Lotus pro světlý režim</string>
     <plurals name="torrents_count">
         <item quantity="one">%1$d torrent</item>
         <item quantity="few">%1$d torrenty</item>
@@ -418,6 +438,4 @@
         <item quantity="many">%1$d aktivních klientů</item>
         <item quantity="other">%1$d aktivních klientů</item>
     </plurals>
-    <string name="operation_running">Probíhá…</string>
-    <string name="operation_success">Operace dokončena</string>
 </resources>

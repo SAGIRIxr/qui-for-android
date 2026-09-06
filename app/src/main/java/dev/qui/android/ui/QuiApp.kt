@@ -9,11 +9,13 @@
 package dev.qui.android.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -116,11 +118,13 @@ fun QuiApp(
 
     // Shared so the nav bar and the torrent screen's action bar retract together.
     val mobileScroll = remember { MobileScrollState() }
+    val bottomBarsTransition = updateTransition(mobileScroll.barsVisible, label = "bottom bars")
 
     CompositionLocalProvider(
         LocalAppPreferences provides preferences,
         LocalTrackerIcons provides trackerIcons,
         LocalMobileScroll provides mobileScroll,
+        LocalBottomBarsTransition provides bottomBarsTransition,
     ) {
         // Null means the stored session has not been read yet; showing nothing avoids a
         // login flash for users who are already signed in.
@@ -154,9 +158,11 @@ private fun MainScaffold(
     val currentRoute = backStackEntry?.destination
     // Keep the graph's start stable as the last-page preference changes, and across rotation.
     val startRoute = rememberSaveable { initialRoute }
+    val mobileScroll = LocalMobileScroll.current
 
     LaunchedEffect(currentRoute?.route) {
         onMainPageChanged(currentRoute?.route)
+        if (currentRoute?.route != Routes.TORRENTS) mobileScroll.show()
     }
 
     // The detail screen is full-bleed in qui too; the bar would only crowd it.
@@ -189,63 +195,65 @@ private fun MainScaffold(
 
     Scaffold(
         bottomBar = {
-            AnimatedVisibility(
-                visible = showBottomBar && LocalMobileScroll.current.barsVisible,
-                enter = slideInVertically { it },
-                exit = slideOutVertically { it },
-            ) {
-                NavigationBar(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ) {
-                    NAV_ENTRIES.forEach { entry ->
-                        val selected = currentRoute?.hierarchy?.any { it.route == entry.route } == true
-                        val isClients = entry.route == Routes.TORRENTS
-                        val activeCount = instances.count { it.isActive }
-                        val description = stringResource(entry.label)
-                        // qui names the middle tab after the client in scope; the
-                        // generic word is only the fallback when nothing is active.
-                        val label = when {
-                            !isClients -> description
-                            unifiedScope -> stringResource(R.string.scope_all_clients)
-                            currentInstanceName != null -> currentInstanceName!!
-                            instances.isEmpty() -> description
-                            activeCount == 0 -> stringResource(R.string.nav_no_active_clients)
-                            else -> description
-                        }
+            if (showBottomBar) {
+                // Keep the system gesture/button area stable while only app bars shrink.
+                Column(Modifier.navigationBarsPadding()) {
+                    CollapsingBottomBar {
+                        NavigationBar(
+                            containerColor = MaterialTheme.colorScheme.surface,
+                            windowInsets = WindowInsets(0, 0, 0, 0),
+                        ) {
+                            NAV_ENTRIES.forEach { entry ->
+                                val selected = currentRoute?.hierarchy?.any { it.route == entry.route } == true
+                                val isClients = entry.route == Routes.TORRENTS
+                                val activeCount = instances.count { it.isActive }
+                                val description = stringResource(entry.label)
+                                // qui names the middle tab after the client in scope; the
+                                // generic word is only the fallback when nothing is active.
+                                val label = when {
+                                    !isClients -> description
+                                    unifiedScope -> stringResource(R.string.scope_all_clients)
+                                    currentInstanceName != null -> currentInstanceName!!
+                                    instances.isEmpty() -> description
+                                    activeCount == 0 -> stringResource(R.string.nav_no_active_clients)
+                                    else -> description
+                                }
 
-                        NavigationBarItem(
-                            selected = selected,
-                            onClick = {
-                                navController.navigate(entry.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            icon = {
-                                if (isClients && instances.isNotEmpty()) {
-                                    BadgedBox(badge = { Badge { Text("$activeCount") } }) {
-                                        Icon(entry.icon, contentDescription = description)
-                                    }
-                                } else {
-                                    Icon(entry.icon, contentDescription = description)
-                                }
-                            },
-                            label = {
-                                Text(
-                                    text = label,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
+                                NavigationBarItem(
+                                    selected = selected,
+                                    onClick = {
+                                        navController.navigate(entry.route) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    },
+                                    icon = {
+                                        if (isClients && instances.isNotEmpty()) {
+                                            BadgedBox(badge = { Badge { Text("$activeCount") } }) {
+                                                Icon(entry.icon, contentDescription = description)
+                                            }
+                                        } else {
+                                            Icon(entry.icon, contentDescription = description)
+                                        }
+                                    },
+                                    label = {
+                                        Text(
+                                            text = label,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                        )
+                                    },
+                                    colors = NavigationBarItemDefaults.colors(
+                                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                                        indicatorColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                    ),
                                 )
-                            },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.primary,
-                                selectedTextColor = MaterialTheme.colorScheme.primary,
-                                indicatorColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                            ),
-                        )
+                            }
+                        }
                     }
                 }
             }
@@ -254,7 +262,7 @@ private fun MainScaffold(
         NavHost(
             navController = navController,
             startDestination = startRoute,
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.padding(innerPadding).consumeWindowInsets(innerPadding),
         ) {
             composable(Routes.DASHBOARD) {
                 DashboardScreen(

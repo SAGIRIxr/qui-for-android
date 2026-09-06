@@ -484,4 +484,22 @@
 
     <string name="operation_running">Working…</string>
     <string name="operation_success">Operation completed</string>
+    <string name="theme_default_name">Default</string>
+    <string name="theme_default_description">The stock qui look</string>
+    <string name="theme_autobrr_name">autobrr</string>
+    <string name="theme_autobrr_description">Clean theme inspired by the autobrr project</string>
+    <string name="theme_dragon_name">Kanagawa Dragon</string>
+    <string name="theme_dragon_description">Dark theme based on the Kanagawa Dragon palette, paired with Kanagawa Lotus for light mode</string>
+    <string name="theme_kyle_name">The Kyle</string>
+    <string name="theme_kyle_description">Kyle\'s magenta paradise — bold and vibrant</string>
+    <string name="theme_minimal_name">Minimal</string>
+    <string name="theme_minimal_description">Clean and minimal theme with neutral colors</string>
+    <string name="theme_napster_name">Napster</string>
+    <string name="theme_napster_description">Retro theme inspired by Napster v2.0 BETA 7 circa 2000</string>
+    <string name="theme_nightwalker_name">Nightwalker</string>
+    <string name="theme_nightwalker_description">Dark theme with subtle blue undertones</string>
+    <string name="theme_swizzin_name">Swizzin</string>
+    <string name="theme_swizzin_description">Swizzin theme · swizzin.ltd</string>
+    <string name="theme_wave_name">Kanagawa Wave</string>
+    <string name="theme_wave_description">Dark theme based on the Kanagawa Wave palette, paired with Kanagawa Lotus for light mode</string>
 </resources>

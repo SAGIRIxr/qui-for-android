@@ -400,6 +400,26 @@
     <string name="sort_availability">Disponibilidade</string>
     <string name="sort_reannounce">Reanunciar em</string>
     <string name="sort_private">Privado</string>
+    <string name="operation_running">Em andamento…</string>
+    <string name="operation_success">Operação concluída</string>
+    <string name="theme_default_name">Padrão</string>
+    <string name="theme_default_description">O visual original do qui</string>
+    <string name="theme_autobrr_name">autobrr</string>
+    <string name="theme_autobrr_description">Tema limpo inspirado no projeto autobrr</string>
+    <string name="theme_dragon_name">Kanagawa Dragon</string>
+    <string name="theme_dragon_description">Tema escuro com a paleta Kanagawa Dragon, combinado com Kanagawa Lotus no modo claro</string>
+    <string name="theme_kyle_name">The Kyle</string>
+    <string name="theme_kyle_description">O paraíso magenta de Kyle — ousado e vibrante</string>
+    <string name="theme_minimal_name">Minimalista</string>
+    <string name="theme_minimal_description">Tema limpo e minimalista com cores neutras</string>
+    <string name="theme_napster_name">Napster</string>
+    <string name="theme_napster_description">Tema retrô inspirado no Napster v2.0 BETA 7, por volta do ano 2000</string>
+    <string name="theme_nightwalker_name">Caminhante noturno</string>
+    <string name="theme_nightwalker_description">Tema escuro com tons sutis de azul</string>
+    <string name="theme_swizzin_name">Swizzin</string>
+    <string name="theme_swizzin_description">Tema Swizzin · swizzin.ltd</string>
+    <string name="theme_wave_name">Kanagawa Wave</string>
+    <string name="theme_wave_description">Tema escuro com a paleta Kanagawa Wave, combinado com Kanagawa Lotus no modo claro</string>
     <plurals name="torrents_count">
         <item quantity="one">%1$d torrent</item>
         <item quantity="many">%1$d torrents</item>
@@ -415,6 +435,4 @@
         <item quantity="many">%1$d clientes ativos</item>
         <item quantity="other">%1$d clientes ativos</item>
     </plurals>
-    <string name="operation_running">Em andamento…</string>
-    <string name="operation_success">Operação concluída</string>
 </resources>

@@ -83,6 +83,7 @@ import dev.qui.android.ui.SUPPORTED_LANGUAGES
 import dev.qui.android.ui.components.QuiCard
 import dev.qui.android.ui.theme.QuiTheme
 import dev.qui.android.ui.theme.QuiThemes
+import dev.qui.android.ui.theme.themeText
 import dev.qui.android.widget.PINNABLE_WIDGETS
 import dev.qui.android.widget.WidgetPinTracker
 import dev.qui.android.widget.openAppSettings
@@ -337,9 +338,10 @@ fun SettingsScreen(
         item {
             SectionCard(stringResource(R.string.settings_theme)) {
                 QuiThemes.forEach { theme ->
+                    val text = themeText(theme.id)
                     ThemeRow(
-                        name = theme.name,
-                        description = theme.description,
+                        name = text?.let { stringResource(it.name) } ?: theme.name,
+                        description = text?.let { stringResource(it.description) } ?: theme.description,
                         selected = prefs.themeId == theme.id && prefs.themeVariation == null,
                         swatch = theme.light.primary,
                         onClick = { root.setTheme(theme.id, null) },

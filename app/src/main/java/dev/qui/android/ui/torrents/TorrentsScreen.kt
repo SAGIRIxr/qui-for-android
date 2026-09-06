@@ -18,12 +18,8 @@
 package dev.qui.android.ui.torrents
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -113,6 +109,7 @@ import dev.qui.android.data.SpeedUnit
 import dev.qui.android.data.ViewMode
 import dev.qui.android.data.model.Torrent
 import dev.qui.android.ui.LocalMobileScroll
+import dev.qui.android.ui.CollapsingBottomBar
 import dev.qui.android.ui.addintent.AddIntent
 import dev.qui.android.ui.nestedScrollConnection
 import dev.qui.android.ui.components.BadgeVariant
@@ -148,6 +145,7 @@ fun TorrentsScreen(
 
     val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
     val mobileScroll = LocalMobileScroll.current
+    val scrollConnection = remember(mobileScroll) { mobileScroll.nestedScrollConnection() }
     val scope = rememberCoroutineScope()
 
     val incomingAdd by pendingAdd.collectAsStateWithLifecycle()
@@ -224,11 +222,7 @@ fun TorrentsScreen(
                     onMore = { showActions = true },
                 )
             } else {
-                AnimatedVisibility(
-                    visible = mobileScroll.barsVisible,
-                    enter = slideInVertically { it },
-                    exit = slideOutVertically { it },
-                ) {
+                CollapsingBottomBar {
                     TorrentsActionBar(
                         incognito = prefs.incognito,
                         viewMode = prefs.viewMode,
@@ -250,7 +244,7 @@ fun TorrentsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .nestedScroll(mobileScroll.nestedScrollConnection()),
+                .nestedScroll(scrollConnection),
         ) {
             when {
                 state.isLoading && state.torrents.isEmpty() -> {

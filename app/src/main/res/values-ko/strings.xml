@@ -400,6 +400,26 @@
     <string name="sort_availability">가용성</string>
     <string name="sort_reannounce">재알림까지</string>
     <string name="sort_private">비공개</string>
+    <string name="operation_running">처리 중…</string>
+    <string name="operation_success">작업 완료</string>
+    <string name="theme_default_name">기본</string>
+    <string name="theme_default_description">qui의 기본 디자인</string>
+    <string name="theme_autobrr_name">autobrr</string>
+    <string name="theme_autobrr_description">autobrr 프로젝트에서 영감을 받은 깔끔한 테마</string>
+    <string name="theme_dragon_name">카나가와 드래곤</string>
+    <string name="theme_dragon_description">어두운 모드에는 카나가와 드래곤 색상을, 밝은 모드에는 카나가와 로터스 색상을 사용하는 테마</string>
+    <string name="theme_kyle_name">더 카일</string>
+    <string name="theme_kyle_description">대담하고 생동감 넘치는 카일의 마젠타 낙원</string>
+    <string name="theme_minimal_name">미니멀</string>
+    <string name="theme_minimal_description">중성 색상의 깔끔하고 미니멀한 테마</string>
+    <string name="theme_napster_name">Napster</string>
+    <string name="theme_napster_description">2000년 무렵의 Napster v2.0 BETA 7에서 영감을 받은 복고풍 테마</string>
+    <string name="theme_nightwalker_name">나이트워커</string>
+    <string name="theme_nightwalker_description">은은한 파란색이 감도는 어두운 테마</string>
+    <string name="theme_swizzin_name">Swizzin</string>
+    <string name="theme_swizzin_description">Swizzin 테마 · swizzin.ltd</string>
+    <string name="theme_wave_name">카나가와 웨이브</string>
+    <string name="theme_wave_description">어두운 모드에는 카나가와 웨이브 색상을, 밝은 모드에는 카나가와 로터스 색상을 사용하는 테마</string>
     <plurals name="torrents_count">
         <item quantity="other">토렌트 %1$d개</item>
     </plurals>
@@ -409,6 +429,4 @@
     <plurals name="instances_active">
         <item quantity="other">활성 클라이언트 %1$d개</item>
     </plurals>
-    <string name="operation_running">처리 중…</string>
-    <string name="operation_success">작업 완료</string>
 </resources>

@@ -6,6 +6,18 @@ The section for a tag becomes that release's notes on GitHub, and the app shows 
 same text in its update dialog. Add the new version at the top before tagging, in this
 file and in [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md).
 
+## 0.5.4
+
+### Fixed
+- Animate the height of the torrent action row and footer navigation on one shared
+  timeline, releasing space to the list during the animation instead of leaving a blank strip.
+- Keep system navigation insets stable and avoid applying them twice in nested screens.
+  Unconsumed overscroll no longer hides the bars.
+
+### Improved
+- Localize all built-in theme names and descriptions in every supported language,
+  preserving project names, palette colors and saved theme selections.
+
 ## 0.5.3
 
 ### Improved

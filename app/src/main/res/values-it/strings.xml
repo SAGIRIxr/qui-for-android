@@ -400,6 +400,26 @@
     <string name="sort_availability">Disponibilità</string>
     <string name="sort_reannounce">Riannuncio tra</string>
     <string name="sort_private">Privato</string>
+    <string name="operation_running">Operazione in corso…</string>
+    <string name="operation_success">Operazione completata</string>
+    <string name="theme_default_name">Predefinito</string>
+    <string name="theme_default_description">L’aspetto originale di qui</string>
+    <string name="theme_autobrr_name">autobrr</string>
+    <string name="theme_autobrr_description">Tema essenziale ispirato al progetto autobrr</string>
+    <string name="theme_dragon_name">Kanagawa Dragon</string>
+    <string name="theme_dragon_description">Tema scuro basato sulla palette Kanagawa Dragon, abbinato a Kanagawa Lotus per la modalità chiara</string>
+    <string name="theme_kyle_name">The Kyle</string>
+    <string name="theme_kyle_description">Il paradiso magenta di Kyle — audace e vivace</string>
+    <string name="theme_minimal_name">Minimalista</string>
+    <string name="theme_minimal_description">Tema essenziale e minimalista con colori neutri</string>
+    <string name="theme_napster_name">Napster</string>
+    <string name="theme_napster_description">Tema retrò ispirato a Napster v2.0 BETA 7, intorno all’anno 2000</string>
+    <string name="theme_nightwalker_name">Viandante notturno</string>
+    <string name="theme_nightwalker_description">Tema scuro con delicate sfumature blu</string>
+    <string name="theme_swizzin_name">Swizzin</string>
+    <string name="theme_swizzin_description">Tema Swizzin · swizzin.ltd</string>
+    <string name="theme_wave_name">Kanagawa Wave</string>
+    <string name="theme_wave_description">Tema scuro basato sulla palette Kanagawa Wave, abbinato a Kanagawa Lotus per la modalità chiara</string>
     <plurals name="torrents_count">
         <item quantity="one">%1$d torrent</item>
         <item quantity="many">%1$d torrent</item>
@@ -415,6 +435,4 @@
         <item quantity="many">%1$d client attivi</item>
         <item quantity="other">%1$d client attivi</item>
     </plurals>
-    <string name="operation_running">Operazione in corso…</string>
-    <string name="operation_success">Operazione completata</string>
 </resources>

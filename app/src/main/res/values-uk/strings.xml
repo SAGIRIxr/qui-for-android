@@ -400,6 +400,26 @@
     <string name="sort_availability">Доступність</string>
     <string name="sort_reannounce">Повторне оголошення через</string>
     <string name="sort_private">Приватний</string>
+    <string name="operation_running">Виконується…</string>
+    <string name="operation_success">Операцію завершено</string>
+    <string name="theme_default_name">Типова</string>
+    <string name="theme_default_description">Оригінальний вигляд qui</string>
+    <string name="theme_autobrr_name">autobrr</string>
+    <string name="theme_autobrr_description">Лаконічна тема, натхненна проєктом autobrr</string>
+    <string name="theme_dragon_name">Kanagawa Dragon</string>
+    <string name="theme_dragon_description">Темна тема з палітрою Kanagawa Dragon у поєднанні з Kanagawa Lotus для світлого режиму</string>
+    <string name="theme_kyle_name">The Kyle</string>
+    <string name="theme_kyle_description">Пурпуровий рай Кайла — сміливий та яскравий</string>
+    <string name="theme_minimal_name">Мінімалістична</string>
+    <string name="theme_minimal_description">Лаконічна мінімалістична тема з нейтральними кольорами</string>
+    <string name="theme_napster_name">Napster</string>
+    <string name="theme_napster_description">Ретротема, натхненна Napster v2.0 BETA 7 приблизно 2000 року</string>
+    <string name="theme_nightwalker_name">Нічний мандрівник</string>
+    <string name="theme_nightwalker_description">Темна тема з ледь помітними синіми відтінками</string>
+    <string name="theme_swizzin_name">Swizzin</string>
+    <string name="theme_swizzin_description">Тема Swizzin · swizzin.ltd</string>
+    <string name="theme_wave_name">Kanagawa Wave</string>
+    <string name="theme_wave_description">Темна тема з палітрою Kanagawa Wave у поєднанні з Kanagawa Lotus для світлого режиму</string>
     <plurals name="torrents_count">
         <item quantity="one">%1$d торент</item>
         <item quantity="few">%1$d торенти</item>
@@ -418,6 +438,4 @@
         <item quantity="many">%1$d активних клієнтів</item>
         <item quantity="other">%1$d активних клієнтів</item>
     </plurals>
-    <string name="operation_running">Виконується…</string>
-    <string name="operation_success">Операцію завершено</string>
 </resources>

@@ -400,6 +400,26 @@
     <string name="sort_availability">可用性</string>
     <string name="sort_reannounce">距下次通報</string>
     <string name="sort_private">私有</string>
+    <string name="operation_running">正在執行…</string>
+    <string name="operation_success">操作成功</string>
+    <string name="theme_default_name">預設</string>
+    <string name="theme_default_description">qui 的經典原始外觀</string>
+    <string name="theme_autobrr_name">autobrr</string>
+    <string name="theme_autobrr_description">靈感源自 autobrr 專案的清爽主題</string>
+    <string name="theme_dragon_name">神奈川·龍</string>
+    <string name="theme_dragon_description">深色模式採用神奈川·龍配色，淺色模式搭配神奈川·蓮配色</string>
+    <string name="theme_kyle_name">凱爾</string>
+    <string name="theme_kyle_description">凱爾的洋紅色樂園，大膽而鮮明</string>
+    <string name="theme_minimal_name">極簡</string>
+    <string name="theme_minimal_description">採用中性色調的清爽極簡主題</string>
+    <string name="theme_napster_name">Napster</string>
+    <string name="theme_napster_description">靈感源自 2000 年前後 Napster v2.0 BETA 7 的復古主題</string>
+    <string name="theme_nightwalker_name">夜行者</string>
+    <string name="theme_nightwalker_description">帶有淡淡藍色調的深色主題</string>
+    <string name="theme_swizzin_name">Swizzin</string>
+    <string name="theme_swizzin_description">Swizzin 主題 · swizzin.ltd</string>
+    <string name="theme_wave_name">神奈川·浪</string>
+    <string name="theme_wave_description">深色模式採用神奈川·浪配色，淺色模式搭配神奈川·蓮配色</string>
     <plurals name="torrents_count">
         <item quantity="other">%1$d 個種子</item>
     </plurals>
@@ -409,6 +429,4 @@
     <plurals name="instances_active">
         <item quantity="other">%1$d 個活躍用戶端</item>
     </plurals>
-    <string name="operation_running">正在執行…</string>
-    <string name="operation_success">操作成功</string>
 </resources>
