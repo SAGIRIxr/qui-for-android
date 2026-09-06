@@ -6,6 +6,14 @@ The section for a tag becomes that release's notes on GitHub, and the app shows 
 same text in its update dialog. Add the new version at the top before tagging, in this
 file and in [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md).
 
+## 0.5.5
+
+### Fixed
+- Keep footer navigation visible on Dashboard and Settings after pressing Android Back
+  from a deeply scrolled torrent list. Scroll-driven hiding now applies only to the list.
+- Ignore lingering scroll callbacks from torrent screens that are no longer resumed,
+  preventing outgoing flings from hiding the destination's navigation again.
+
 ## 0.5.4
 
 ### Fixed

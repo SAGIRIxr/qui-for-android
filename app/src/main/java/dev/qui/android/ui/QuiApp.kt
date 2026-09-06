@@ -118,7 +118,11 @@ fun QuiApp(
 
     // Shared so the nav bar and the torrent screen's action bar retract together.
     val mobileScroll = remember { MobileScrollState() }
-    val bottomBarsTransition = updateTransition(mobileScroll.barsVisible, label = "bottom bars")
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val bottomBarsTransition = updateTransition(
+        bottomBarsVisible(backStackEntry?.destination?.route, mobileScroll.barsVisible),
+        label = "bottom bars",
+    )
 
     CompositionLocalProvider(
         LocalAppPreferences provides preferences,

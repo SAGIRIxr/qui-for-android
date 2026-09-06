@@ -59,6 +59,10 @@ class MobileScrollState {
 
 val LocalMobileScroll = staticCompositionLocalOf { MobileScrollState() }
 
+/** Scroll hiding belongs to the list, never to the destination returned to with Back. */
+internal fun bottomBarsVisible(route: String?, scrollVisible: Boolean): Boolean =
+    route != Routes.TORRENTS || scrollVisible
+
 /** One clock for the footer and action row, even though they live in nested Scaffolds. */
 val LocalBottomBarsTransition = staticCompositionLocalOf<Transition<Boolean>> {
     error("Bottom bar transition must be provided by the app shell")
@@ -77,11 +81,13 @@ fun CollapsingBottomBar(content: @Composable AnimatedVisibilityScope.() -> Unit)
 }
 
 /** Feeds list scrolling into [MobileScrollState] without consuming any of it. */
-fun MobileScrollState.nestedScrollConnection(): NestedScrollConnection =
+fun MobileScrollState.nestedScrollConnection(isActive: () -> Boolean = { true }): NestedScrollConnection =
     object : NestedScrollConnection {
         override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
             // Overscroll and an unscrollable list must not retract the controls.
-            onScroll(consumed.y)
+            // NavHost keeps outgoing content composed during its transition. Its
+            // remaining fling must not change the destination screen's controls.
+            if (isActive()) onScroll(consumed.y)
             return Offset.Zero
         }
     }
