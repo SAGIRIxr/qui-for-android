@@ -54,6 +54,7 @@ private const val FREE_SPACE_DELAY_MS = 1_500L
 
 data class TorrentsUiState(
     val instances: List<Instance> = emptyList(),
+    val instancesLoaded: Boolean = false,
     val selectedInstanceId: Int? = null,
     val torrents: List<Torrent> = emptyList(),
     val total: Int = 0,
@@ -71,6 +72,10 @@ data class TorrentsUiState(
     val isRefreshing: Boolean = false,
     val hasMore: Boolean = false,
     val error: String? = null,
+    val actionError: String? = null,
+    val actionPending: Int = 0,
+    val actionSucceeded: Boolean = false,
+    val instanceUnavailable: Boolean = false,
     val streamConnected: Boolean = false,
     val selection: Set<String> = emptySet(),
     val selectionMode: Boolean = false,
@@ -139,6 +144,8 @@ class TorrentsViewModel @Inject constructor(
     private var metadataJob: Job? = null
     private var metadataGeneration = 0L
     private var loadedPages = 1
+    private var selectionRevision = 0L
+    private val pendingActions = mutableSetOf<Triple<Int, String, Set<String>>>()
 
     /**
      * When the last stream frame arrived. Android freezes the process in the
@@ -180,7 +187,7 @@ class TorrentsViewModel @Inject constructor(
                 val target = remembered?.takeIf { id -> active.any { it.id == id } }
                     ?: active.firstOrNull()?.id
 
-                _state.update { it.copy(instances = instances, selectedInstanceId = target) }
+                _state.update { it.copy(instances = instances, instancesLoaded = true, selectedInstanceId = target) }
 
                 // A stored unified scope only survives if there is still more than one
                 // active client to merge; otherwise fall back to a single one.
@@ -194,11 +201,12 @@ class TorrentsViewModel @Inject constructor(
             }
             .onFailure { error ->
                 if (generation != queryGeneration) return@onFailure
-                _state.update { it.copy(error = error.message, isLoading = false) }
+                _state.update { it.copy(error = error.message, isLoading = false, instancesLoaded = true) }
             }
     }
 
     fun selectInstance(instanceId: Int) {
+        _state.update { it.copy(instanceUnavailable = false) }
         val current = _state.value
         if (!current.unifiedScope &&
             current.selectedInstanceId == instanceId &&
@@ -207,6 +215,7 @@ class TorrentsViewModel @Inject constructor(
             return
         }
         freeSpaceJob?.cancel()
+        selectionRevision++
         freeSpaceAt = 0L
         _state.update {
             it.copy(
@@ -238,8 +247,10 @@ class TorrentsViewModel @Inject constructor(
      * because qBittorrent defines them per instance; the list itself is merged.
      */
     fun selectUnified() {
+        _state.update { it.copy(instanceUnavailable = false) }
         val current = _state.value
         if (current.unifiedScope || !current.canUnify) return
+        selectionRevision++
         _state.update {
             it.copy(
                 unifiedScope = true,
@@ -461,6 +472,15 @@ class TorrentsViewModel @Inject constructor(
         pageJob = viewModelScope.launch { fetchPage(requestId) }
     }
 
+    fun openInstance(instanceId: Int) {
+        if (_state.value.instances.none { it.id == instanceId && it.isActive }) {
+            _state.update { it.copy(instanceUnavailable = true) }
+            return
+        }
+        _state.update { it.copy(instanceUnavailable = false) }
+        selectInstance(instanceId)
+    }
+
     private suspend fun fetchPage(requestId: Long) {
         val current = _state.value
         val generation = queryGeneration
@@ -651,18 +671,23 @@ class TorrentsViewModel @Inject constructor(
 
     // ---- selection ----
 
-    fun toggleSelection(key: String) = _state.update { current ->
+    private fun updateSelection(transform: (TorrentsUiState) -> TorrentsUiState) {
+        selectionRevision++
+        _state.update(transform)
+    }
+
+    fun toggleSelection(key: String) = updateSelection { current ->
         val next = if (key in current.selection) current.selection - key else current.selection + key
         current.copy(selection = next, selectionMode = next.isNotEmpty())
     }
 
-    fun enterSelection(key: String) = _state.update {
+    fun enterSelection(key: String) = updateSelection {
         it.copy(selection = it.selection + key, selectionMode = true)
     }
 
-    fun clearSelection() = _state.update { it.copy(selection = emptySet(), selectionMode = false) }
+    fun clearSelection() = updateSelection { it.copy(selection = emptySet(), selectionMode = false) }
 
-    fun selectAllLoaded() = _state.update { current ->
+    fun selectAllLoaded() = updateSelection { current ->
         current.copy(
             selection = current.torrents.map { it.key }.toSet(),
             selectionMode = current.torrents.isNotEmpty(),
@@ -685,6 +710,10 @@ class TorrentsViewModel @Inject constructor(
         // Instance 0 is qui's all-instances sentinel; the targets carry the real ids.
         val instanceId = if (current.unifiedScope) 0 else current.selectedInstanceId ?: return
         if (keys.isEmpty()) return
+        val token = Triple(instanceId, action, keys.toSet())
+        val revision = selectionRevision
+        if (!pendingActions.add(token)) return
+        _state.update { it.copy(actionPending = pendingActions.size, actionError = null, actionSucceeded = false) }
 
         val hashes = keys.map { it.substringAfterLast(':') }
         val targets = keys.mapNotNull { key ->
@@ -701,7 +730,21 @@ class TorrentsViewModel @Inject constructor(
                 instanceId,
                 BulkActionRequest(hashes = hashes, action = action, targets = targets).configure(),
             )
-            result.onSuccess { clearSelection() }
+            pendingActions.remove(token)
+            _state.update {
+                it.copy(
+                    actionPending = pendingActions.size,
+                    actionError = result.exceptionOrNull()?.let { error -> error.message ?: error.toString() }
+                        ?: it.actionError,
+                    actionSucceeded = result.isSuccess,
+                )
+            }
+            result.onSuccess {
+                val latest = _state.value
+                if (revision == selectionRevision && latest.selectedInstanceId == current.selectedInstanceId &&
+                    latest.unifiedScope == current.unifiedScope && latest.selection == current.selection
+                ) clearSelection()
+            }
             onResult(result)
             // A REST re-read closes the gap when the stream is down.
             if (!_state.value.streamConnected) requestPage()

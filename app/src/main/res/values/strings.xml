@@ -482,6 +482,9 @@
     <string name="sort_reannounce">Reannounce In</string>
     <string name="sort_private">Private</string>
 
+    <string name="operation_failed">Operation failed. Please check and retry.</string>
+    <string name="instance_unavailable">This server is no longer available.</string>
+    <string name="add_partial_result">Added %1$d. Review the remaining items before retrying.</string>
     <string name="operation_running">Working…</string>
     <string name="operation_success">Operation completed</string>
     <string name="theme_default_name">Default</string>

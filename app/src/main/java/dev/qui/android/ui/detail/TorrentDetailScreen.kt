@@ -100,13 +100,17 @@ fun TorrentDetailScreen(
     onBack: () -> Unit,
     viewModel: TorrentDetailViewModel = hiltViewModel(),
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val rawState by viewModel.state.collectAsStateWithLifecycle()
 
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.setResumed(true) }
     LifecycleEventEffect(Lifecycle.Event.ON_PAUSE) { viewModel.setResumed(false) }
     val prefs = dev.qui.android.ui.LocalAppPreferences.current
+    val state = remember(rawState, prefs.incognito) { rawState.forDisplay(prefs.incognito) }
     val palette = QuiTheme.palette
     var showRename by remember { mutableStateOf(false) }
+    androidx.compose.runtime.LaunchedEffect(prefs.incognito) {
+        if (prefs.incognito) showRename = false
+    }
 
     val title = state.torrent?.name
         ?: state.properties?.name
@@ -153,6 +157,7 @@ fun TorrentDetailScreen(
             if (state.actionBusy || state.actionSucceeded || failure != null) {
                 Text(
                     text = if (state.actionBusy) stringResource(R.string.operation_running)
+                        else if (failure != null && prefs.incognito) stringResource(R.string.operation_failed)
                         else failure ?: stringResource(R.string.operation_success),
                     color = if (failure != null) palette.destructive else palette.mutedForeground,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
@@ -193,7 +198,7 @@ fun TorrentDetailScreen(
                 DetailAction(
                     icon = Icons.Default.DriveFileRenameOutline,
                     label = stringResource(R.string.action_rename),
-                    enabled = !state.actionBusy,
+                    enabled = !state.actionBusy && !prefs.incognito,
                 ) { showRename = true }
             }
 
@@ -232,7 +237,7 @@ fun TorrentDetailScreen(
             }
             when (state.tab) {
                 DetailTab.General -> GeneralTab(state)
-                DetailTab.Trackers -> TrackersTab(state.trackers)
+                DetailTab.Trackers -> TrackersTab(state.trackers, prefs.incognito)
                 DetailTab.Peers -> PeersTab(state.peers, prefs.speedUnit)
                 DetailTab.Content -> ContentTab(
                     files = state.sortedFiles,
@@ -245,7 +250,7 @@ fun TorrentDetailScreen(
         }
     }
 
-    if (showRename) {
+    if (showRename && !prefs.incognito) {
         TextInputDialog(
             title = stringResource(R.string.detail_rename_title),
             initial = title,
@@ -468,7 +473,7 @@ private fun StatRow(label: String, value: String, mono: Boolean = false) {
 }
 
 @Composable
-private fun TrackersTab(trackers: List<TorrentTracker>) {
+private fun TrackersTab(trackers: List<TorrentTracker>, incognito: Boolean = false) {
     val palette = QuiTheme.palette
 
     if (trackers.isEmpty()) {
@@ -483,7 +488,7 @@ private fun TrackersTab(trackers: List<TorrentTracker>) {
         items(trackers) { tracker ->
             QuiCard {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    TrackerIcon(host = trackerHost(tracker.url), size = 16.dp)
+                    if (!incognito) TrackerIcon(host = trackerHost(tracker.url), size = 16.dp)
                     Spacer(Modifier.width(8.dp))
                     Text(
                         text = tracker.url,

@@ -17,6 +17,8 @@
 
 package dev.qui.android.ui.torrents
 
+import androidx.activity.compose.BackHandler
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -128,6 +130,11 @@ import kotlinx.coroutines.launch
 fun TorrentsScreen(
     pendingAdd: MutableStateFlow<AddIntent?>,
     onOpenTorrent: (instanceId: Int, hash: String) -> Unit,
+    requestedInstanceId: Int? = null,
+    onInstanceRequestHandled: () -> Unit = {},
+    canNavigateBack: Boolean = false,
+    isCurrentPage: Boolean = true,
+    onNavigateBack: () -> Unit = {},
     viewModel: TorrentsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -155,6 +162,24 @@ fun TorrentsScreen(
     val scope = rememberCoroutineScope()
 
     val incomingAdd by pendingAdd.collectAsStateWithLifecycle()
+
+    LaunchedEffect(requestedInstanceId, state.instancesLoaded) {
+        val id = requestedInstanceId ?: return@LaunchedEffect
+        if (state.instancesLoaded) {
+            viewModel.openInstance(id)
+            onInstanceRequestHandled()
+        }
+    }
+
+    // Dialog windows handle Back first; local modes come before page history.
+    BackHandler(enabled = isCurrentPage && (state.selectionMode || openSwipeKey != null || canNavigateBack)) {
+        when (torrentBackAction(openSwipeKey != null, state.selectionMode, canNavigateBack)) {
+            TorrentBackAction.CloseSwipe -> openSwipeKey = null
+            TorrentBackAction.ClearSelection -> viewModel.clearSelection()
+            TorrentBackAction.PreviousPage -> onNavigateBack()
+            TorrentBackAction.System -> Unit
+        }
+    }
 
     // Coming back from the background can land on a stream whose socket the network
     // dropped while the process was frozen. The read timeout would catch that on its
@@ -197,6 +222,7 @@ fun TorrentsScreen(
     Scaffold(
         containerColor = QuiTheme.palette.background,
         topBar = {
+            Column {
             TorrentsTopBar(
                 state = state,
                 speedUnit = prefs.speedUnit,
@@ -214,6 +240,19 @@ fun TorrentsScreen(
                 onOpenInstances = { showInstances = true },
                 onClearFilters = viewModel::clearFilters,
             )
+            if (state.actionPending > 0 || state.actionError != null || state.actionSucceeded || state.instanceUnavailable) {
+                Text(
+                    text = when {
+                        state.instanceUnavailable -> stringResource(R.string.instance_unavailable)
+                        state.actionPending > 0 -> stringResource(R.string.operation_running)
+                        state.actionError != null -> if (prefs.incognito) stringResource(R.string.operation_failed) else state.actionError.orEmpty()
+                        else -> stringResource(R.string.operation_success)
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+            }
         },
         bottomBar = {
             // qui's mobile view stacks a quick-action row above the footer nav, and
@@ -469,13 +508,15 @@ fun TorrentsScreen(
             categories = state.categories.keys.toList(),
             knownTags = state.tags,
             prefill = incomingAdd,
+            onPrefillConsumed = { pendingAdd.compareAndSet(incomingAdd, null) },
+            onPartialAdded = viewModel::refresh,
             onDismiss = {
                 showAdd = false
                 pendingAdd.value = null
             },
             onAdded = {
-                showAdd = false
-                pendingAdd.value = null
+                // A newer share arriving during submission belongs to the next draft.
+                showAdd = pendingAdd.value != null
                 viewModel.refresh()
             },
         )

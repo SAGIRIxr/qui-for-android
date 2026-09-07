@@ -400,6 +400,9 @@
     <string name="sort_availability">Доступність</string>
     <string name="sort_reannounce">Повторне оголошення через</string>
     <string name="sort_private">Приватний</string>
+    <string name="operation_failed">Операція не вдалася. Перевірте дані та спробуйте ще раз.</string>
+    <string name="instance_unavailable">Цей сервер більше не доступний.</string>
+    <string name="add_partial_result">Додано: %1$d. Перевірте решту елементів перед повторною спробою.</string>
     <string name="operation_running">Виконується…</string>
     <string name="operation_success">Операцію завершено</string>
     <string name="theme_default_name">Типова</string>

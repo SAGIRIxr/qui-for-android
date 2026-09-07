@@ -68,6 +68,58 @@ class RefreshRegressionTest {
     }
 
     private fun torrents() = TorrentsViewModel(repository, stream, prefs, history).also { models += it }
+
+    @Test fun `list actions deduplicate but both speed limits run and failures retain selection`() = regression {
+        val gate = CompletableDeferred<Unit>()
+        coEvery { repository.bulkAction(any(), any()) } coAnswers {
+            gate.await()
+            Result.failure(Exception("denied"))
+        }
+        val model = torrents()
+        runCurrent()
+        model.enterSelection("hash")
+        model.runAction("setDownloadLimit")
+        model.runAction("setDownloadLimit")
+        model.runAction("setUploadLimit")
+        runCurrent()
+        assertEquals(2, model.state.value.actionPending)
+        coVerify(exactly = 2) { repository.bulkAction(any(), any()) }
+        gate.complete(Unit)
+        runCurrent()
+        assertEquals(0, model.state.value.actionPending)
+        assertEquals("denied", model.state.value.actionError)
+        assertEquals(setOf("hash"), model.state.value.selection)
+    }
+
+    @Test fun `completed old action does not clear a reselected identical row`() = regression {
+        val gate = CompletableDeferred<Unit>()
+        coEvery { repository.bulkAction(any(), any()) } coAnswers { gate.await(); Result.success(Unit) }
+        val model = torrents()
+        runCurrent()
+        model.enterSelection("hash")
+        model.runAction("pause")
+        runCurrent()
+        model.clearSelection()
+        model.enterSelection("hash")
+        gate.complete(Unit)
+        runCurrent()
+        assertTrue(model.state.value.selectionMode)
+        assertTrue(model.state.value.actionSucceeded)
+    }
+
+    @Test fun `instance card request selects requested server and rejects missing server`() = regression {
+        val model = torrents()
+        runCurrent()
+        assertTrue(model.state.value.instancesLoaded)
+        model.openInstance(2)
+        runCurrent()
+        assertEquals(2, model.state.value.selectedInstanceId)
+        model.openInstance(99)
+        assertTrue(model.state.value.instanceUnavailable)
+        assertEquals(2, model.state.value.selectedInstanceId)
+        model.selectInstance(1)
+        assertFalse(model.state.value.instanceUnavailable)
+    }
     private fun detail() = TorrentDetailViewModel(repository,
         SavedStateHandle(mapOf("instanceId" to 1, "hash" to "hash")), prefs).also { models += it }
 

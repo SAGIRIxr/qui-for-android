@@ -400,6 +400,9 @@
     <string name="sort_availability">可用性</string>
     <string name="sort_reannounce">距下次通報</string>
     <string name="sort_private">私有</string>
+    <string name="operation_failed">操作失敗，請檢查後重試。</string>
+    <string name="instance_unavailable">此伺服器已無法使用。</string>
+    <string name="add_partial_result">已新增 %1$d 個。請檢查剩餘項目後重試。</string>
     <string name="operation_running">正在執行…</string>
     <string name="operation_success">操作成功</string>
     <string name="theme_default_name">預設</string>

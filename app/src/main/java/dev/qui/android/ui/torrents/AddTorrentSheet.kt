@@ -72,15 +72,24 @@ fun AddTorrentSheet(
     prefill: AddIntent?,
     onDismiss: () -> Unit,
     onAdded: () -> Unit,
+    onPartialAdded: () -> Unit = {},
+    onPrefillConsumed: () -> Unit = {},
     viewModel: AddTorrentViewModel = hiltViewModel(),
 ) {
     val palette = QuiTheme.palette
     val context = LocalContext.current
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val busy = androidx.compose.runtime.rememberUpdatedState(state.isBusy)
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+        confirmValueChange = { !busy.value },
+    )
 
-    LaunchedEffect(prefill) {
-        prefill?.let(viewModel::applyPrefill)
+    LaunchedEffect(prefill, state.isBusy) {
+        if (!state.isBusy && prefill != null) {
+            viewModel.applyPrefill(prefill)
+            onPrefillConsumed()
+        }
     }
 
     val filePicker = rememberLauncherForActivityResult(
@@ -97,7 +106,7 @@ fun AddTorrentSheet(
         viewModel.addFiles(payloads)
     }
 
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
+    ModalBottomSheet(onDismissRequest = { if (!state.isBusy) onDismiss() }, sheetState = sheetState) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -115,6 +124,7 @@ fun AddTorrentSheet(
 
             OutlinedTextField(
                 value = state.urls,
+                enabled = !state.isBusy,
                 onValueChange = viewModel::setUrls,
                 label = { Text(stringResource(R.string.add_magnet_or_url)) },
                 placeholder = { Text(stringResource(R.string.add_magnet_placeholder)) },
@@ -125,6 +135,7 @@ fun AddTorrentSheet(
 
             OutlinedButton(
                 onClick = { filePicker.launch(arrayOf("application/x-bittorrent", "*/*")) },
+                enabled = !state.isBusy,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Icon(Icons.Default.AttachFile, contentDescription = null, Modifier.size(18.dp))
@@ -149,7 +160,7 @@ fun AddTorrentSheet(
                         contentDescription = stringResource(R.string.common_remove),
                         modifier = Modifier
                             .size(16.dp)
-                            .clickable { viewModel.removeFile(file) },
+                            .clickable(enabled = !state.isBusy) { viewModel.removeFile(file) },
                     )
                 }
             }
@@ -163,6 +174,7 @@ fun AddTorrentSheet(
                     categories.forEach { category ->
                         FilterChip(
                             selected = state.category == category,
+                            enabled = !state.isBusy,
                             onClick = {
                                 viewModel.setCategory(if (state.category == category) "" else category)
                             },
@@ -181,6 +193,7 @@ fun AddTorrentSheet(
                     knownTags.forEach { tag ->
                         FilterChip(
                             selected = tag in state.tags,
+                            enabled = !state.isBusy,
                             onClick = { viewModel.toggleTag(tag) },
                             label = { Text(tag) },
                         )
@@ -190,6 +203,7 @@ fun AddTorrentSheet(
 
             OutlinedTextField(
                 value = state.savePath,
+                enabled = !state.isBusy,
                 onValueChange = viewModel::setSavePath,
                 label = { Text(stringResource(R.string.add_save_path)) },
                 singleLine = true,
@@ -199,30 +213,39 @@ fun AddTorrentSheet(
             ToggleRow(
                 label = stringResource(R.string.add_start_paused),
                 checked = state.startPaused,
+                enabled = !state.isBusy,
                 onChange = viewModel::setStartPaused,
             )
             ToggleRow(
                 label = stringResource(R.string.add_skip_hash_check),
                 checked = state.skipHashCheck,
+                enabled = !state.isBusy,
                 onChange = viewModel::setSkipHashCheck,
             )
             ToggleRow(
                 label = stringResource(R.string.add_sequential),
                 checked = state.sequential,
+                enabled = !state.isBusy,
                 onChange = viewModel::setSequential,
             )
             ToggleRow(
                 label = stringResource(R.string.add_first_last_piece),
                 checked = state.firstLastPiece,
+                enabled = !state.isBusy,
                 onChange = viewModel::setFirstLastPiece,
             )
 
+            if (state.addedCount > 0) {
+                Text(stringResource(R.string.add_partial_result, state.addedCount))
+            }
             state.error?.let {
-                Text(it, style = MaterialTheme.typography.bodySmall, color = palette.destructive)
+                val hidden = dev.qui.android.ui.LocalAppPreferences.current.incognito
+                Text(if (hidden || it.isBlank()) stringResource(R.string.operation_failed) else it,
+                    style = MaterialTheme.typography.bodySmall, color = palette.destructive)
             }
 
             Button(
-                onClick = { instanceId?.let { viewModel.submit(it, onAdded) } },
+                onClick = { instanceId?.let { viewModel.submit(it, onAdded, onPartialAdded) } },
                 enabled = instanceId != null && !state.isBusy && state.canSubmit,
                 modifier = Modifier.fillMaxWidth(),
             ) {
@@ -241,12 +264,12 @@ fun AddTorrentSheet(
 }
 
 @Composable
-private fun ToggleRow(label: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+private fun ToggleRow(label: String, checked: Boolean, enabled: Boolean = true, onChange: (Boolean) -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(label, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
-        Switch(checked = checked, onCheckedChange = onChange)
+        Switch(checked = checked, onCheckedChange = onChange, enabled = enabled)
     }
 }

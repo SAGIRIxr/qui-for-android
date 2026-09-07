@@ -30,6 +30,7 @@ data class AddTorrentUiState(
     val firstLastPiece: Boolean = false,
     val isBusy: Boolean = false,
     val error: String? = null,
+    val addedCount: Int = 0,
 ) {
     val canSubmit: Boolean
         get() = urls.isNotBlank() || files.isNotEmpty()
@@ -43,8 +44,12 @@ class AddTorrentViewModel @Inject constructor(
     private val _state = MutableStateFlow(AddTorrentUiState())
     val state: StateFlow<AddTorrentUiState> = _state.asStateFlow()
 
+    private fun edit(transform: (AddTorrentUiState) -> AddTorrentUiState) = _state.update {
+        if (it.isBusy) it else transform(it)
+    }
+
     /** Fills the form from a magnet link or .torrent handed in by another app. */
-    fun applyPrefill(intent: AddIntent) = _state.update { current ->
+    fun applyPrefill(intent: AddIntent) = edit { current ->
         val mergedUrls = (current.urls.lines() + intent.urls)
             .map { it.trim() }
             .filter { it.isNotEmpty() }
@@ -57,31 +62,31 @@ class AddTorrentViewModel @Inject constructor(
         )
     }
 
-    fun setUrls(value: String) = _state.update { it.copy(urls = value, error = null) }
+    fun setUrls(value: String) = edit { it.copy(urls = value, error = null) }
 
-    fun addFiles(files: List<TorrentPayload>) = _state.update {
+    fun addFiles(files: List<TorrentPayload>) = edit {
         it.copy(files = (it.files + files).distinct(), error = null)
     }
 
-    fun removeFile(file: TorrentPayload) = _state.update {
+    fun removeFile(file: TorrentPayload) = edit {
         it.copy(files = it.files - file)
     }
 
-    fun setCategory(value: String) = _state.update { it.copy(category = value) }
+    fun setCategory(value: String) = edit { it.copy(category = value) }
 
-    fun toggleTag(tag: String) = _state.update {
+    fun toggleTag(tag: String) = edit {
         it.copy(tags = if (tag in it.tags) it.tags - tag else it.tags + tag)
     }
 
-    fun setSavePath(value: String) = _state.update { it.copy(savePath = value) }
-    fun setStartPaused(value: Boolean) = _state.update { it.copy(startPaused = value) }
-    fun setSkipHashCheck(value: Boolean) = _state.update { it.copy(skipHashCheck = value) }
-    fun setSequential(value: Boolean) = _state.update { it.copy(sequential = value) }
-    fun setFirstLastPiece(value: Boolean) = _state.update { it.copy(firstLastPiece = value) }
+    fun setSavePath(value: String) = edit { it.copy(savePath = value) }
+    fun setStartPaused(value: Boolean) = edit { it.copy(startPaused = value) }
+    fun setSkipHashCheck(value: Boolean) = edit { it.copy(skipHashCheck = value) }
+    fun setSequential(value: Boolean) = edit { it.copy(sequential = value) }
+    fun setFirstLastPiece(value: Boolean) = edit { it.copy(firstLastPiece = value) }
 
-    fun submit(instanceId: Int, onAdded: () -> Unit) {
+    fun submit(instanceId: Int, onAdded: () -> Unit, onPartialAdded: () -> Unit = {}) {
         val current = _state.value
-        if (!current.canSubmit) return
+        if (!current.canSubmit || current.isBusy) return
 
         _state.update { it.copy(isBusy = true, error = null) }
 
@@ -113,17 +118,28 @@ class AddTorrentViewModel @Inject constructor(
                         response.failedFiles?.forEach { add("${it.filename}: ${it.error}") }
                     }
 
-                    if (response.added == 0 && failureDetail.isNotEmpty()) {
+                    if (failureDetail.isNotEmpty() || response.failed > 0 || response.added == 0) {
+                        val failedUrls = response.failedURLs.orEmpty().map { it.url }.toSet()
+                        val failedFiles = response.failedFiles.orEmpty().map { it.filename }.toSet()
+                        // Without complete item-level results, do not silently discard a draft.
+                        val identified = failureDetail.isNotEmpty() && response.failed <= failureDetail.size
                         _state.update {
-                            it.copy(isBusy = false, error = failureDetail.joinToString("\n"))
+                            it.copy(
+                                isBusy = false,
+                                urls = if (identified) current.urls.lines().filter { url -> url.trim() in failedUrls }.joinToString("\n") else current.urls,
+                                files = if (identified) current.files.filter { file -> file.filename in failedFiles } else current.files,
+                                addedCount = current.addedCount + response.added,
+                                error = failureDetail.joinToString("\n"),
+                            )
                         }
+                        if (response.added > 0) onPartialAdded()
                     } else {
                         _state.value = AddTorrentUiState()
                         onAdded()
                     }
                 }
                 .onFailure { error ->
-                    _state.update { it.copy(isBusy = false, error = error.message) }
+                    _state.update { it.copy(isBusy = false, error = error.message ?: error.toString()) }
                 }
         }
     }

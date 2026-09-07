@@ -400,6 +400,9 @@
     <string name="sort_availability">Disponibilidade</string>
     <string name="sort_reannounce">Reanunciar em</string>
     <string name="sort_private">Privado</string>
+    <string name="operation_failed">A operação falhou. Verifique e tente novamente.</string>
+    <string name="instance_unavailable">Este servidor não está mais disponível.</string>
+    <string name="add_partial_result">%1$d adicionados. Revise os itens restantes antes de tentar novamente.</string>
     <string name="operation_running">Em andamento…</string>
     <string name="operation_success">Operação concluída</string>
     <string name="theme_default_name">Padrão</string>

@@ -400,6 +400,9 @@
     <string name="sort_availability">Dostupnost</string>
     <string name="sort_reannounce">Znovu ohlásit za</string>
     <string name="sort_private">Soukromý</string>
+    <string name="operation_failed">Operace selhala. Zkontrolujte údaje a zkuste to znovu.</string>
+    <string name="instance_unavailable">Tento server již není dostupný.</string>
+    <string name="add_partial_result">Přidáno: %1$d. Před dalším pokusem zkontrolujte zbývající položky.</string>
     <string name="operation_running">Probíhá…</string>
     <string name="operation_success">Operace dokončena</string>
     <string name="theme_default_name">Výchozí</string>

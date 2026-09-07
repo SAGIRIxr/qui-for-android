@@ -1,4 +1,31 @@
 {
+  "operation_failed": {
+    "zh-CN": "操作失败，请检查后重试。", "zh-TW": "操作失敗，請檢查後重試。",
+    "cs": "Operace selhala. Zkontrolujte údaje a zkuste to znovu.",
+    "de": "Vorgang fehlgeschlagen. Bitte prüfen und erneut versuchen.",
+    "fr": "Échec de l’opération. Vérifiez puis réessayez.",
+    "it": "Operazione non riuscita. Controlla e riprova.",
+    "ko": "작업에 실패했습니다. 확인 후 다시 시도하세요.",
+    "pt-BR": "A operação falhou. Verifique e tente novamente.",
+    "uk": "Операція не вдалася. Перевірте дані та спробуйте ще раз."
+  },
+  "instance_unavailable": {
+    "zh-CN": "此服务器已不可用。", "zh-TW": "此伺服器已無法使用。",
+    "cs": "Tento server již není dostupný.", "de": "Dieser Server ist nicht mehr verfügbar.",
+    "fr": "Ce serveur n’est plus disponible.", "it": "Questo server non è più disponibile.",
+    "ko": "이 서버는 더 이상 사용할 수 없습니다.", "pt-BR": "Este servidor não está mais disponível.",
+    "uk": "Цей сервер більше не доступний."
+  },
+  "add_partial_result": {
+    "zh-CN": "已添加 %1$d 个。请检查剩余项目后重试。", "zh-TW": "已新增 %1$d 個。請檢查剩餘項目後重試。",
+    "cs": "Přidáno: %1$d. Před dalším pokusem zkontrolujte zbývající položky.",
+    "de": "%1$d hinzugefügt. Verbleibende Einträge vor dem erneuten Versuch prüfen.",
+    "fr": "%1$d ajoutés. Vérifiez les éléments restants avant de réessayer.",
+    "it": "%1$d aggiunti. Controlla gli elementi rimanenti prima di riprovare.",
+    "ko": "%1$d개를 추가했습니다. 남은 항목을 확인한 후 다시 시도하세요.",
+    "pt-BR": "%1$d adicionados. Revise os itens restantes antes de tentar novamente.",
+    "uk": "Додано: %1$d. Перевірте решту елементів перед повторною спробою."
+  },
   "theme_default_name": {
     "zh-CN": "默认",
     "zh-TW": "預設",

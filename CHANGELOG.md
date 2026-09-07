@@ -6,6 +6,20 @@ The section for a tag becomes that release's notes on GitHub, and the app shows 
 same text in its update dialog. Add the new version at the top before tagging, in this
 file and in [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md).
 
+## 0.5.6
+
+### Fixed
+- Android Back follows main-page visit history, retaining tab state. Close swipe actions
+  and leave multi-selection before navigating; detail pages still return to their list.
+- Dashboard instance cards open the requested server, including from unified view.
+- Show running, success and failure feedback for list actions; suppress duplicate requests
+  without dropping paired speed-limit updates or clearing a newer selection.
+- Keep failed URLs/files after partially successful additions, retry only the remaining
+  items when item-level failures are available, and protect in-flight drafts from edits.
+- Mask sensitive fields across every detail tab in privacy mode, including paths, hashes,
+  trackers, peers and WebSeeds. Keep real operation targets unchanged and disable rename.
+- Preserve a new shared torrent arriving during an earlier addition.
+
 ## 0.5.5
 
 ### Fixed

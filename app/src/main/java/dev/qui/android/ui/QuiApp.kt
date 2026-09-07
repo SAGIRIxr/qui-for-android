@@ -9,6 +9,7 @@
 package dev.qui.android.ui
 
 import androidx.annotation.StringRes
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -162,7 +165,34 @@ private fun MainScaffold(
     val currentRoute = backStackEntry?.destination
     // Keep the graph's start stable as the last-page preference changes, and across rotation.
     val startRoute = rememberSaveable { initialRoute }
+    var pageHistory by rememberSaveable { mutableStateOf(listOf(startRoute)) }
     val mobileScroll = LocalMobileScroll.current
+
+    fun showMainPage(route: String) {
+        // Do not save a detail screen above a tab and restore it on a shared-add launch.
+        while (navController.currentDestination != null &&
+            NAV_ENTRIES.none { it.route == navController.currentDestination?.route }
+        ) {
+            if (!navController.popBackStack()) break
+        }
+        if (navController.currentDestination?.route == route) return
+        navController.navigate(route) {
+            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
+    fun visitPage(route: String) {
+        showMainPage(route)
+        pageHistory = visitMainPage(pageHistory, route)
+    }
+
+    fun returnToPreviousPage() {
+        val previous = previousMainPage(pageHistory) ?: return
+        showMainPage(previous)
+        pageHistory = pageHistory.dropLast(1)
+    }
 
     LaunchedEffect(currentRoute?.route) {
         onMainPageChanged(currentRoute?.route)
@@ -184,11 +214,7 @@ private fun MainScaffold(
         if (backStackEntry == null) return@LaunchedEffect
         if (incomingAdd != null) {
             if (currentRoute?.route != Routes.TORRENTS) {
-                navController.navigate(Routes.TORRENTS) {
-                    popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                    launchSingleTop = true
-                    restoreState = true
-                }
+                visitPage(Routes.TORRENTS)
             }
             return@LaunchedEffect
         }
@@ -226,13 +252,7 @@ private fun MainScaffold(
                                 NavigationBarItem(
                                     selected = selected,
                                     onClick = {
-                                        navController.navigate(entry.route) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
-                                        }
+                                        visitPage(entry.route)
                                     },
                                     icon = {
                                         if (isClients && instances.isNotEmpty()) {
@@ -270,12 +290,23 @@ private fun MainScaffold(
         ) {
             composable(Routes.DASHBOARD) {
                 DashboardScreen(
-                    onOpenInstance = { navController.navigate(Routes.TORRENTS) },
+                    onOpenInstance = { instanceId ->
+                        visitPage(Routes.TORRENTS)
+                        navController.currentBackStackEntry?.savedStateHandle?.set(OPEN_INSTANCE_ID, instanceId)
+                    },
                 )
+                BackHandler(enabled = currentRoute?.route == Routes.DASHBOARD && pageHistory.size > 1) { returnToPreviousPage() }
             }
-            composable(Routes.TORRENTS) {
+            composable(Routes.TORRENTS) { entry ->
+                val requestedInstance by entry.savedStateHandle
+                    .getStateFlow<Int?>(OPEN_INSTANCE_ID, null).collectAsStateWithLifecycle()
                 TorrentsScreen(
                     pendingAdd = pendingAdd,
+                    requestedInstanceId = requestedInstance,
+                    onInstanceRequestHandled = { entry.savedStateHandle[OPEN_INSTANCE_ID] = null },
+                    canNavigateBack = pageHistory.size > 1,
+                    isCurrentPage = currentRoute?.route == Routes.TORRENTS,
+                    onNavigateBack = ::returnToPreviousPage,
                     onOpenTorrent = { instanceId, hash ->
                         navController.navigate(Routes.detail(instanceId, hash))
                     },
@@ -283,6 +314,7 @@ private fun MainScaffold(
             }
             composable(Routes.SETTINGS) {
                 SettingsScreen()
+                BackHandler(enabled = currentRoute?.route == Routes.SETTINGS && pageHistory.size > 1) { returnToPreviousPage() }
             }
             composable(
                 route = Routes.DETAIL,
