@@ -178,6 +178,79 @@ class RefreshRegressionTest {
         assertEquals(0L, model.state.value.headlineFreeSpace)
     }
 
+    @Test fun `heartbeats do not stop REST polling before a usable snapshot`() = regression {
+        val model = torrents()
+        runCurrent()
+        events.emit(StreamEvent.Heartbeat)
+        runCurrent()
+        advanceTimeBy(3_001)
+        runCurrent()
+        assertFalse(model.state.value.streamConnected)
+        coVerify(exactly = 2) { repository.torrents(1, any(), any(), any(), any(), any(), any()) }
+        events.emit(StreamEvent.Snapshot(StreamPayload(data = TorrentResponse(torrents = listOf(Torrent(hash = "live"))))))
+        runCurrent()
+        advanceTimeBy(3_001)
+        runCurrent()
+        assertTrue(model.state.value.streamConnected)
+        coVerify(exactly = 2) { repository.torrents(1, any(), any(), any(), any(), any(), any()) }
+    }
+
+    @Test fun `version gap keeps visible rows and reconnects for a baseline`() = regression {
+        val model = torrents()
+        runCurrent()
+        events.emit(StreamEvent.Snapshot(StreamPayload(data = TorrentResponse(torrents = listOf(Torrent(hash = "live"))),
+            version = StreamVersion(1, 1))))
+        runCurrent()
+        events.emit(StreamEvent.Delta(StreamPayload(data = TorrentResponse(),
+            version = StreamVersion(1, 3), delta = StreamDelta(order = emptyList(), baseVersion = StreamVersion(1, 2)))))
+        runCurrent()
+        assertEquals("live", model.state.value.torrents.single().hash)
+        assertFalse(model.state.value.streamConnected)
+        advanceTimeBy(1_001)
+        runCurrent()
+        verify(exactly = 2) { stream.stream(any()) }
+    }
+
+    @Test fun `temporary stream error retains baseline despite fallback replacing visible rows`() = regression {
+        val model = torrents()
+        runCurrent()
+        events.emit(StreamEvent.Snapshot(StreamPayload(data = TorrentResponse(
+            torrents = listOf(Torrent(hash = "a", name = "baseline"), Torrent(hash = "b", name = "before")), total = 2),
+            version = StreamVersion(1, 1))))
+        events.emit(StreamEvent.Failed("temporary", 5))
+        events.emit(StreamEvent.Heartbeat)
+        runCurrent()
+        advanceTimeBy(3_001)
+        runCurrent()
+        assertEquals("fresh", model.state.value.torrents.single().name)
+        assertFalse(model.state.value.streamConnected)
+        events.emit(StreamEvent.Delta(StreamPayload(data = TorrentResponse(
+            torrents = listOf(Torrent(hash = "b", name = "after")), total = 2,
+            stats = TorrentStats(totalDownloadSpeed = 777), serverState = ServerState(freeSpaceOnDisk = 123)),
+            version = StreamVersion(1, 2), delta = StreamDelta(baseVersion = StreamVersion(1, 1)))))
+        runCurrent()
+        assertEquals(listOf("baseline", "after"), model.state.value.torrents.map { it.name })
+        assertEquals(777L, model.state.value.stats?.totalDownloadSpeed)
+        assertEquals(123L, model.state.value.serverState?.freeSpaceOnDisk)
+        assertTrue(model.state.value.streamConnected)
+        verify(exactly = 1) { stream.stream(any()) }
+    }
+
+    @Test fun `stream completion reconnects and snapshot clears removed selection`() = regression {
+        every { stream.stream(any()) } returns flowOf(StreamEvent.Snapshot(StreamPayload(
+            data = TorrentResponse(torrents = listOf(Torrent(hash = "hash")), total = 1))))
+        val model = torrents()
+        runCurrent()
+        model.enterSelection("hash")
+        every { stream.stream(any()) } returns flowOf(StreamEvent.Snapshot(StreamPayload(data = TorrentResponse())))
+        advanceTimeBy(1_001)
+        runCurrent()
+        assertTrue(model.state.value.torrents.isEmpty())
+        assertFalse(model.state.value.selectionMode)
+        assertTrue(model.state.value.selection.isEmpty())
+        verify(exactly = 2) { stream.stream(any()) }
+    }
+
     @Test fun `peers load without waiting for slow header properties`() = regression {
         coEvery { repository.torrentProperties(any(), any()) } coAnswers { awaitCancellation() }
         val model = detail()

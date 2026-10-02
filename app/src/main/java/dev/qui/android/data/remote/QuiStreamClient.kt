@@ -26,6 +26,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.BufferedSource
 import java.net.URLEncoder
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -55,7 +56,15 @@ data class StreamMeta(
 )
 
 @Serializable
-data class StreamDelta(val order: List<String>? = null)
+data class StreamVersion(val major: Long = 0, val minor: Long = 0) {
+    val isValid: Boolean get() = major > 0 && minor > 0
+}
+
+@Serializable
+data class StreamDelta(
+    val order: List<String>? = null,
+    val baseVersion: StreamVersion? = null,
+)
 
 @Serializable
 data class StreamPayload(
@@ -64,6 +73,7 @@ data class StreamPayload(
     val delta: StreamDelta? = null,
     val meta: StreamMeta? = null,
     val error: String? = null,
+    val version: StreamVersion? = null,
 )
 
 sealed interface StreamEvent {
@@ -129,18 +139,21 @@ class QuiStreamClient @Inject constructor(
             try {
                 call.execute().use { response ->
                     if (!response.isSuccessful) {
-                        trySend(StreamEvent.Failed("HTTP ${response.code}", null))
+                        send(StreamEvent.Failed("HTTP ${response.code}", null))
                         return@use
                     }
                     val source = response.body?.source() ?: return@use
                     readEvents(source) { event, data ->
                         if (!isActive) return@readEvents false
-                        dispatch(event, data)?.let { trySend(it) }
+                        dispatch(event, data)?.let { send(it) }
                         true
                     }
                 }
             } catch (e: Exception) {
-                if (isActive) trySend(StreamEvent.Failed(e.message ?: "stream failed", null))
+                if (isActive) send(StreamEvent.Failed(e.message ?: "stream failed", null))
+            } finally {
+                // EOF and HTTP failures must complete the flow so the caller can reconnect.
+                close()
             }
         }
 
@@ -152,8 +165,13 @@ class QuiStreamClient @Inject constructor(
 
     private fun dispatch(event: String, data: String): StreamEvent? {
         if (event == "heartbeat") return StreamEvent.Heartbeat
-        val payload = runCatching { json.decodeFromString<StreamPayload>(data) }.getOrNull()
-            ?: return null
+        if (event.isNotEmpty() && event !in setOf("init", "update", "delta", "stream-error")) return null
+        // Silently dropping a malformed data frame loses the baseline on older servers.
+        val payload = try {
+            json.decodeFromString<StreamPayload>(data)
+        } catch (e: Exception) {
+            throw IOException("Invalid torrent stream frame", e)
+        }
 
         return when (event.ifEmpty { payload.type }) {
             "init", "update" -> StreamEvent.Snapshot(payload)
@@ -171,9 +189,9 @@ class QuiStreamClient @Inject constructor(
      * Minimal SSE framing: accumulate `event:` and `data:` lines until a blank line.
      * Multiple `data:` lines in one frame are joined with newlines, per the spec.
      */
-    private inline fun readEvents(
+    private suspend fun readEvents(
         source: BufferedSource,
-        onEvent: (event: String, data: String) -> Boolean,
+        onEvent: suspend (event: String, data: String) -> Boolean,
     ) {
         var eventName = ""
         val dataLines = StringBuilder()

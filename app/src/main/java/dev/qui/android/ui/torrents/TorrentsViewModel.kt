@@ -347,6 +347,7 @@ class TorrentsViewModel @Inject constructor(
         streamRevision = 0L
         val unified = _state.value.unifiedScope
         val instanceId = if (unified) 0 else _state.value.selectedInstanceId ?: return
+        _state.update { it.copy(streamConnected = false) }
 
         // A REST fetch fills the list immediately; the stream then keeps it live. This
         // is the same ordering the web UI uses so the screen is never blank while the
@@ -354,8 +355,17 @@ class TorrentsViewModel @Inject constructor(
         requestPage()
 
         streamJob = viewModelScope.launch {
+            // A heartbeat only proves the socket is alive. Poll until a usable
+            // snapshot arrives, and during server errors or reconnection backoff.
+            launch {
+                while (true) {
+                    delay(preferences.value.refreshSeconds.coerceAtLeast(2) * 1000L)
+                    if (!_state.value.streamConnected && pageJob?.isActive != true) requestPage()
+                }
+            }
             var backoffSeconds = 1L
             while (true) {
+                val baseline = StreamSnapshot()
                 val current = _state.value
                 val subscription = StreamSubscription(
                     key = if (unified) "android-unified" else "android-${current.selectedInstanceId}",
@@ -373,9 +383,20 @@ class TorrentsViewModel @Inject constructor(
                 try {
                     streamClient.stream(listOf(subscription)).collect { event ->
                         if (generation != queryGeneration) return@collect
-                        backoffSeconds = 1
                         lastEventAt = System.currentTimeMillis()
-                        handleStreamEvent(event)
+                        when (event) {
+                            is StreamEvent.Snapshot -> {
+                                val data = baseline.accept(event.payload, delta = false)
+                                handleStreamEvent(StreamEvent.Snapshot(event.payload.copy(data = data)))
+                                backoffSeconds = 1
+                            }
+                            is StreamEvent.Delta -> {
+                                val data = baseline.accept(event.payload, delta = true)
+                                handleStreamEvent(StreamEvent.Snapshot(event.payload.copy(data = data)))
+                                backoffSeconds = 1
+                            }
+                            else -> handleStreamEvent(event)
+                        }
                     }
                 } catch (cancelled: CancellationException) {
                     throw cancelled
@@ -417,53 +438,20 @@ class TorrentsViewModel @Inject constructor(
                         isRefreshing = false,
                         streamConnected = true,
                         error = null,
+                        selection = current.selection.intersect(data.rows.map { it.key }.toSet()),
+                        selectionMode = current.selectionMode && current.selection.any { key -> data.rows.any { it.key == key } },
                     )
                 }
             }
 
-            is StreamEvent.Delta -> {
-                val data = event.payload.data ?: return
-                streamRevision++
-                _state.update { current -> current.applyDelta(data.rows, event.payload.delta?.order) }
-            }
+            is StreamEvent.Delta -> error("Deltas must be reconstructed from their stream baseline")
 
             is StreamEvent.Failed -> _state.update {
                 it.copy(streamConnected = false, isLoading = false, isRefreshing = false)
             }
 
-            StreamEvent.Heartbeat -> _state.update { it.copy(streamConnected = true) }
+            StreamEvent.Heartbeat -> Unit
         }
-    }
-
-    /**
-     * Applies a delta frame the way qui's stream-merge does: changed rows are patched in
-     * place, and `order` — sent only when membership or ordering changed — becomes the
-     * new sequence, dropping rows that left the page.
-     */
-    private fun TorrentsUiState.applyDelta(
-        changed: List<Torrent>,
-        order: List<String>?,
-    ): TorrentsUiState {
-        if (changed.isEmpty() && order == null) return this
-
-        val byKey = torrents.associateByTo(LinkedHashMap()) { it.key }
-        changed.forEach { byKey[it.key] = it }
-
-        val next = if (order != null) {
-            order.mapNotNull { byKey[it] }
-        } else {
-            torrents.map { byKey[it.key] ?: it }
-        }
-
-        return copy(
-            torrents = next,
-            streamConnected = true,
-            isLoading = false,
-            isRefreshing = false,
-            // Selections referring to rows that left the page would silently act on
-            // nothing, so they are pruned here.
-            selection = selection.intersect(next.map { it.key }.toSet()),
-        )
     }
 
     private fun requestPage() {

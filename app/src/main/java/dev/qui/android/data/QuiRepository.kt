@@ -38,9 +38,14 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.ResponseBody
+import retrofit2.HttpException
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -156,13 +161,11 @@ class QuiRepository @Inject constructor(
         instanceId: Int,
         values: Map<String, Any?>,
     ): Result<Unit> = io { api ->
-        api.updatePreferences(instanceId, values)
-        Unit
+        api.updatePreferences(instanceId, values).requireSuccess()
     }
 
     suspend fun toggleAltSpeedLimits(instanceId: Int): Result<Unit> = io { api ->
-        api.toggleAltSpeedLimits(instanceId)
-        Unit
+        api.toggleAltSpeedLimits(instanceId).requireSuccess()
     }
 
     // ---- torrents ----
@@ -208,8 +211,7 @@ class QuiRepository @Inject constructor(
     }
 
     suspend fun bulkAction(instanceId: Int, request: BulkActionRequest): Result<Unit> = io { api ->
-        api.bulkAction(instanceId, request)
-        Unit
+        api.bulkAction(instanceId, request).requireSuccess()
     }
 
     /** Convenience wrapper for the action menu; [targets] is only needed cross-instance. */
@@ -288,7 +290,7 @@ class QuiRepository @Inject constructor(
         io { api -> api.torrentTrackers(instanceId, hash) }
 
     suspend fun addTrackers(instanceId: Int, hash: String, urls: String): Result<Unit> =
-        io { api -> api.addTrackers(instanceId, hash, TrackerUrlsRequest(urls)); Unit }
+        io { api -> api.addTrackers(instanceId, hash, TrackerUrlsRequest(urls)).requireSuccess() }
 
     suspend fun editTracker(
         instanceId: Int,
@@ -296,8 +298,7 @@ class QuiRepository @Inject constructor(
         oldUrl: String,
         newUrl: String,
     ): Result<Unit> = io { api ->
-        api.editTracker(instanceId, hash, EditTrackerRequest(oldUrl, newUrl))
-        Unit
+        api.editTracker(instanceId, hash, EditTrackerRequest(oldUrl, newUrl)).requireSuccess()
     }
 
     /** qui returns peers keyed by "ip:port" or pre-sorted; both are flattened here. */
@@ -321,12 +322,11 @@ class QuiRepository @Inject constructor(
         indexes: List<Int>,
         priority: Int,
     ): Result<Unit> = io { api ->
-        api.setFilePriority(instanceId, hash, FilePriorityRequest(indexes, priority))
-        Unit
+        api.setFilePriority(instanceId, hash, FilePriorityRequest(indexes, priority)).requireSuccess()
     }
 
     suspend fun renameTorrent(instanceId: Int, hash: String, name: String): Result<Unit> =
-        io { api -> api.renameTorrent(instanceId, hash, RenameRequest(name)); Unit }
+        io { api -> api.renameTorrent(instanceId, hash, RenameRequest(name)).requireSuccess() }
 
     suspend fun renameFile(
         instanceId: Int,
@@ -334,8 +334,7 @@ class QuiRepository @Inject constructor(
         oldPath: String,
         newPath: String,
     ): Result<Unit> = io { api ->
-        api.renameFile(instanceId, hash, RenamePathRequest(oldPath, newPath))
-        Unit
+        api.renameFile(instanceId, hash, RenamePathRequest(oldPath, newPath)).requireSuccess()
     }
 
     suspend fun renameFolder(
@@ -344,8 +343,7 @@ class QuiRepository @Inject constructor(
         oldPath: String,
         newPath: String,
     ): Result<Unit> = io { api ->
-        api.renameFolder(instanceId, hash, RenamePathRequest(oldPath, newPath))
-        Unit
+        api.renameFolder(instanceId, hash, RenamePathRequest(oldPath, newPath)).requireSuccess()
     }
 
     // ---- categories, tags, trackers ----
@@ -378,6 +376,31 @@ class QuiRepository @Inject constructor(
     suspend fun serverVersion() = io { api -> api.version() }
 
     suspend fun latestVersion() = io { api -> api.latestVersion() }
+
+    /** Retrofit only throws for non-2xx responses when the API returns a decoded body. */
+    private fun Response<*>.requireSuccess() {
+        try {
+            if (!isSuccessful) {
+                val text = errorBody()?.string()?.trim().orEmpty()
+                val fields = runCatching { json.parseToJsonElement(text) as? JsonObject }.getOrNull()
+                val detail = sequenceOf("error", "message")
+                    .mapNotNull { (fields?.get(it) as? JsonPrimitive)?.takeIf { value -> value.isString }?.content }
+                    .firstOrNull { it.isNotBlank() }
+                    ?: text
+                val message = "HTTP ${code()}" + detail.take(512).takeIf { it.isNotBlank() }
+                    ?.let { ": $it" }.orEmpty()
+                throw ApiResponseException(this, message)
+            }
+        } finally {
+            (body() as? ResponseBody)?.close()
+            errorBody()?.close()
+        }
+    }
+
+    private class ApiResponseException(
+        response: Response<*>,
+        override val message: String,
+    ) : HttpException(response)
 
     private suspend inline fun <T> io(
         crossinline block: suspend (dev.qui.android.data.remote.QuiApi) -> T,

@@ -148,13 +148,15 @@ class SessionCookieJar(private val session: SessionStore) : okhttp3.CookieJar {
 }
 
 /**
- * Attaches whichever credential is stored. qui checks `X-API-Key` first, then the
- * session cookie, so sending both is safe and keeps the app working right after
- * a password login and after an API key is issued.
+ * Attaches stored credentials. qui gives `X-API-Key` precedence over the session
+ * cookie, and rejects an invalid key without falling back to the cookie.
  */
 class AuthInterceptor(private val session: SessionStore) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-        val builder = chain.request().newBuilder()
+        val request = chain.request()
+        val builder = request.newBuilder()
+            // Since qui v1.30.0, cookie-authenticated writes require this header.
+            .header("X-Requested-With", "XMLHttpRequest")
 
         runBlocking {
             session.currentApiKey()?.takeIf { it.isNotBlank() }?.let {
@@ -165,7 +167,10 @@ class AuthInterceptor(private val session: SessionStore) : Interceptor {
             }
         }
 
-        builder.header("Accept", "application/json")
+        // Keep content negotiation chosen by callers, especially SSE streams.
+        if (request.header("Accept") == null) {
+            builder.header("Accept", "application/json")
+        }
         return chain.proceed(builder.build())
     }
 }

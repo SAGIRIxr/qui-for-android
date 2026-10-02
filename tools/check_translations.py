@@ -3,8 +3,8 @@
 Fail if a locale has drifted from the English source.
 
 Adding a string to values/strings.xml and forgetting to re-run
-generate_translations.py leaves that string English on nine of the ten
-languages, which nothing else catches. This needs no qui checkout, so CI can run
+generate_translations.py leaves that string English in translated locales,
+which nothing else catches. This needs no qui checkout, so CI can run
 it on every push.
 
 Usage: python tools/check_translations.py
@@ -16,6 +16,8 @@ import re
 import sys
 from pathlib import Path
 from xml.etree import ElementTree
+
+from generate_translations import LANGUAGES
 
 FORMAT_ARG = re.compile(r"%\d+\$[sd]")
 
@@ -48,6 +50,22 @@ def main() -> int:
         print("No translated locales found.")
         return 1
 
+    expected_dirs = {qualifier for _, qualifier in LANGUAGES}
+    actual_dirs = {directory.name for directory in locales}
+    for missing in sorted(expected_dirs - actual_dirs):
+        problems.append(f"{missing}: missing translated strings.xml")
+    for extra in sorted(actual_dirs - expected_dirs):
+        problems.append(f"{extra}: locale not registered in the translation generator")
+
+    expected_tags = {"en", *(lang for lang, _ in LANGUAGES)}
+    locale_config = ElementTree.parse(res / "xml" / "locales_config.xml").getroot()
+    registered_tags = {
+        node.get("{http://schemas.android.com/apk/res/android}name")
+        for node in locale_config.findall("locale")
+    }
+    if registered_tags != expected_tags:
+        problems.append("locales_config.xml: languages differ from the translation generator")
+
     for locale_dir in locales:
         strings, plurals = read(locale_dir / "strings.xml")
         name = locale_dir.name
@@ -60,14 +78,21 @@ def main() -> int:
             if sorted(FORMAT_ARG.findall(english)) != sorted(FORMAT_ARG.findall(strings[key])):
                 problems.append(f"{name}: format arguments differ for string/{key}")
 
-        for key in base_plurals:
+        for key, english_forms in base_plurals.items():
             if key not in plurals:
                 problems.append(f"{name}: missing plurals/{key}")
-            elif "other" not in plurals[key]:
+                continue
+            if "other" not in plurals[key]:
                 problems.append(f"{name}: plurals/{key} has no 'other' quantity")
+            for quantity, translated in plurals[key].items():
+                english = english_forms.get(quantity, english_forms["other"])
+                if sorted(FORMAT_ARG.findall(english)) != sorted(FORMAT_ARG.findall(translated)):
+                    problems.append(f"{name}: format arguments differ for plurals/{key}/{quantity}")
 
         for key in strings.keys() - base_strings.keys():
             problems.append(f"{name}: string/{key} is not in the English source")
+        for key in plurals.keys() - base_plurals.keys():
+            problems.append(f"{name}: plurals/{key} is not in the English source")
 
     if problems:
         print(f"{len(problems)} problem(s):")

@@ -31,7 +31,7 @@ qui 没有官方 iOS 应用,手机上是以 PWA 形式安装的。本项目就�
   配置。
 - **添加种子** —— 磁力链接、URL 和 `.torrent` 文件,包括从其它应用分享过来的磁力链和文件。
 - **qui 的全部九套主题**及其配色变体,支持浅色/深色/跟随系统,以及可选的 Material You 动态取色。
-- **十种语言** —— 和 qui 提供的完全一致。首次启动自动匹配设备语言,也可在设置里覆盖。
+- **十一种语言** —— 和 qui v1.30.0 提供的完全一致。首次启动自动匹配设备语言,也可在设置里覆盖。
 - **隐身模式** —— 用与 qui 相同的哈希算法,把名称、分类、标签和 Tracker 替换成一套确定性的
   Linux 发行版词汇,并在仪表盘上遮蔽实例地址。和 qui 一样,可从列表页直接开关。
 - **四个桌面小部件** —— 见 [小部件](#小部件)。
@@ -88,7 +88,7 @@ qui 没有官方 iOS 应用,手机上是以 PWA 形式安装的。本项目就�
 
 ## 语言
 
-qui 支持的十种语言:`en`、`cs`、`de`、`fr`、`it`、`ko`、`pt-BR`、`uk`、`zh-CN`、`zh-TW`。
+qui 支持的十一种语言:`en`、`ca`、`cs`、`de`、`fr`、`it`、`ko`、`pt-BR`、`uk`、`zh-CN`、`zh-TW`。
 首次启动时安卓会挑选与设备语言最接近的一个,**设置 → 语言**可以覆盖。
 
 翻译由 `tools/generate_translations.py` 生成。只要同一句英文在 qui 自己的语言文件里出现过,
@@ -208,7 +208,7 @@ Windows 下可运行 `powershell -File tools/setup-signing.ps1`：首次生成�
 
 ## 翻译
 
-英文在 `app/src/main/res/values/strings.xml`,是唯一需要手工编辑的文件。另外九种语言都是生成的:
+英文在 `app/src/main/res/values/strings.xml`,是唯一需要手工编辑的文件。另外十种语言都是生成的:
 
 ```bash
 python tools/generate_translations.py ../qui-upstream

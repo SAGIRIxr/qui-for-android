@@ -1,5 +1,9 @@
 {
+  "nav_loading": {
+    "ca": "S'està carregant…"
+  },
   "operation_failed": {
+    "ca": "L'operació ha fallat. Comprova les dades i torna-ho a provar.",
     "zh-CN": "操作失败，请检查后重试。", "zh-TW": "操作失敗，請檢查後重試。",
     "cs": "Operace selhala. Zkontrolujte údaje a zkuste to znovu.",
     "de": "Vorgang fehlgeschlagen. Bitte prüfen und erneut versuchen.",
@@ -10,6 +14,7 @@
     "uk": "Операція не вдалася. Перевірте дані та спробуйте ще раз."
   },
   "instance_unavailable": {
+    "ca": "Aquest servidor ja no està disponible.",
     "zh-CN": "此服务器已不可用。", "zh-TW": "此伺服器已無法使用。",
     "cs": "Tento server již není dostupný.", "de": "Dieser Server ist nicht mehr verfügbar.",
     "fr": "Ce serveur n’est plus disponible.", "it": "Questo server non è più disponibile.",
@@ -17,6 +22,7 @@
     "uk": "Цей сервер більше не доступний."
   },
   "add_partial_result": {
+    "ca": "Se n'han afegit %1$d. Revisa els elements restants abans de tornar-ho a provar.",
     "zh-CN": "已添加 %1$d 个。请检查剩余项目后重试。", "zh-TW": "已新增 %1$d 個。請檢查剩餘項目後重試。",
     "cs": "Přidáno: %1$d. Před dalším pokusem zkontrolujte zbývající položky.",
     "de": "%1$d hinzugefügt. Verbleibende Einträge vor dem erneuten Versuch prüfen.",
@@ -38,6 +44,7 @@
     "uk": "Типова"
   },
   "theme_default_description": {
+    "ca": "L'aspecte original de qui",
     "zh-CN": "qui 的经典原始外观",
     "zh-TW": "qui 的經典原始外觀",
     "cs": "Původní vzhled qui",
@@ -49,6 +56,7 @@
     "uk": "Оригінальний вигляд qui"
   },
   "theme_autobrr_name": {
+    "ca": "autobrr",
     "zh-CN": "autobrr",
     "zh-TW": "autobrr",
     "cs": "autobrr",
@@ -60,6 +68,7 @@
     "uk": "autobrr"
   },
   "theme_autobrr_description": {
+    "ca": "Tema net inspirat en el projecte autobrr",
     "zh-CN": "灵感源自 autobrr 项目的清爽主题",
     "zh-TW": "靈感源自 autobrr 專案的清爽主題",
     "cs": "Čistý motiv inspirovaný projektem autobrr",
@@ -71,6 +80,7 @@
     "uk": "Лаконічна тема, натхненна проєктом autobrr"
   },
   "theme_dragon_name": {
+    "ca": "Kanagawa Dragon",
     "zh-CN": "神奈川·龙",
     "zh-TW": "神奈川·龍",
     "cs": "Kanagawa Dragon",
@@ -82,6 +92,7 @@
     "uk": "Kanagawa Dragon"
   },
   "theme_dragon_description": {
+    "ca": "Tema fosc basat en la paleta Kanagawa Dragon, combinat amb Kanagawa Lotus per al mode clar",
     "zh-CN": "深色模式采用神奈川·龙配色，浅色模式搭配神奈川·莲配色",
     "zh-TW": "深色模式採用神奈川·龍配色，淺色模式搭配神奈川·蓮配色",
     "cs": "Tmavý motiv s paletou Kanagawa Dragon, doplněný paletou Kanagawa Lotus pro světlý režim",
@@ -93,6 +104,7 @@
     "uk": "Темна тема з палітрою Kanagawa Dragon у поєднанні з Kanagawa Lotus для світлого режиму"
   },
   "theme_kyle_name": {
+    "ca": "The Kyle",
     "zh-CN": "凯尔",
     "zh-TW": "凱爾",
     "cs": "The Kyle",
@@ -104,6 +116,7 @@
     "uk": "The Kyle"
   },
   "theme_kyle_description": {
+    "ca": "El paradís magenta d'en Kyle: atrevit i vibrant",
     "zh-CN": "凯尔的洋红色乐园，大胆而鲜明",
     "zh-TW": "凱爾的洋紅色樂園，大膽而鮮明",
     "cs": "Kyleův purpurový ráj — odvážný a výrazný",
@@ -115,6 +128,7 @@
     "uk": "Пурпуровий рай Кайла — сміливий та яскравий"
   },
   "theme_minimal_name": {
+    "ca": "Minimalista",
     "zh-CN": "极简",
     "zh-TW": "極簡",
     "cs": "Minimalistický",
@@ -126,6 +140,7 @@
     "uk": "Мінімалістична"
   },
   "theme_minimal_description": {
+    "ca": "Tema net i minimalista amb colors neutres",
     "zh-CN": "采用中性色调的清爽极简主题",
     "zh-TW": "採用中性色調的清爽極簡主題",
     "cs": "Čistý minimalistický motiv s neutrálními barvami",
@@ -137,6 +152,7 @@
     "uk": "Лаконічна мінімалістична тема з нейтральними кольорами"
   },
   "theme_napster_name": {
+    "ca": "Napster",
     "zh-CN": "Napster",
     "zh-TW": "Napster",
     "cs": "Napster",
@@ -148,6 +164,7 @@
     "uk": "Napster"
   },
   "theme_napster_description": {
+    "ca": "Tema retro inspirat en Napster v2.0 BETA 7, de l'any 2000",
     "zh-CN": "灵感源自 2000 年前后 Napster v2.0 BETA 7 的复古主题",
     "zh-TW": "靈感源自 2000 年前後 Napster v2.0 BETA 7 的復古主題",
     "cs": "Retro motiv inspirovaný Napsterem v2.0 BETA 7 z doby kolem roku 2000",
@@ -159,6 +176,7 @@
     "uk": "Ретротема, натхненна Napster v2.0 BETA 7 приблизно 2000 року"
   },
   "theme_nightwalker_name": {
+    "ca": "Nightwalker",
     "zh-CN": "夜行者",
     "zh-TW": "夜行者",
     "cs": "Noční poutník",
@@ -170,6 +188,7 @@
     "uk": "Нічний мандрівник"
   },
   "theme_nightwalker_description": {
+    "ca": "Tema fosc amb matisos blaus subtils",
     "zh-CN": "带有淡淡蓝色调的深色主题",
     "zh-TW": "帶有淡淡藍色調的深色主題",
     "cs": "Tmavý motiv s jemnými modrými odstíny",
@@ -181,6 +200,7 @@
     "uk": "Темна тема з ледь помітними синіми відтінками"
   },
   "theme_swizzin_name": {
+    "ca": "Swizzin",
     "zh-CN": "Swizzin",
     "zh-TW": "Swizzin",
     "cs": "Swizzin",
@@ -192,6 +212,7 @@
     "uk": "Swizzin"
   },
   "theme_swizzin_description": {
+    "ca": "Tema Swizzin · swizzin.ltd",
     "zh-CN": "Swizzin 主题 · swizzin.ltd",
     "zh-TW": "Swizzin 主題 · swizzin.ltd",
     "cs": "Motiv Swizzin · swizzin.ltd",
@@ -203,6 +224,7 @@
     "uk": "Тема Swizzin · swizzin.ltd"
   },
   "theme_wave_name": {
+    "ca": "Kanagawa Wave",
     "zh-CN": "神奈川·浪",
     "zh-TW": "神奈川·浪",
     "cs": "Kanagawa Wave",
@@ -214,6 +236,7 @@
     "uk": "Kanagawa Wave"
   },
   "theme_wave_description": {
+    "ca": "Tema fosc basat en la paleta Kanagawa Wave, combinat amb Kanagawa Lotus per al mode clar",
     "zh-CN": "深色模式采用神奈川·浪配色，浅色模式搭配神奈川·莲配色",
     "zh-TW": "深色模式採用神奈川·浪配色，淺色模式搭配神奈川·蓮配色",
     "cs": "Tmavý motiv s paletou Kanagawa Wave, doplněný paletou Kanagawa Lotus pro světlý režim",
@@ -236,6 +259,7 @@
     "zh-TW": "正在執行…"
   },
   "operation_success": {
+    "ca": "Operació completada",
     "cs": "Operace dokončena",
     "de": "Vorgang abgeschlossen",
     "fr": "Opération terminée",
@@ -254,6 +278,7 @@
   ],
 
   "add_to_qui": {
+    "ca": "Afegeix a qui",
     "cs": "Přidat do qui",
     "de": "Zu qui hinzufügen",
     "fr": "Ajouter à qui",
@@ -266,6 +291,7 @@
   },
 
   "action_top_of_queue": {
+    "ca": "Mou al principi de la cua",
     "cs": "Na začátek fronty",
     "de": "An den Anfang der Warteschlange",
     "fr": "En haut de la file",
@@ -277,6 +303,7 @@
     "zh-TW": "移到佇列首位"
   },
   "action_bottom_of_queue": {
+    "ca": "Mou al final de la cua",
     "cs": "Na konec fronty",
     "de": "Ans Ende der Warteschlange",
     "fr": "En bas de la file",
@@ -288,6 +315,7 @@
     "zh-TW": "移到佇列末尾"
   },
   "action_more": {
+    "ca": "Més accions",
     "cs": "Další akce",
     "de": "Weitere Aktionen",
     "fr": "Plus d'actions",
@@ -300,6 +328,7 @@
   },
 
   "add_magnet_or_url": {
+    "ca": "Enllaç magnet o URL",
     "cs": "Magnet nebo URL",
     "de": "Magnet oder URL",
     "fr": "Magnet ou URL",
@@ -311,6 +340,7 @@
     "zh-TW": "Magnet 連結或 URL"
   },
   "add_choose_files": {
+    "ca": "Tria fitxers .torrent",
     "cs": "Vybrat soubory .torrent",
     "de": ".torrent-Dateien auswählen",
     "fr": "Choisir des fichiers .torrent",
@@ -322,6 +352,7 @@
     "zh-TW": "選擇 .torrent 檔案"
   },
   "add_first_last_piece": {
+    "ca": "Primera i última peça abans que les altres",
     "cs": "Nejprve první a poslední část",
     "de": "Erstes und letztes Teil zuerst",
     "fr": "Premier et dernier fragment en priorité",
@@ -334,6 +365,7 @@
   },
 
   "common_none": {
+    "ca": "(cap)",
     "cs": "(žádná)",
     "de": "(keine)",
     "fr": "(aucune)",
@@ -345,6 +377,7 @@
     "zh-TW": "（無）"
   },
   "common_or_type_new": {
+    "ca": "O escriu-ne un de nou",
     "cs": "Nebo zadejte novou",
     "de": "Oder eine neue eingeben",
     "fr": "Ou saisissez-en une nouvelle",
@@ -357,6 +390,7 @@
   },
 
   "dashboard_all_clients": {
+    "ca": "Tots els clients",
     "cs": "Všichni klienti",
     "de": "Alle Clients",
     "fr": "Tous les clients",
@@ -368,6 +402,7 @@
     "zh-TW": "所有用戶端"
   },
   "dashboard_session": {
+    "ca": "Sessió",
     "cs": "Relace",
     "de": "Sitzung",
     "fr": "Session",
@@ -379,6 +414,7 @@
     "zh-TW": "本次"
   },
   "dashboard_all_time": {
+    "ca": "Des de l'inici",
     "cs": "Celkem",
     "de": "Insgesamt",
     "fr": "Depuis toujours",
@@ -390,6 +426,7 @@
     "zh-TW": "累計"
   },
   "dashboard_alt_speed_limits": {
+    "ca": "Límits de velocitat alternatius",
     "cs": "Alternativní rychlostní limity",
     "de": "Alternative Geschwindigkeitsbegrenzungen",
     "fr": "Limites de vitesse alternatives",
@@ -401,6 +438,7 @@
     "zh-TW": "備用速度限制"
   },
   "search_recent": {
+    "ca": "Recents",
     "cs": "Nedávné",
     "de": "Zuletzt",
     "fr": "Récents",
@@ -412,6 +450,7 @@
     "zh-TW": "最近"
   },
   "search_clear_history": {
+    "ca": "Esborra l'historial de cerca",
     "cs": "Vymazat historii hledání",
     "de": "Suchverlauf löschen",
     "fr": "Effacer l'historique de recherche",
@@ -423,6 +462,7 @@
     "zh-TW": "清除搜尋記錄"
   },
   "search_fuzzy_example": {
+    "ca": "\"breaking bad\" troba \"Breaking.Bad\"",
     "cs": "„breaking bad“ najde „Breaking.Bad“",
     "de": "„breaking bad“ findet „Breaking.Bad“",
     "fr": "« breaking bad » trouve « Breaking.Bad »",
@@ -434,6 +474,7 @@
     "zh-TW": "輸入「breaking bad」可符合「Breaking.Bad」"
   },
   "scope_back_to_top": {
+    "ca": "Vés a dalt de tot",
     "cs": "Zpět nahoru",
     "de": "Nach oben",
     "fr": "Retour en haut",
@@ -445,6 +486,7 @@
     "zh-TW": "回到頂端"
   },
   "update_version": {
+    "ca": "Versió %1$s",
     "cs": "Verze %1$s",
     "de": "Version %1$s",
     "fr": "Version %1$s",
@@ -456,6 +498,7 @@
     "zh-TW": "版本 %1$s"
   },
   "update_qui_server": {
+    "ca": "Hi ha una versió més recent del servidor qui",
     "cs": "Je dostupný novější server qui",
     "de": "Ein neuerer qui-Server ist verfügbar",
     "fr": "Un serveur qui plus récent est disponible",
@@ -467,6 +510,7 @@
     "zh-TW": "qui 伺服器有新版本"
   },
   "update_check": {
+    "ca": "Comprova si hi ha actualitzacions",
     "cs": "Zkontrolovat aktualizace",
     "de": "Nach Updates suchen",
     "fr": "Rechercher des mises à jour",
@@ -478,6 +522,7 @@
     "zh-TW": "檢查更新"
   },
   "storage_tracker_icons": {
+    "ca": "Icones dels trackers",
     "cs": "Ikony trackerů",
     "de": "Tracker-Symbole",
     "fr": "Icônes de trackers",
@@ -489,6 +534,7 @@
     "zh-TW": "Tracker 圖示"
   },
   "storage_entries": {
+    "ca": "%1$d entrades",
     "cs": "Položek: %1$d",
     "de": "%1$d Einträge",
     "fr": "%1$d entrées",
@@ -500,6 +546,7 @@
     "zh-TW": "%1$d 項"
   },
   "storage_cleared": {
+    "ca": "Esborrat",
     "cs": "Vymazáno",
     "de": "Geleert",
     "fr": "Effacé",
@@ -511,6 +558,7 @@
     "zh-TW": "已清除"
   },
   "widget_name": {
+    "ca": "Estadístiques de qui",
     "cs": "Statistiky qui",
     "de": "qui-Statistik",
     "fr": "Statistiques qui",
@@ -522,6 +570,7 @@
     "zh-TW": "qui 統計"
   },
   "widget_description": {
+    "ca": "4×2: velocitats, recomptes dels quatre estats, mida total i espai lliure.",
     "cs": "4×2 — rychlosti, všechny čtyři počty stavů, celková velikost a volné místo.",
     "de": "4×2 — Geschwindigkeiten, alle vier Statuszahlen, Gesamtgröße und freier Speicher.",
     "fr": "4×2 — vitesses, les quatre compteurs d'état, taille totale et espace libre.",
@@ -533,6 +582,7 @@
     "zh-TW": "4×2 — 速度、四種狀態計數、總大小和可用空間。"
   },
   "widget_not_signed_in": {
+    "ca": "Inicia la sessió a qui",
     "cs": "Přihlaste se do qui",
     "de": "Bei qui anmelden",
     "fr": "Connectez-vous à qui",
@@ -557,6 +607,7 @@
   },
 
   "widget_torrents_name": {
+    "ca": "Transferències de qui",
     "cs": "Přenosy qui",
     "de": "qui-Übertragungen",
     "fr": "Transferts qui",
@@ -569,6 +620,7 @@
   },
 
   "widget_torrents_description": {
+    "ca": "4×4: transferències en curs amb el progrés. Toca una fila per obrir-la.",
     "cs": "4×4 — co se právě přenáší, včetně průběhu. Klepnutím na řádek jej otevřete.",
     "de": "4×4 — was gerade übertragen wird, mit Fortschritt. Auf eine Zeile tippen, um sie zu öffnen.",
     "fr": "4×4 — ce qui est en cours de transfert, avec la progression. Touchez une ligne pour l'ouvrir.",
@@ -581,6 +633,7 @@
   },
 
   "widget_no_active": {
+    "ca": "No hi ha cap transferència en curs",
     "cs": "Nic se nepřenáší",
     "de": "Es wird nichts übertragen",
     "fr": "Aucun transfert en cours",
@@ -593,6 +646,7 @@
   },
 
   "widget_free_space": {
+    "ca": "%1$s lliures",
     "cs": "%1$s volných",
     "de": "%1$s frei",
     "fr": "%1$s libres",
@@ -605,6 +659,7 @@
   },
 
   "widget_stale": {
+    "ca": "Última actualització: %1$s",
     "cs": "Naposledy aktualizováno %1$s",
     "de": "Zuletzt aktualisiert %1$s",
     "fr": "Dernière mise à jour %1$s",
@@ -617,6 +672,7 @@
   },
 
   "widget_refreshing": {
+    "ca": "S'està actualitzant…",
     "cs": "Obnovuji…",
     "de": "Wird aktualisiert…",
     "fr": "Actualisation…",
@@ -629,6 +685,7 @@
   },
 
   "widget_error_offline": {
+    "ca": "No hi ha connexió de xarxa",
     "cs": "Bez připojení k síti",
     "de": "Keine Netzwerkverbindung",
     "fr": "Aucune connexion réseau",
@@ -641,6 +698,7 @@
   },
 
   "widget_error_unauthorized": {
+    "ca": "Torna a iniciar la sessió: el servidor ha rebutjat les credencials desades",
     "cs": "Přihlaste se znovu — server odmítl uložené přihlašovací údaje",
     "de": "Erneut anmelden — der Server hat die gespeicherten Zugangsdaten abgelehnt",
     "fr": "Reconnectez-vous — le serveur a rejeté les identifiants enregistrés",
@@ -653,6 +711,7 @@
   },
 
   "widget_error_timeout": {
+    "ca": "El servidor ha trigat massa a respondre",
     "cs": "Server odpovídal příliš dlouho",
     "de": "Der Server hat zu lange gebraucht",
     "fr": "Le serveur a mis trop de temps à répondre",
@@ -665,6 +724,7 @@
   },
 
   "widget_error_no_response": {
+    "ca": "No ha respost cap client",
     "cs": "Neodpověděl žádný klient",
     "de": "Kein Client hat geantwortet",
     "fr": "Aucun client n'a répondu",
@@ -677,6 +737,7 @@
   },
 
   "widget_error_http": {
+    "ca": "Error del servidor (HTTP %1$s)",
     "cs": "Chyba serveru (HTTP %1$s)",
     "de": "Serverfehler (HTTP %1$s)",
     "fr": "Erreur du serveur (HTTP %1$s)",
@@ -689,6 +750,7 @@
   },
 
   "widget_interval": {
+    "ca": "Actualització en segon pla",
     "cs": "Obnovování na pozadí",
     "de": "Aktualisierung im Hintergrund",
     "fr": "Actualisation en arrière-plan",
@@ -713,6 +775,7 @@
   },
 
   "widget_interval_minutes": {
+    "ca": "%1$d min",
     "cs": "%1$d min",
     "de": "%1$d Min",
     "fr": "%1$d min",
@@ -737,6 +800,7 @@
   },
 
   "widget_interval_note": {
+    "ca": "Android no executa tasques en segon pla amb una freqüència superior a una vegada cada 15 minuts. Obrir l'aplicació o tocar el botó d'actualització del giny l'actualitza immediatament, independentment d'aquesta opció.",
     "cs": "Android nespouští práci na pozadí častěji než jednou za 15 minut. Otevření aplikace a tlačítko obnovení na widgetu jej aktualizují okamžitě, ať je nastaveno cokoli.",
     "de": "Android führt Hintergrundarbeit höchstens alle 15 Minuten aus. Die App zu öffnen und die Aktualisieren-Schaltfläche des Widgets aktualisieren es sofort, unabhängig von dieser Einstellung.",
     "fr": "Android n'exécute pas de tâche en arrière-plan plus souvent que toutes les 15 minutes. Ouvrir l'application et le bouton d'actualisation du widget le mettent à jour immédiatement, quel que soit ce réglage.",
@@ -749,6 +813,7 @@
   },
 
   "torrents_partial_results": {
+    "ca": "Un client no ha respost. Aquesta llista és incompleta",
     "cs": "Jeden klient neodpověděl — seznam je neúplný",
     "de": "Ein Client hat nicht geantwortet — diese Liste ist unvollständig",
     "fr": "Un client n'a pas répondu — cette liste est incomplète",
@@ -761,6 +826,7 @@
   },
 
   "update_from_to": {
+    "ca": "%1$s → %2$s",
     "cs": "%1$s → %2$s",
     "de": "%1$s → %2$s",
     "fr": "%1$s → %2$s",
@@ -773,6 +839,7 @@
   },
 
   "update_notes": {
+    "ca": "Novetats",
     "cs": "Novinky",
     "de": "Neuerungen",
     "fr": "Nouveautés",
@@ -785,6 +852,7 @@
   },
 
   "release_notes_heading": {
+    "ca": "English",
     "cs": "English",
     "de": "English",
     "fr": "English",
@@ -797,6 +865,7 @@
   },
 
   "update_no_notes": {
+    "ca": "No hi ha notes de la versió per a aquesta versió.",
     "cs": "K této verzi nejsou žádné poznámky.",
     "de": "Für diese Version gibt es keine Anmerkungen.",
     "fr": "Aucune note pour cette version.",
@@ -809,6 +878,7 @@
   },
 
   "update_open": {
+    "ca": "Obre la versió",
     "cs": "Otevřít vydání",
     "de": "Release öffnen",
     "fr": "Ouvrir la version",
@@ -821,6 +891,7 @@
   },
 
   "update_later": {
+    "ca": "Més tard",
     "cs": "Později",
     "de": "Später",
     "fr": "Plus tard",
@@ -833,6 +904,7 @@
   },
 
   "update_skip": {
+    "ca": "Omet aquesta versió",
     "cs": "Tuto verzi přeskočit",
     "de": "Diese Version überspringen",
     "fr": "Ignorer cette version",
@@ -845,6 +917,7 @@
   },
 
   "update_auto_check": {
+    "ca": "Comprova en iniciar",
     "cs": "Kontrolovat při spuštění",
     "de": "Beim Start prüfen",
     "fr": "Vérifier au démarrage",
@@ -857,6 +930,7 @@
   },
 
   "update_auto_check_note": {
+    "ca": "Cerca una versió més recent en iniciar l'aplicació. No es baixa res automàticament.",
     "cs": "Při spuštění aplikace hledá novější vydání. Nic se nestahuje automaticky.",
     "de": "Sucht beim Start nach einem neueren Release. Es wird nichts automatisch heruntergeladen.",
     "fr": "Cherche une version plus récente au démarrage. Rien n'est téléchargé automatiquement.",
@@ -869,6 +943,7 @@
   },
 
   "widget_pin_requested": {
+    "ca": "Confirma-ho a la pantalla d'inici per col·locar-lo.",
     "cs": "Potvrďte umístění na ploše.",
     "de": "Zum Platzieren auf dem Startbildschirm bestätigen.",
     "fr": "Confirmez sur l'écran d'accueil pour le placer.",
@@ -881,6 +956,7 @@
   },
 
   "widget_pin_added": {
+    "ca": "S'ha afegit a la pantalla d'inici",
     "cs": "Přidáno na plochu",
     "de": "Zum Startbildschirm hinzugefügt",
     "fr": "Ajouté à l'écran d'accueil",
@@ -893,6 +969,7 @@
   },
 
   "widget_pin_no_response_title": {
+    "ca": "No ha aparegut res?",
     "cs": "Nic se neobjevilo?",
     "de": "Nichts passiert?",
     "fr": "Rien ne s'est passé ?",
@@ -905,6 +982,7 @@
   },
 
   "widget_pin_no_response": {
+    "ca": "Si el llançador no t'ha demanat confirmació, probablement no té permís per crear dreceres a la pantalla d'inici. A Xiaomi, ves a Configuració → Aplicacions → qui → Permisos → Crea dreceres a la pantalla d'inici.\\n\\nTambé pots mantenir premuda la pantalla d'inici i afegir qui des de la llista de ginys.",
     "cs": "Pokud vás plocha nepožádala o potvrzení, aplikaci nejspíš chybí oprávnění vytvářet zástupce na ploše. Na Xiaomi je to Nastavení → Aplikace → qui → Oprávnění → Vytvářet zástupce na ploše.\\n\\nVždy můžete podržet plochu a přidat qui z jejího seznamu widgetů.",
     "de": "Wenn der Launcher nie um Bestätigung gebeten hat, fehlt vermutlich die Berechtigung, Verknüpfungen auf dem Startbildschirm zu erstellen. Auf Xiaomi: Einstellungen → Apps → qui → Berechtigungen → Verknüpfung auf dem Startbildschirm erstellen.\\n\\nDu kannst den Startbildschirm auch gedrückt halten und qui aus der Widget-Liste hinzufügen.",
     "fr": "Si le lanceur ne vous a jamais demandé de confirmer, il manque probablement l'autorisation de créer des raccourcis sur l'écran d'accueil. Sur Xiaomi : Paramètres → Applications → qui → Autorisations → Créer un raccourci sur l'écran d'accueil.\\n\\nVous pouvez toujours appuyer longuement sur l'écran d'accueil et ajouter qui depuis sa liste de widgets.",
@@ -917,6 +995,7 @@
   },
 
   "widget_pin_open_settings": {
+    "ca": "Configuració de l'aplicació",
     "cs": "Nastavení aplikace",
     "de": "App-Einstellungen",
     "fr": "Paramètres de l'app",
@@ -929,6 +1008,7 @@
   },
 
   "widget_pin_dismiss": {
+    "ca": "Entesos",
     "cs": "Rozumím",
     "de": "Verstanden",
     "fr": "Compris",
@@ -941,6 +1021,7 @@
   },
 
   "widget_speed_name": {
+    "ca": "Velocitat de qui",
     "cs": "Rychlost qui",
     "de": "qui-Tempo",
     "fr": "Vitesse qui",
@@ -953,6 +1034,7 @@
   },
 
   "widget_speed_description": {
+    "ca": "2×1: velocitat total de baixada i pujada.",
     "cs": "2×1 — celková rychlost stahování a nahrávání.",
     "de": "2×1 — gesamte Download- und Upload-Geschwindigkeit.",
     "fr": "2×1 — vitesse totale de téléchargement et d'envoi.",
@@ -965,6 +1047,7 @@
   },
 
   "widget_overview_name": {
+    "ca": "Resum de qui",
     "cs": "Přehled qui",
     "de": "qui-Überblick",
     "fr": "Aperçu qui",
@@ -977,6 +1060,7 @@
   },
 
   "widget_overview_description": {
+    "ca": "2×2: velocitats i nombre de torrents en baixada i en sembra.",
     "cs": "2×2 — rychlosti a počty stahovaných a sdílených torrentů.",
     "de": "2×2 — Geschwindigkeiten sowie die Zahl der ladenden und seedenden Torrents.",
     "fr": "2×2 — vitesses ainsi que le nombre de torrents en téléchargement et en partage.",
@@ -989,6 +1073,7 @@
   },
 
   "settings_widgets": {
+    "ca": "Ginys",
     "cs": "Widgety",
     "de": "Widgets",
     "fr": "Widgets",
@@ -1013,6 +1098,7 @@
   },
 
   "widget_pin_unsupported": {
+    "ca": "Aquest llançador no permet afegir ginys des d'una aplicació. Mantén premuda la pantalla d'inici i tria qui a la llista de ginys.",
     "cs": "Tento launcher neumí přidat widget z aplikace. Podržte plochu a vyberte qui z jeho seznamu widgetů.",
     "de": "Dieser Launcher kann Widgets nicht aus der App heraus hinzufügen. Startbildschirm gedrückt halten und qui in der Widget-Liste auswählen.",
     "fr": "Ce lanceur ne peut pas ajouter de widget depuis l'application. Appuyez longuement sur l'écran d'accueil et choisissez qui dans sa liste de widgets.",
@@ -1037,6 +1123,7 @@
   },
 
   "widget_scope_all": {
+    "ca": "Tots els clients actius",
     "cs": "Všichni aktivní klienti",
     "de": "Alle aktiven Clients",
     "fr": "Tous les clients actifs",
@@ -1049,6 +1136,7 @@
   },
 
   "widget_list_content": {
+    "ca": "Llista de transferències",
     "cs": "Seznam přenosů",
     "de": "Übertragungsliste",
     "fr": "Liste des transferts",
@@ -1061,6 +1149,7 @@
   },
 
   "widget_list_active": {
+    "ca": "Primer les transferències en curs",
     "cs": "Nejprve přenášené",
     "de": "Übertragende zuerst",
     "fr": "Transferts en cours d'abord",
@@ -1073,6 +1162,7 @@
   },
 
   "widget_list_recent": {
+    "ca": "Afegits recentment",
     "cs": "Naposledy přidané",
     "de": "Zuletzt hinzugefügt",
     "fr": "Ajoutés récemment",
@@ -1085,6 +1175,7 @@
   },
 
   "widget_incognito_note": {
+    "ca": "Els noms dels torrents al giny segueixen l'opció de mode d'incògnit de l'aplicació.",
     "cs": "Názvy torrentů ve widgetu se řídí přepínačem anonymního režimu v aplikaci.",
     "de": "Torrent-Namen im Widget folgen dem Inkognito-Schalter der App.",
     "fr": "Les noms de torrents du widget suivent l'interrupteur navigation privée de l'application.",
@@ -1097,6 +1188,7 @@
   },
 
   "widget_refresh_note": {
+    "ca": "HyperOS, MIUI i sistemes semblants sovint ometen les tasques en segon pla. Si el giny no s'actualitza, permet l'inici automàtic i configura l'ús de bateria de qui sense restriccions.",
     "cs": "HyperOS, MIUI a podobné často práci na pozadí úplně přeskočí. Pokud widget zastará, povolte pro qui automatické spouštění a nastavte politiku baterie na neomezenou.",
     "de": "HyperOS, MIUI und Ähnliche überspringen Hintergrundarbeit oft ganz. Wenn das Widget veraltet, erlaube qui den Autostart und setze die Akku-Richtlinie auf uneingeschränkt.",
     "fr": "HyperOS, MIUI et consorts ignorent souvent complètement les tâches en arrière-plan. Si le widget se fige, autorisez le démarrage automatique de qui et réglez sa politique de batterie sur « sans restriction ».",
@@ -1109,6 +1201,7 @@
   },
 
   "dashboard_active_count": {
+    "ca": "%1$d actius",
     "cs": "%1$d aktivních",
     "de": "%1$d aktiv",
     "fr": "%1$d actifs",
@@ -1120,6 +1213,7 @@
     "zh-TW": "%1$d 個活躍"
   },
   "dashboard_hide_address": {
+    "ca": "Amaga l'adreça",
     "cs": "Skrýt adresu",
     "de": "Adresse verbergen",
     "fr": "Masquer l'adresse",
@@ -1131,6 +1225,7 @@
     "zh-TW": "隱藏位址"
   },
   "dashboard_show_address": {
+    "ca": "Mostra l'adreça",
     "cs": "Zobrazit adresu",
     "de": "Adresse anzeigen",
     "fr": "Afficher l'adresse",
@@ -1142,6 +1237,7 @@
     "zh-TW": "顯示位址"
   },
   "dashboard_no_tracker_data": {
+    "ca": "Encara no hi ha dades dels trackers.",
     "cs": "Zatím žádná data o trackerech.",
     "de": "Noch keine Tracker-Daten.",
     "fr": "Aucune donnée de tracker pour l'instant.",
@@ -1154,6 +1250,7 @@
   },
 
   "dashboard_no_instances_title": {
+    "ca": "Encara no hi ha cap client",
     "cs": "Zatím žádní klienti",
     "de": "Noch keine Clients",
     "fr": "Aucun client",
@@ -1165,6 +1262,7 @@
     "zh-TW": "尚無用戶端"
   },
   "dashboard_no_instances_message": {
+    "ca": "Afegeix una instància de qBittorrent a qui i apareixerà aquí.",
     "cs": "Přidejte instanci qBittorrentu v qui a objeví se zde.",
     "de": "Füge in qui eine qBittorrent-Instanz hinzu, dann erscheint sie hier.",
     "fr": "Ajoutez une instance qBittorrent dans qui et elle apparaîtra ici.",
@@ -1177,6 +1275,7 @@
   },
 
   "delete_title_one": {
+    "ca": "Vols eliminar el torrent?",
     "cs": "Smazat torrent?",
     "de": "Torrent löschen?",
     "fr": "Supprimer le torrent ?",
@@ -1188,6 +1287,7 @@
     "zh-TW": "刪除此種子？"
   },
   "delete_title_many": {
+    "ca": "Vols eliminar %1$d torrents?",
     "cs": "Smazat %1$d torrentů?",
     "de": "%1$d Torrents löschen?",
     "fr": "Supprimer %1$d torrents ?",
@@ -1199,6 +1299,7 @@
     "zh-TW": "刪除 %1$d 個種子？"
   },
   "delete_body_keep_files": {
+    "ca": "Els torrents se suprimiran de qBittorrent. Els fitxers baixats es conservaran al disc.",
     "cs": "Torrenty budou odebrány z qBittorrentu. Stažené soubory zůstanou na disku.",
     "de": "Die Torrents werden aus qBittorrent entfernt. Heruntergeladene Dateien bleiben auf der Festplatte.",
     "fr": "Les torrents seront retirés de qBittorrent. Les fichiers téléchargés restent sur le disque.",
@@ -1210,6 +1311,7 @@
     "zh-TW": "種子將從 qBittorrent 中移除，已下載的檔案仍保留在磁碟上。"
   },
   "delete_body_with_files": {
+    "ca": "Els fitxers baixats s'eliminaran permanentment del disc. Aquesta acció no es pot desfer.",
     "cs": "Stažené soubory budou trvale smazány z disku. Tuto akci nelze vrátit zpět.",
     "de": "Die heruntergeladenen Dateien werden dauerhaft von der Festplatte gelöscht. Das lässt sich nicht rückgängig machen.",
     "fr": "Les fichiers téléchargés seront définitivement supprimés du disque. Cette action est irréversible.",
@@ -1222,6 +1324,7 @@
   },
 
   "detail_no_trackers": {
+    "ca": "No hi ha cap tracker",
     "cs": "Žádné trackery",
     "de": "Keine Tracker",
     "fr": "Aucun tracker",
@@ -1233,6 +1336,7 @@
     "zh-TW": "沒有 Tracker"
   },
   "detail_no_peers": {
+    "ca": "No hi ha cap parell connectat",
     "cs": "Žádní připojení peeři",
     "de": "Keine verbundenen Peers",
     "fr": "Aucun pair connecté",
@@ -1244,6 +1348,7 @@
     "zh-TW": "沒有已連線的節點"
   },
   "detail_reannounce_in": {
+    "ca": "Proper reanunci d'aquí a",
     "cs": "Znovu ohlásit za",
     "de": "Erneute Ankündigung in",
     "fr": "Réannonce dans",
@@ -1255,6 +1360,7 @@
     "zh-TW": "距下次通報"
   },
   "detail_x_of_y": {
+    "ca": "%1$d de %2$d",
     "cs": "%1$d z %2$d",
     "de": "%1$d von %2$d",
     "fr": "%1$d sur %2$d",
@@ -1267,6 +1373,7 @@
   },
 
   "filters_hint": {
+    "ca": "Toca una fila per incloure-la; toca el signe menys per excloure-la.",
     "cs": "Klepnutím na řádek jej zahrnete, klepnutím na minus jej vyloučíte.",
     "de": "Auf eine Zeile tippen, um sie einzuschließen; auf das Minus tippen, um sie auszuschließen.",
     "fr": "Touchez une ligne pour l'inclure, touchez le moins pour l'exclure.",
@@ -1279,6 +1386,7 @@
   },
 
   "instances_selected": {
+    "ca": "Seleccionat",
     "cs": "Vybráno",
     "de": "Ausgewählt",
     "fr": "Sélectionné",
@@ -1290,6 +1398,7 @@
     "zh-TW": "已選取"
   },
   "instances_not_reachable": {
+    "ca": "Inaccessible",
     "cs": "Nedostupné",
     "de": "Nicht erreichbar",
     "fr": "Injoignable",
@@ -1302,6 +1411,7 @@
   },
 
   "login_subtitle": {
+    "ca": "Connecta't al teu servidor qui",
     "cs": "Připojte se ke svému serveru qui",
     "de": "Mit deinem qui-Server verbinden",
     "fr": "Connectez-vous à votre serveur qui",
@@ -1313,6 +1423,7 @@
     "zh-TW": "連線到您的 qui 伺服器"
   },
   "login_server_address": {
+    "ca": "Adreça del servidor",
     "cs": "Adresa serveru",
     "de": "Serveradresse",
     "fr": "Adresse du serveur",
@@ -1324,6 +1435,7 @@
     "zh-TW": "伺服器位址"
   },
   "login_api_key_hint": {
+    "ca": "Crea una clau a qui, a Configuració → Claus API. Les claus no caduquen, de manera que l'aplicació manté la sessió iniciada.",
     "cs": "Vytvořte klíč v qui v Nastavení → API klíče. Klíče nevyprší, takže aplikace zůstane přihlášená.",
     "de": "Erstelle in qui unter Einstellungen → API-Schlüssel einen Schlüssel. Schlüssel laufen nicht ab, die App bleibt also angemeldet.",
     "fr": "Créez une clé dans qui sous Paramètres → Clés API. Les clés n'expirent pas, l'application reste donc connectée.",
@@ -1335,6 +1447,7 @@
     "zh-TW": "在 qui 的「設定 → API 金鑰」中建立金鑰。金鑰不會過期，應用程式會保持登入狀態。"
   },
   "login_show_password": {
+    "ca": "Mostra la contrasenya",
     "cs": "Zobrazit heslo",
     "de": "Passwort anzeigen",
     "fr": "Afficher le mot de passe",
@@ -1346,6 +1459,7 @@
     "zh-TW": "顯示密碼"
   },
   "login_hide_password": {
+    "ca": "Amaga la contrasenya",
     "cs": "Skrýt heslo",
     "de": "Passwort verbergen",
     "fr": "Masquer le mot de passe",
@@ -1357,6 +1471,7 @@
     "zh-TW": "隱藏密碼"
   },
   "login_toggle_key_visibility": {
+    "ca": "Mostra o amaga la clau",
     "cs": "Přepnout viditelnost klíče",
     "de": "Schlüsselanzeige umschalten",
     "fr": "Afficher ou masquer la clé",
@@ -1368,6 +1483,7 @@
     "zh-TW": "切換金鑰顯示"
   },
   "login_trust_certs": {
+    "ca": "Confia en els certificats autosignats",
     "cs": "Důvěřovat certifikátům podepsaným sebou samým",
     "de": "Selbstsignierten Zertifikaten vertrauen",
     "fr": "Faire confiance aux certificats auto-signés",
@@ -1379,6 +1495,7 @@
     "zh-TW": "信任自簽憑證"
   },
   "login_trust_certs_hint": {
+    "ca": "Activa aquesta opció només per a un servidor que controlis.",
     "cs": "Zapínejte pouze u serveru, který spravujete.",
     "de": "Aktiviere das nur für einen Server, den du selbst betreibst.",
     "fr": "N'activez cette option que pour un serveur que vous contrôlez.",
@@ -1390,6 +1507,7 @@
     "zh-TW": "僅在您完全掌控的伺服器上啟用。"
   },
   "login_error_no_address": {
+    "ca": "Introdueix l'adreça del teu servidor qui",
     "cs": "Zadejte adresu svého serveru qui",
     "de": "Gib die Adresse deines qui-Servers ein",
     "fr": "Saisissez l'adresse de votre serveur qui",
@@ -1401,6 +1519,7 @@
     "zh-TW": "請輸入 qui 伺服器位址"
   },
   "login_probe_setup_required": {
+    "ca": "Aquest servidor qui encara no té cap compte. Crea'n un a continuació.",
     "cs": "Tento server qui zatím nemá účet – vytvořte jej níže.",
     "de": "Dieser qui-Server hat noch kein Konto – lege unten eins an.",
     "fr": "Ce serveur qui n'a pas encore de compte – créez-en un ci-dessous.",
@@ -1412,6 +1531,7 @@
     "zh-TW": "該 qui 伺服器尚未建立帳戶——請在下方建立。"
   },
   "login_probe_ok": {
+    "ca": "Connexió establerta. Inicia la sessió a continuació.",
     "cs": "Připojeno. Přihlaste se níže.",
     "de": "Verbunden. Melde dich unten an.",
     "fr": "Connecté. Identifiez-vous ci-dessous.",
@@ -1423,6 +1543,7 @@
     "zh-TW": "已連線，請在下方登入。"
   },
   "login_error_generic": {
+    "ca": "S'ha produït un error",
     "cs": "Něco se pokazilo",
     "de": "Etwas ist schiefgelaufen",
     "fr": "Une erreur s'est produite",
@@ -1434,6 +1555,7 @@
     "zh-TW": "發生錯誤"
   },
   "login_error_credentials": {
+    "ca": "Credencials incorrectes",
     "cs": "Nesprávné přihlašovací údaje",
     "de": "Falsche Zugangsdaten",
     "fr": "Identifiants incorrects",
@@ -1445,6 +1567,7 @@
     "zh-TW": "認證資訊不正確"
   },
   "login_error_forbidden": {
+    "ca": "El servidor ha denegat l'accés",
     "cs": "Server přístup odmítl",
     "de": "Zugriff vom Server verweigert",
     "fr": "Accès refusé par le serveur",
@@ -1456,6 +1579,7 @@
     "zh-TW": "伺服器拒絕存取"
   },
   "login_error_not_qui": {
+    "ca": "Aquesta adreça no sembla correspondre a un servidor qui",
     "cs": "Tato adresa nevypadá jako server qui",
     "de": "Diese Adresse sieht nicht nach einem qui-Server aus",
     "fr": "Cette adresse ne ressemble pas à un serveur qui",
@@ -1467,6 +1591,7 @@
     "zh-TW": "該位址似乎不是 qui 伺服器"
   },
   "login_error_host": {
+    "ca": "No es pot connectar amb aquest amfitrió",
     "cs": "Tento hostitel není dostupný",
     "de": "Dieser Host ist nicht erreichbar",
     "fr": "Impossible de joindre cet hôte",
@@ -1478,6 +1603,7 @@
     "zh-TW": "無法連線到該主機"
   },
   "login_error_tls": {
+    "ca": "S'ha rebutjat el certificat TLS. Activa «Confia en els certificats autosignats» si aquest servidor és teu",
     "cs": "Certifikát TLS byl odmítnut – pokud jde o váš vlastní server, zapněte „Důvěřovat certifikátům podepsaným sebou samým“",
     "de": "TLS-Zertifikat wurde abgelehnt – aktiviere „Selbstsignierten Zertifikaten vertrauen“, wenn das dein eigener Server ist",
     "fr": "Le certificat TLS a été rejeté – activez « Faire confiance aux certificats auto-signés » s'il s'agit de votre propre serveur",
@@ -1489,6 +1615,7 @@
     "zh-TW": "TLS 憑證遭拒——如果這是您自己的伺服器，請開啟「信任自簽憑證」"
   },
   "login_error_unreachable": {
+    "ca": "No es pot connectar amb el servidor. Comprova l'adreça i que estigui en funcionament",
     "cs": "Server není dostupný – zkontrolujte adresu a to, zda běží",
     "de": "Server nicht erreichbar – prüfe die Adresse und ob er läuft",
     "fr": "Serveur injoignable – vérifiez l'adresse et qu'il est bien démarré",
@@ -1501,6 +1628,7 @@
   },
 
   "settings_account": {
+    "ca": "Compte",
     "cs": "Účet",
     "de": "Konto",
     "fr": "Compte",
@@ -1512,6 +1640,7 @@
     "zh-TW": "帳戶"
   },
   "settings_signed_in": {
+    "ca": "Sessió iniciada",
     "cs": "Přihlášeno",
     "de": "Angemeldet",
     "fr": "Connecté",
@@ -1523,6 +1652,7 @@
     "zh-TW": "已登入"
   },
   "settings_sign_out_title": {
+    "ca": "Vols tancar la sessió?",
     "cs": "Odhlásit se?",
     "de": "Abmelden?",
     "fr": "Se déconnecter ?",
@@ -1534,6 +1664,7 @@
     "zh-TW": "登出？"
   },
   "settings_sign_out_body": {
+    "ca": "S'eliminaran les credencials desades per a aquest servidor.",
     "cs": "Uložené přihlašovací údaje pro tento server budou odstraněny.",
     "de": "Die gespeicherten Zugangsdaten für diesen Server werden entfernt.",
     "fr": "Les identifiants enregistrés pour ce serveur seront supprimés.",
@@ -1545,6 +1676,7 @@
     "zh-TW": "將刪除此伺服器儲存的認證資訊。"
   },
   "settings_speed_units": {
+    "ca": "Unitats de velocitat",
     "cs": "Jednotky rychlosti",
     "de": "Geschwindigkeitseinheiten",
     "fr": "Unités de vitesse",
@@ -1556,6 +1688,7 @@
     "zh-TW": "速度單位"
   },
   "settings_behaviour": {
+    "ca": "Comportament",
     "cs": "Chování",
     "de": "Verhalten",
     "fr": "Comportement",
@@ -1567,6 +1700,7 @@
     "zh-TW": "行為"
   },
   "settings_language_system": {
+    "ca": "Predeterminat del sistema",
     "cs": "Výchozí jazyk systému",
     "de": "Systemstandard",
     "fr": "Langue du système",
@@ -1578,6 +1712,7 @@
     "zh-TW": "跟隨系統"
   },
   "settings_incognito": {
+    "ca": "Mode d'incògnit",
     "cs": "Anonymní režim",
     "de": "Inkognito-Modus",
     "fr": "Mode incognito",
@@ -1589,6 +1724,7 @@
     "zh-TW": "隱身模式"
   },
   "settings_incognito_hint": {
+    "ca": "Substitueix els noms, les categories i els trackers per imatges ISO de Linux.",
     "cs": "Nahradit názvy, kategorie a trackery linuxovými ISO.",
     "de": "Namen, Kategorien und Tracker durch Linux-ISOs ersetzen.",
     "fr": "Remplacer les noms, catégories et trackers par des ISO Linux.",
@@ -1600,6 +1736,7 @@
     "zh-TW": "將名稱、分類和 Tracker 替換為 Linux ISO。"
   },
   "settings_confirm_delete": {
+    "ca": "Confirma abans d'eliminar",
     "cs": "Potvrdit před smazáním",
     "de": "Vor dem Löschen bestätigen",
     "fr": "Confirmer avant de supprimer",
@@ -1611,6 +1748,7 @@
     "zh-TW": "刪除前確認"
   },
   "settings_confirm_delete_hint": {
+    "ca": "Demana confirmació abans de suprimir torrents.",
     "cs": "Zeptat se před odebráním torrentů.",
     "de": "Vor dem Entfernen von Torrents nachfragen.",
     "fr": "Demander avant de retirer des torrents.",
@@ -1622,6 +1760,7 @@
     "zh-TW": "移除種子前先詢問。"
   },
   "settings_dynamic_color": {
+    "ca": "Fes servir els colors del sistema",
     "cs": "Použít systémové barvy",
     "de": "Systemfarben verwenden",
     "fr": "Utiliser les couleurs du système",
@@ -1633,6 +1772,7 @@
     "zh-TW": "使用系統配色"
   },
   "settings_dynamic_color_hint": {
+    "ca": "Fes servir la paleta del fons de pantalla d'Android en lloc d'un tema de qui.",
     "cs": "Řídit se paletou tapety Androidu místo motivu qui.",
     "de": "Der Android-Hintergrundpalette folgen statt einem qui-Theme.",
     "fr": "Suivre la palette du fond d'écran Android au lieu d'un thème qui.",
@@ -1644,6 +1784,7 @@
     "zh-TW": "跟隨 Android 桌布擷取色彩，而不使用 qui 主題。"
   },
   "settings_selected": {
+    "ca": "Seleccionat",
     "cs": "Vybráno",
     "de": "Ausgewählt",
     "fr": "Sélectionné",
@@ -1655,6 +1796,7 @@
     "zh-TW": "已選取"
   },
   "settings_about": {
+    "ca": "Quant a",
     "cs": "O aplikaci",
     "de": "Über",
     "fr": "À propos",
@@ -1666,6 +1808,7 @@
     "zh-TW": "關於"
   },
   "settings_source_code": {
+    "ca": "Codi font",
     "cs": "Zdrojový kód",
     "de": "Quellcode",
     "fr": "Code source",
@@ -1678,6 +1821,7 @@
   },
 
   "sort_added_on": {
+    "ca": "Afegits recentment",
     "cs": "Nedávno přidané",
     "de": "Zuletzt hinzugefügt",
     "fr": "Ajoutés récemment",
@@ -1689,6 +1833,7 @@
     "zh-TW": "最近新增"
   },
   "sort_downloaded_session": {
+    "ca": "Baixat durant la sessió",
     "cs": "Staženo v relaci",
     "de": "Sitzung heruntergeladen",
     "fr": "Téléchargé (session)",
@@ -1700,6 +1845,7 @@
     "zh-TW": "本次下載量"
   },
   "sort_uploaded_session": {
+    "ca": "Pujat durant la sessió",
     "cs": "Nahráno v relaci",
     "de": "Sitzung hochgeladen",
     "fr": "Envoyé (session)",
@@ -1711,6 +1857,7 @@
     "zh-TW": "本次上傳量"
   },
   "sort_seen_complete": {
+    "ca": "Última vegada vist complet",
     "cs": "Naposledy viděno kompletní",
     "de": "Zuletzt vollständig gesehen",
     "fr": "Dernière fois complet",
@@ -1722,6 +1869,7 @@
     "zh-TW": "上次完整可見"
   },
   "sort_reannounce": {
+    "ca": "Proper reanunci d'aquí a",
     "cs": "Znovu ohlásit za",
     "de": "Erneute Ankündigung in",
     "fr": "Réannonce dans",
@@ -1734,6 +1882,7 @@
   },
 
   "speed_limits_hint": {
+    "ca": "Els valors són en KiB/s. Deixa un camp buit per mantenir-ne el límit actual; fes servir 0 per a il·limitat.",
     "cs": "Hodnoty jsou v KiB/s. Prázdné pole ponechá limit beze změny; 0 znamená bez omezení.",
     "de": "Werte in KiB/s. Ein leeres Feld lässt das Limit unverändert; 0 bedeutet unbegrenzt.",
     "fr": "Valeurs en Kio/s. Laissez un champ vide pour ne pas modifier la limite ; 0 signifie illimité.",
@@ -1746,6 +1895,7 @@
   },
 
   "torrents_select_client": {
+    "ca": "Selecciona un client",
     "cs": "Vybrat klienta",
     "de": "Client auswählen",
     "fr": "Choisir un client",
@@ -1757,6 +1907,7 @@
     "zh-TW": "選擇用戶端"
   },
   "torrents_polling": {
+    "ca": "Consulta periòdica",
     "cs": "Dotazování",
     "de": "Abfrage",
     "fr": "Interrogation",
@@ -1768,6 +1919,7 @@
     "zh-TW": "輪詢中"
   },
   "torrents_live": {
+    "ca": "En directe",
     "cs": "Živě",
     "de": "Live",
     "fr": "En direct",
@@ -1779,6 +1931,7 @@
     "zh-TW": "即時"
   },
   "torrents_empty_title": {
+    "ca": "No hi ha cap torrent",
     "cs": "Žádné torrenty",
     "de": "Keine Torrents",
     "fr": "Aucun torrent",
@@ -1790,6 +1943,7 @@
     "zh-TW": "沒有種子"
   },
   "torrents_empty_filtered": {
+    "ca": "No hi ha cap coincidència amb la cerca i els filtres actuals.",
     "cs": "Aktuálnímu hledání a filtrům nic neodpovídá.",
     "de": "Nichts passt zur aktuellen Suche und den Filtern.",
     "fr": "Rien ne correspond à la recherche et aux filtres actuels.",
@@ -1801,6 +1955,7 @@
     "zh-TW": "沒有符合目前搜尋和篩選條件的內容。"
   },
   "torrents_empty_message": {
+    "ca": "Aquest client encara no té cap torrent.",
     "cs": "Tento klient zatím nemá žádné torrenty.",
     "de": "Dieser Client hat noch keine Torrents.",
     "fr": "Ce client n'a encore aucun torrent.",
@@ -1812,6 +1967,7 @@
     "zh-TW": "此用戶端尚無種子。"
   },
   "torrents_no_clients_message": {
+    "ca": "Afegeix una instància de qBittorrent a qui i llisca cap avall per actualitzar.",
     "cs": "Přidejte instanci qBittorrentu v qui a poté potáhněte pro obnovení.",
     "de": "Füge in qui eine qBittorrent-Instanz hinzu und ziehe dann zum Aktualisieren.",
     "fr": "Ajoutez une instance qBittorrent dans qui, puis tirez pour actualiser.",
@@ -1823,6 +1979,7 @@
     "zh-TW": "請先在 qui 中新增 qBittorrent 實例，然後向下拉動重新整理。"
   },
   "torrents_loaded_of": {
+    "ca": "%1$d de %2$d",
     "cs": "%1$d z %2$d",
     "de": "%1$d von %2$d",
     "fr": "%1$d sur %2$d",
@@ -1835,6 +1992,7 @@
   },
 
   "tracker_status_not_working": {
+    "ca": "No funciona",
     "cs": "Nefunguje",
     "de": "Funktioniert nicht",
     "fr": "Ne fonctionne pas",
@@ -1847,6 +2005,7 @@
   },
 
   "instances_active": {
+    "ca": {"one": "%1$d client actiu", "many": "%1$d clients actius", "other": "%1$d clients actius"},
     "cs": {
       "one": "%1$d aktivní klient",
       "few": "%1$d aktivní klienti",
@@ -1890,6 +2049,7 @@
   },
 
   "torrents_count": {
+    "ca": {"one": "%1$d torrent", "many": "%1$d torrents", "other": "%1$d torrents"},
     "cs": {
       "one": "%1$d torrent",
       "few": "%1$d torrenty",
@@ -1933,6 +2093,7 @@
   },
 
   "selection_count": {
+    "ca": {"one": "%1$d seleccionat", "many": "%1$d seleccionats", "other": "%1$d seleccionats"},
     "cs": {
       "one": "Vybrán %1$d",
       "few": "Vybrány %1$d",

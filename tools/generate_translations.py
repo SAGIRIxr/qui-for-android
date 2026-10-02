@@ -11,17 +11,19 @@ string we try, in order:
                                           English locale files
 
 Reusing qui's own translations keeps the Android wording identical to the web UI
-for the terms that matter (states, actions, filters), and means the nine
+for the terms that matter (states, actions, filters), and means the ten
 non-English locales are as good as upstream's rather than a fresh guess.
 
 Usage: python tools/generate_translations.py <path-to-qui-checkout> [--report]
+       [--language ca] [--ref v1.30.0]
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
-import sys
+import subprocess
 import unicodedata
 from pathlib import Path
 from xml.etree import ElementTree
@@ -29,6 +31,7 @@ from xml.etree import ElementTree
 # qui's supported languages; the second element is the Android resource
 # qualifier for that language tag.
 LANGUAGES = [
+    ("ca", "values-ca"),
     ("cs", "values-cs"),
     ("de", "values-de"),
     ("fr", "values-fr"),
@@ -120,14 +123,24 @@ def flatten(obj, prefix=""):
     return out
 
 
-def load_locale(root: Path, lang: str) -> dict[str, str]:
+def load_locale(root: Path, lang: str, ref: str | None = None) -> dict[str, str]:
     """All strings for one language, keyed as "namespace:dotted.key"."""
     strings = {}
     for ns in NAMESPACES:
-        path = root / "web" / "src" / "i18n" / "locales" / lang / f"{ns}.json"
-        if not path.exists():
-            continue
-        data = json.loads(path.read_text(encoding="utf-8"))
+        relative_path = f"web/src/i18n/locales/{lang}/{ns}.json"
+        if ref:
+            result = subprocess.run(
+                ["git", "-C", str(root), "show", f"{ref}:{relative_path}"],
+                capture_output=True, text=True, encoding="utf-8", check=False,
+            )
+            if result.returncode:
+                continue
+            data = json.loads(result.stdout)
+        else:
+            path = root / relative_path
+            if not path.exists():
+                continue
+            data = json.loads(path.read_text(encoding="utf-8"))
         for key, value in flatten(data).items():
             strings[f"{ns}:{key}"] = value
     return strings
@@ -171,12 +184,17 @@ def read_source(res_dir: Path):
 
 
 def main() -> int:
-    if len(sys.argv) < 2:
-        print(__doc__)
-        return 2
-
-    qui_root = Path(sys.argv[1]).resolve()
-    report_only = "--report" in sys.argv
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("qui_checkout", type=Path)
+    parser.add_argument("--report", action="store_true", help="Report coverage without writing files")
+    parser.add_argument(
+        "--language", action="append", choices=[lang for lang, _ in LANGUAGES],
+        help="Generate only this language; may be repeated",
+    )
+    parser.add_argument("--ref", help="Read locales from a Git revision without changing the checkout")
+    args = parser.parse_args()
+    qui_root = args.qui_checkout.resolve()
+    report_only = args.report
     project = Path(__file__).resolve().parent.parent
     res_dir = project / "app" / "src" / "main" / "res"
 
@@ -187,7 +205,7 @@ def main() -> int:
     if overrides_path.exists():
         overrides = json.loads(overrides_path.read_text(encoding="utf-8"))
 
-    english = load_locale(qui_root, "en")
+    english = load_locale(qui_root, "en", args.ref)
     if not english:
         print(f"No qui English locale found under {qui_root}")
         return 1
@@ -217,7 +235,9 @@ def main() -> int:
     missing_keys: set[str] = set()
 
     for lang, qualifier in LANGUAGES:
-        lang_strings = load_locale(qui_root, lang)
+        if args.language and lang not in args.language:
+            continue
+        lang_strings = load_locale(qui_root, lang, args.ref)
         lines = [
             '<?xml version="1.0" encoding="utf-8"?>',
             "<!--",

@@ -6,6 +6,22 @@ The section for a tag becomes that release's notes on GitHub, and the app shows 
 same text in its update dialog. Add the new version at the top before tagging, in this
 file and in [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md).
 
+## 0.5.7
+
+### Added
+- Catalan (`ca`), matching qui v1.30.0's eleven languages.
+
+### Fixed
+- Send the request header required by qui v1.30.0 for password-session writes,
+  and preserve the SSE Accept header.
+- Report rejected torrent actions and settings writes as failures, including the
+  server's error message, instead of showing success for HTTP errors.
+- Follow qui v1.29.0's stream versions: recover missed deltas with a fresh baseline,
+  reconnect after EOF/network errors, and poll while live data is unavailable.
+- Keep the stream baseline through temporary server errors and REST fallback;
+  update counts, speeds, free space, categories and tags on aggregate-only frames.
+- Continue supporting older qui servers that send unversioned stream frames.
+
 ## 0.5.6
 
 ### Fixed

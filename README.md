@@ -40,7 +40,7 @@ rebuild of that mobile experience for Android.
   files shared from other apps.
 - **All nine qui themes** with their colour variations, light/dark/system mode, and
   optional Material You dynamic colour.
-- **Ten languages** — the same set qui ships. The device language is matched
+- **Eleven languages** — the same set qui v1.30.0 ships. The device language is matched
   automatically; Settings can override it.
 - **Incognito mode** — swaps names, categories, tags and trackers for a deterministic
   Linux-distro vocabulary using the same hash arithmetic as qui, and masks instance
@@ -111,7 +111,7 @@ MiuiWidget SDK and an app registered through their store review. These are stand
 
 ## Languages
 
-The ten locales qui supports: `en`, `cs`, `de`, `fr`, `it`, `ko`, `pt-BR`, `uk`,
+The eleven locales qui supports: `en`, `ca`, `cs`, `de`, `fr`, `it`, `ko`, `pt-BR`, `uk`,
 `zh-CN`, `zh-TW`. Android picks the closest match to the device's languages on first
 launch; *Settings → Language* overrides it.
 
@@ -244,7 +244,7 @@ values converted to sRGB, so the palettes are numerically identical to the web U
 ## Translations
 
 English lives in `app/src/main/res/values/strings.xml` and is the only file to edit by
-hand. The other nine locales are generated:
+hand. The other ten locales are generated:
 
 ```bash
 python tools/generate_translations.py ../qui-upstream
